@@ -41,6 +41,7 @@ brew 'mysql'
 # Apps
 cask 'aerial'
 cask 'alfred'
+cask 'avidemux'
 cask 'caffeine'
 cask 'docker'
 cask 'eid-be'
@@ -59,13 +60,14 @@ cask 'quip'
 cask 'sequel-pro'
 cask 'shuttle'
 cask 'slack'
-cask 'sublime-text'
+cask 'spectable'
 cask 'torbrowser'
 cask 'tower'
 cask 'transmit'
 cask 'vagrant'
 cask 'virtualbox'
 cask 'virtualbox-extension-pack'
+cask 'visual-studio-code'
 cask 'vlc'
 cask 'zoomus'
 
@@ -93,7 +95,3 @@ mas 'Sip', id: 507257563
 mas 'Sketch', id: 402476602
 mas 'Spark', id: 1176895641
 mas 'The Unarchiver', id: 425424353
-mas 'Things', id: 904280696
-mas 'Tweetbot', id: 557168941
-mas 'Unsplash Wallpapers', id: 1284863847
-mas 'WhatsApp', id: 1147396723 
