@@ -29,6 +29,7 @@ cask 'firefox'
 # Comms
 cask 'telegram'
 cask 'whatsapp'
+cask 'slack'
 
 # OS Tooling
 cask 'caffeine'
@@ -42,6 +43,7 @@ cask 'visual-studio-code'
 cask 'jetbrains-toolbox'
 cask 'postman'
 cask 'insomnia'
+cask 'filezilla'
 
 # Misc
 cask 'spotify'
