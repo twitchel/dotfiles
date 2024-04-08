@@ -4,17 +4,10 @@ cd "$(dirname "${BASH_SOURCE}")";
 
 git pull origin master;
 
-# Install zsh, ohmyzsh powerlevel10k, homebrew
 function doIt() {
-	rsync --exclude ".git/" \
-		--exclude ".DS_Store" \
-		--exclude ".idea/" \
-		--exclude ".osx" \
-		--exclude "bootstrap.sh" \
-		--exclude "README.md" \
-		--exclude "LICENSE-MIT.txt" \
-		-avh --no-perms ./home/ ~;
-#	source ~/.zshrc;
+	mkdir "~/.yadm"
+	git clone https://github.com/TheLocehiliosan/yadm.git ~/.yadm
+	ln -s ~/.yadm/yadm /usr/local/bin/yadm
 }
 
 if [ "$1" == "--force" -o "$1" == "-f" ]; then
