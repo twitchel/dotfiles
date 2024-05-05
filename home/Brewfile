@@ -1,5 +1,11 @@
+# Tap extra casks
+tap "homebrew/cask-fonts"
+
 # specify a directory to install
 cask_args appdir: '/Applications'
+
+# Fonts
+cask 'font-meslo-lg-nerd-font'
 
 # CLI Tooling
 brew 'zsh'
@@ -7,15 +13,21 @@ brew 'bat'
 brew 'tmux'
 brew 'git'
 brew 'tig'
+brew 'git-delta'
 brew 'jq'
 brew 'tree'
 brew 'wget'
 brew 'eza'
+brew 'fzf'
+brew 'fd'
 brew 'openjdk'
 brew 'awscli'
 brew 'awscli-local'
 brew 'aws-sam-cli'
 brew 'htop'
+brew 'tlrc'
+brew 'thefuck'
+brew 'zoxide'
 
 # Development Runtimes
 brew 'nvm'
