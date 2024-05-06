@@ -8,9 +8,11 @@ cask_args appdir: '/Applications'
 cask 'font-meslo-lg-nerd-font'
 
 # CLI Tooling
-brew 'zsh'
 brew 'bat'
+brew 'neofetch'
 brew 'tmux'
+brew 'neovim'
+brew 'ripgrep'
 brew 'git'
 brew 'tig'
 brew 'git-delta'
@@ -28,6 +30,7 @@ brew 'htop'
 brew 'tlrc'
 brew 'thefuck'
 brew 'zoxide'
+brew 'zsh'
 
 # Development Runtimes
 brew 'nvm'
