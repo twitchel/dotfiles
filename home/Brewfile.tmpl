@@ -38,6 +38,11 @@ brew 'nvm'
 # Database Tooling
 brew 'postgresql@13'
 
+# password management
+cask '1password-cli'
+
+{{ if eq .chezmoi.os "darwin" }}
+
 # Browsers
 cask 'google-chrome'
 cask 'brave-browser'
@@ -73,5 +78,10 @@ cask 'cyberduck'
 # Misc
 cask 'spotify'
 cask 'vlc'
-cask '1password-cli'
+
+{{ if eq .chezmoi.config.data.isPersonal true }}
+cask '1password'
+{{ end }}
+
+{{ end }}
 
