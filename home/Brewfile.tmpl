@@ -1,3 +1,4 @@
+{{ if eq .chezmoi.os "darwin" }}
 # Tap extra casks
 tap "homebrew/cask-fonts"
 
@@ -6,7 +7,7 @@ cask_args appdir: '/Applications'
 
 # Fonts
 cask 'font-meslo-lg-nerd-font'
-
+{{ end }}
 # CLI Tooling
 brew 'bat'
 brew 'neofetch'
