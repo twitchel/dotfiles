@@ -1,8 +1,11 @@
-{{ $email := promptStringOnce . "email" "What is your email address?" }}
-{{ $isPersonal := promptBoolOnce . "isPersonal" "Is this machine personal?" }}
-{{ $isWork := promptBoolOnce . "isWork" "Is this machine used for work?" }}
-
+{{- $email := promptStringOnce . "email" "What is your email address?" -}}
+{{- $isPersonal := promptBoolOnce . "isPersonal" "Is this machine personal?" -}}
+{{- $isWork := promptBoolOnce . "isWork" "Is this machine used for work?" -}}
 [data]
 	email = {{ $email | quote }}
 	isPersonal = {{ $isPersonal }}
 	isWork = {{ $isWork }}
+[hook.read-source-state.pre]
+	command = ".local/share/chezmoi/scripts/.install-homebrew.sh"
+[hook.apply.pre]
+	command = ".local/share/chezmoi/scripts/.brew-bundle.sh"
