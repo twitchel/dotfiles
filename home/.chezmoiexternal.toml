@@ -21,3 +21,9 @@ type = "git-repo"
 url = "https://github.com/romkatv/powerlevel10k.git"
 exact = true
 refreshPeriod = "24h"
+
+[".config/.alacritty/themes"]
+type = "git-repo"
+url = "https://github.com/alacritty/alacritty-theme"
+exact = true
+refreshPeriod = "168h"
