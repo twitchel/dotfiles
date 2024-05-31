@@ -1,0 +1,2 @@
+EDITOR=nvim
+ZSH_CUSTOM="~/.oh-my-zsh-custom"
