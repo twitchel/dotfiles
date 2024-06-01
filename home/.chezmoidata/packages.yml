@@ -89,10 +89,10 @@ packages:
     # OS Tooling
 
     # Development
-    - alacritty
-    - code # vscode
+    - alacritty --classic
+    - code --classic # vscode
     - insomnia
-    - intellij-idea-ultimate
+    - intellij-idea-ultimate --classic
     - postman
 
     # Misc
