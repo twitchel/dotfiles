@@ -2,9 +2,7 @@
 
 echo "Installing packages"
 
-{{- if eq .chezmoi.os "darwin" }}
 brew bundle
-{{- end }}
 
 {{- if eq .chezmoi.os "linux" }}
 sudo apt-get update
