@@ -11,7 +11,7 @@ error() {
 
 # -e: exit on error
 # -u: exit on unset variables
-set -eu
+set -e
 
 # Install Chezmoi if not already installed
 if ! chezmoi="$(command -v chezmoi)"; then
