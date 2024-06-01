@@ -16,7 +16,7 @@ set -eu
 # Install Chezmoi if not already installed
 if ! chezmoi="$(command -v chezmoi)"; then
   bin_dir="${HOME}/.local/bin"
-  mkdir -p bin_dir
+  mkdir -p ${bin_dir}
   chezmoi="${bin_dir}/chezmoi"
   echo_task "Installing chezmoi to ${chezmoi}"
   if command -v curl >/dev/null; then
@@ -32,19 +32,19 @@ fi
 
 chezmoi_args="--apply"
 
-if [ -n "${DOTFILES_DEBUG-}" ]; then
+if [ -n "${DOTFILES_DEBUG:-}" ]; then
   chezmoi_args="${chezmoi_args} --debug"
 fi
 
-if [ -n "${DOTFILES_VERBOSE-}" ]; then
+if [ -n "${DOTFILES_VERBOSE:-}" ]; then
   chezmoi_args="${chezmoi_args} --verbose"
 fi
 
-if [ -n "${DOTFILES_NO_TTY}" ]; then
+if [ -n "${DOTFILES_NO_TTY:-}" ]; then
   chezmoi_args="${chezmoi_args} --no-tty"
 fi
 
-if [ -n "${DOTFILES_BRANCH}" ]; then
+if [ -n "${DOTFILES_BRANCH:-}" ]; then
   chezmoi_args="${chezmoi_args} --branch ${DOTFILES_BRANCH}"
 fi
 
