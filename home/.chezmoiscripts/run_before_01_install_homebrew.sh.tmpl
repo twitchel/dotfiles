@@ -9,7 +9,7 @@ else
   which brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   {{- if eq .chezmoi.os "linux" }}
-  (echo; echo 'eval "$(/home/linuxbrew/bin/brew shellenv)"') >> $HOME/.bashrc
+  (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> $HOME/.bashrc
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   {{- end }}
 
@@ -17,4 +17,6 @@ else
   (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> $HOME/.bashrc
   eval "$(/opt/homebrew/bin/brew shellenv)"
   {{- end }}
+
+  source $HOME/.bashrc
 fi
