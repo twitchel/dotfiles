@@ -1,0 +1,108 @@
+packages:
+  brew:
+    # Shell
+    - antigen
+    - fd
+    - fzf
+    - thefuck
+    - tmux
+    - tree
+    - wget
+    - zsh
+
+    # Standard tool replacements
+    - bat # better cat
+    - eza # better ls
+    - htop # better top
+    - tlrc # better man
+    - zoxide # better cd
+
+    # git/github
+    - act
+    - git-delta
+    - tig
+
+    # development
+    - awscli
+    - awscli-local
+    - aws-sam-cli
+    - jq
+    - neovim
+    - neofetch
+    - openjdk
+    - ripgrep
+
+  casks:
+    # Nerd fonts
+    - homebrew/cask-fonts/font-meslo-lg-nerd-font
+
+    # Browsers
+    - brave-browser
+    - firefox
+    - google-chrome
+    - microsoft-edge
+
+    # Comms
+    - slack
+    - telegram
+    - whatsapp
+
+    # Productivity
+    - gimp
+    - notion
+    - screenflow
+
+    # OS Tooling
+    - caffeine
+    - lulu
+    - rectangle
+    - raycast
+    - stats
+
+    # Development
+    - alacritty
+    - cyberduck
+    - docker
+    - insomnia
+    - iterm2
+    - jetbrains-toolbox
+    - postman
+    - visual-studio-code
+
+    # Misc
+    - notunes
+    - spotify
+    - vlc
+
+  snaps:
+    # Browsers
+    - brave
+    - firefox
+
+    # Comms
+    - slack
+    - telegram-desktop
+
+    # Productivity
+    - gimp
+
+    # OS Tooling
+
+    # Development
+    - alacritty
+    - code # vscode
+    - insomnia
+    - intellij-idea-ultimate
+    - postman
+
+    # Misc
+    - spotify
+    - vlc
+
+  aptitude:
+    # OS Tooling
+    - caffeine
+    - gnome-tweaks
+
+  dpkg:
+
