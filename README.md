@@ -2,30 +2,36 @@
 
 Shared dotfiles between machines, managed by [`chezmoi`](https://github.com/twpayne/chezmoi).
 
-# Base Chezmoi Requirements
+## Supported operating systems
+This is my standard set of applications + configuration and is designed to run on my OS's of choice.
 
-1. Install base OS level dependencies (Ubuntu + Debian flavours).
+This has been tested on:
+- MacOS (Sonoma+)
+- Ubuntu Linux 24.04+
+- Windows 11 (WSL with Ubuntu 24.04)
 
-I use Ubuntu as my distribution of choice, so these commands are tailored for that. They should work for any debian based linux distribution, and should be fairly easily converted to work when RHEL/Other based distros.
+It also has had limited testing on Android using the [Termux app located on F-Droid](https://f-droid.org/en/packages/com.termux/).
 
-```
-sudo apt-get install -y curl git gcc build-essentials
-```
-
-# Install
+## Install
 
 Install everything with:
 
+### curl
 ```
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply twitchel
+sh -c "$(curl -fsLS https://raw.githubusercontent.com/twitchel/dotfiles/master/install.sh)" -- init --apply twitchel
+```
+
+### wget
+```
+sh -c "$(wget -qO- https://raw.githubusercontent.com/twitchel/dotfiles/master/install.sh)" -- init --apply twitchel
+```
+
+There are some config flags you can set via environment variables
+```
+DOTFILES_BRANCH=feature/git-branch-for-testing
+DOTFILES_DEBUG=true
+DOTFILES_VERBOSE=true
 ```
 
 You will need to restart your terminal session afterwards
 
-# Secrets
-
-Personal secrets are stored in [1Password](https://1password.com) and you'll
-need the [1Password CLI](https://developer.1password.com/docs/cli/) installed.
-Login to 1Password with:
-
-    eval $(op signin)

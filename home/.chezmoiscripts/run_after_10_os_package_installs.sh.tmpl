@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo "Installing packages"
+
+brew bundle
+
+{{- if eq .chezmoi.os "linux" }}
+sudo apt-get update
+
+sudo apt-get install -y {{ range .packages.aptitude }}{{ . }} {{ end }}
+
+# Although you can install multiple snaps on one line, this errors if already installed
+{{- range .packages.snaps }}
+sudo snap install {{ . }}
+{{- end }}
+
+{{- end }}

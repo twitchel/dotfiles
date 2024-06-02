@@ -1,3 +1,7 @@
+# ---- Add home bin dir to PATH -----
+PATH="${PATH}:${HOME}/.local/bin"
+
+# ---- ZSH plugins -----
 plugins=(git macos docker common-aliases)
 
 # ---- FZF -----

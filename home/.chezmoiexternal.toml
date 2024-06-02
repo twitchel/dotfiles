@@ -1,29 +1,34 @@
 [".oh-my-zsh"]
-type = "git-repo"
-url = "https://github.com/ohmyzsh/ohmyzsh.git"
-exact = true
-refreshPeriod = "72h"
-
-[".oh-my-zsh-custom/plugins/zsh-syntax-highlighting"]
-type = "git-repo"
-url = "https://github.com/zsh-users/zsh-syntax-highlighting.git"
-exact = true
-refreshPeriod = "24h"
-
-[".oh-my-zsh-custom/plugins/zsh-completions"]
-type = "git-repo"
-url = "https://github.com/zsh-users/zsh-completions.git"
-exact = true
-refreshPeriod = "24h"
-
-[".oh-my-zsh-custom/themes/powerlevel10k"]
-type = "git-repo"
-url = "https://github.com/romkatv/powerlevel10k.git"
-exact = true
-refreshPeriod = "24h"
-
-[".config/.alacritty/themes"]
-type = "git-repo"
-url = "https://github.com/alacritty/alacritty-theme"
 exact = true
 refreshPeriod = "168h"
+stripComponents = 1
+type = "archive"
+url = "https://github.com/ohmyzsh/ohmyzsh/archive/refs/heads/master.zip"
+
+[".oh-my-zsh-custom/plugins/zsh-syntax-highlighting"]
+exact = true
+refreshPeriod = "168h"
+stripComponents = 1
+type = "archive"
+url = "https://github.com/zsh-users/zsh-syntax-highlighting/archive/refs/heads/master.zip"
+
+[".oh-my-zsh-custom/plugins/zsh-completions"]
+exact = true
+refreshPeriod = "168h"
+stripComponents = 1
+type = "archive"
+url = "https://github.com/zsh-users/zsh-completions/archive/refs/heads/master.zip"
+
+[".oh-my-zsh-custom/themes/powerlevel10k"]
+exact = true
+refreshPeriod = "168h"
+stripComponents = 1
+type = "archive"
+url = "https://github.com/romkatv/powerlevel10k/archive/refs/heads/master.zip"
+
+[".config/.alacritty/themes"]
+exact = true
+refreshPeriod = "168h"
+stripComponents = 1
+type = "archive"
+url = "https://github.com/alacritty/alacritty-theme/archive/refs/heads/master.zip"
