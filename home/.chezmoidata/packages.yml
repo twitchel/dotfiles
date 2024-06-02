@@ -62,7 +62,6 @@ packages:
     # Development
     - alacritty
     - cyberduck
-    - docker
     - insomnia
     - iterm2
     - jetbrains-toolbox
