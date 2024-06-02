@@ -30,7 +30,7 @@ if ! chezmoi="$(command -v chezmoi)"; then
   unset chezmoi_installer bin_dir
 fi
 
-chezmoi_args="--apply"
+chezmoi_args=""
 
 if [ -n "${DOTFILES_DEBUG:-}" ]; then
   chezmoi_args="${chezmoi_args} --debug"
@@ -55,8 +55,10 @@ echo_task "Running chezmoi init"
 # shellcheck disable=SC2086
 {
   exec "${chezmoi}" init twitchel ${chezmoi_args}
+  exec "${chezmoi}" apply ${chezmoi_args}
 } || {
   echo_task "chezmoi init failed... retrying"
   exec "${chezmoi}" init twitchel ${chezmoi_args}
+  exec "${chezmoi}" appply ${chezmoi_args}
 }
 
