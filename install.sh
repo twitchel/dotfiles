@@ -53,12 +53,6 @@ echo_task "Running chezmoi init"
 # shellcheck disable=SC2086
 # REtry this execution until it succeeds for a minimum of 3 retries
 # shellcheck disable=SC2086
-{
-  exec "${chezmoi}" init twitchel ${chezmoi_args}
-  exec "${chezmoi}" apply ${chezmoi_args}
-} || {
-  echo_task "chezmoi init failed... retrying"
-  exec "${chezmoi}" init twitchel ${chezmoi_args}
-  exec "${chezmoi}" appply ${chezmoi_args}
-}
+"${chezmoi}" init twitchel ${chezmoi_args}
+"${chezmoi}" apply ${chezmoi_args}
 
