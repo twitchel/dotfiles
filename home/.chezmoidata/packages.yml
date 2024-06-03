@@ -8,7 +8,6 @@ packages:
     - tmux
     - tree
     - wget
-    - zsh
 
     # Standard tool replacements
     - bat # better cat

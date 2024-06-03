@@ -4,7 +4,10 @@
 
 echo "Installing packages"
 sudo apt-get update
-sudo apt-get install -y git curl build-essential
+sudo apt-get install -y git curl build-essential zsh
+
+# Set default shell to zsh
+chsh -s "$(which zsh)"
 
 # Install 1Password CLI if not exists
 if command -v op; then
