@@ -9,6 +9,14 @@ sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y git curl build-essential zsh
 
+{{- if eq .isHeadless false }}
+# Install Meslo nerd font on linux
+sudo apt-get intall -y fontconfig
+wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip \
+&& cd ~/.local/share/fonts && unzip Meslo.zip && rm *Windows* && rm Meslo.zip && fc-cache -fv
+
+{{- end }}
+
 # Set default shell to zsh
 sudo chsh -s $(which zsh) $(whoami)
 
