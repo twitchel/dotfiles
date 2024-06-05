@@ -4,7 +4,13 @@
 
 echo "Installing packages"
 
-brew bundle
+{{- if eq .chezmoi.os "darwin" }}
+BREW_PATH="/opt/homebrew/bin/brew"
+{{- else }}
+BREW_PATH="/home/linuxbrew/.linuxbrew/bin/brew"
+{{- end }}
+
+$BREW_PATH bundle
 
 {{- if (and (eq .chezmoi.os "linux") (eq .isHeadless false)) }}
 sudo apt-get update

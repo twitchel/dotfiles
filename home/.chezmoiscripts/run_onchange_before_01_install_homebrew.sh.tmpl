@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 set -e
 
@@ -6,7 +6,7 @@ if command -v brew; then
   echo "Brew already installed"
 else
   echo "Installing Homebrew"
-  which brew || /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  which brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   source $HOME/.zshrc
 fi
