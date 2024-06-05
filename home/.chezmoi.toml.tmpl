@@ -1,7 +1,9 @@
 {{- $email := promptStringOnce . "email" "What is your email address?" -}}
+{{- isHeadless := promptBoolOnce . "isHeadless" "Is this machine headless (CLI only)?" -}}
 {{- $isPersonal := promptBoolOnce . "isPersonal" "Is this machine personal?" -}}
 {{- $isWork := promptBoolOnce . "isWork" "Is this machine used for work?" -}}
 [data]
 	email = {{ $email | quote }}
+	isPersonal = {{ $isHeadless }}
 	isPersonal = {{ $isPersonal }}
 	isWork = {{ $isWork }}
