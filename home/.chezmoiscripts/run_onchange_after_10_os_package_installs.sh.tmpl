@@ -6,7 +6,7 @@ echo "Installing packages"
 
 brew bundle
 
-{{- if (and (eq .chezmoi.os "linux") (eq isHeadless false)) }}
+{{- if (and (eq .chezmoi.os "linux") (eq .isHeadless false)) }}
 sudo apt-get update
 sudo apt-get install -y {{ range .packages.gui.aptitude.common }}{{ . }} {{ end }}
 
@@ -14,7 +14,7 @@ sudo apt-get install -y {{ range .packages.gui.aptitude.common }}{{ . }} {{ end 
 {{- range .packages.gui.snaps.common }}
 sudo snap install {{ . }} --no-wait
 {{- end }}
-{{- if eq isPersonal true }}
+{{- if eq .isPersonal true }}
 {{- range .packages.gui.snaps.personal }}
 sudo snap install {{ . }} --no-wait
 {{- end }}

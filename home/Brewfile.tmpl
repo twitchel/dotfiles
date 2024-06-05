@@ -8,11 +8,11 @@ brew '{{ . }}'
 {{- end }}
 
 {{ if eq .chezmoi.os "darwin" }}
-{{- if eq isHeadless false }}
+{{- if eq .isHeadless false }}
 {{- range .packages.gui.casks.common }}
 cask '{{ . }}'
 {{- end }}
-{{- if eq isPersonal true }}
+{{- if eq .isPersonal true }}
 {{- range .packages.gui.casks.personal }}
 cask '{{ . }}'
 {{- end }}
