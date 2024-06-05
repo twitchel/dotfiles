@@ -1,106 +1,114 @@
 packages:
-  brew:
-    # Shell
-    - antigen
-    - fd
-    - fzf
-    - thefuck
-    - tmux
-    - tree
-    - wget
+  cli:
+    brew:
+      common:
+        # Shell
+        - antigen
+        - fd
+        - fzf
+        - thefuck
+        - tmux
+        - tree
+        - wget
 
-    # Standard tool replacements
-    - bat # better cat
-    - eza # better ls
-    - htop # better top
-    - tlrc # better man
-    - zoxide # better cd
+        # Standard tool replacements
+        - bat # better cat
+        - eza # better ls
+        - htop # better top
+        - tlrc # better man
+        - zoxide # better cd
 
-    # git/github
-    - act
-    - git-delta
-    - tig
+        # git/github
+        - act
+        - git-delta
+        - tig
 
-    # development
-    - awscli
-    - awscli-local
-    - aws-sam-cli
-    - jq
-    - neovim
-    - neofetch
-    - openjdk
-    - ripgrep
+        # development
+        - awscli
+        - awscli-local
+        - aws-sam-cli
+        - jq
+        - neovim
+        - neofetch
+        - openjdk
+        - ripgrep
+      personal:
+  gui:
+    casks:
+      common:
+        # Nerd fonts
+        - homebrew/cask-fonts/font-meslo-lg-nerd-font
 
-  casks:
-    # Nerd fonts
-    - homebrew/cask-fonts/font-meslo-lg-nerd-font
+        # Browsers
+        - brave-browser
+        - firefox
+        - google-chrome
+        - microsoft-edge
 
-    # Browsers
-    - brave-browser
-    - firefox
-    - google-chrome
-    - microsoft-edge
+        # Comms
+        - slack
+        - telegram
+        - whatsapp
 
-    # Comms
-    - slack
-    - telegram
-    - whatsapp
+        # Productivity
+        - gimp
+        - notion
+        - screenflow
 
-    # Productivity
-    - gimp
-    - notion
-    - screenflow
+        # OS Tooling
+        - caffeine
+        - lulu
+        - rectangle
+        - raycast
+        - stats
 
-    # OS Tooling
-    - caffeine
-    - lulu
-    - rectangle
-    - raycast
-    - stats
+        # Development
+        - alacritty
+        - cyberduck
+        - insomnia
+        - iterm2
+        - jetbrains-toolbox
+        - postman
+        - visual-studio-code
 
-    # Development
-    - alacritty
-    - cyberduck
-    - insomnia
-    - iterm2
-    - jetbrains-toolbox
-    - postman
-    - visual-studio-code
+        # Misc
+        - notunes
+        - spotify
+        - vlc
+        - android-file-transfer
+      personal:
+        - 1password
+        - discord
+    snaps:
+      common:
+        # Browsers
+        - brave
+        - firefox
 
-    # Misc
-    - notunes
-    - spotify
-    - vlc
-    - android-file-transfer
-  snaps:
-    # Browsers
-    - brave
-    - firefox
+        # Comms
+        - slack
+        - telegram-desktop
 
-    # Comms
-    - slack
-    - telegram-desktop
+        # Productivity
+        - gimp
 
-    # Productivity
-    - gimp
+        # OS Tooling
 
-    # OS Tooling
+        # Development
+        - alacritty --classic
+        - code --classic # vscode
+        - insomnia
+        - intellij-idea-ultimate --classic
+        - postman
 
-    # Development
-    - alacritty --classic
-    - code --classic # vscode
-    - insomnia
-    - intellij-idea-ultimate --classic
-    - postman
-
-    # Misc
-    - spotify
-    - vlc
-
-  aptitude:
-    # OS Tooling
-    - caffeine
-    - gnome-tweaks
-
-  dpkg:
-
+        # Misc
+        - spotify
+        - vlc
+      personal:
+        - steam
+        - discord
+    aptitude:
+      common:
+        # OS Tooling
+        - caffeine
+        - gnome-tweaks

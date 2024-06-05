@@ -6,14 +6,17 @@ echo "Installing packages"
 
 brew bundle
 
-{{- if eq .chezmoi.os "linux" }}
+{{- if (and (eq .chezmoi.os "linux") (eq isHeadless false)) }}
 sudo apt-get update
-
-sudo apt-get install -y {{ range .packages.aptitude }}{{ . }} {{ end }}
+sudo apt-get install -y {{ range .packages.gui.aptitude.common }}{{ . }} {{ end }}
 
 # Although you can install multiple snaps on one line, this errors if already installed
-{{- range .packages.snaps }}
+{{- range .packages.gui.snaps.common }}
 sudo snap install {{ . }} --no-wait
 {{- end }}
-
+{{- if eq isPersonal true }}
+{{- range .packages.gui.snaps.personal }}
+sudo snap install {{ . }} --no-wait
+{{- end }}
+{{- end }}
 {{- end }}

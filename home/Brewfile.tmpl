@@ -3,18 +3,19 @@
 cask_args appdir: '/Applications'
 {{- end }}
 
-{{- range .packages.brew }}
+{{- range .packages.cli.brew.common }}
 brew '{{ . }}'
 {{- end }}
 
 {{ if eq .chezmoi.os "darwin" }}
-{{- range .packages.casks }}
+{{- if eq isHeadless false }}
+{{- range .packages.gui.casks.common }}
 cask '{{ . }}'
 {{- end }}
-
-{{ if eq .chezmoi.config.data.isPersonal true }}
-cask '1password'
-{{ end }}
-
-{{ end }}
-
+{{- if eq isPersonal true }}
+{{- range .packages.gui.casks.personal }}
+cask '{{ . }}'
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
