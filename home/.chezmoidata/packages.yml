@@ -71,7 +71,7 @@ packages:
     - notunes
     - spotify
     - vlc
-
+    - android-file-transfer
   snaps:
     # Browsers
     - brave
