@@ -1,21 +1,21 @@
-{{- if eq .chezmoi.os "darwin" }}
+{{- if eq .chezmoi.os "darwin" -}}
 # specify a directory to install
 cask_args appdir: '/Applications'
-{{- end }}
+{{- end -}}
 
-{{- range .packages.cli.brew.common }}
+{{- range (.packages.cli.brew.common | sortAlpha | uniq) -}}
 brew '{{ . }}'
-{{- end }}
+{{- end -}}
 
-{{ if eq .chezmoi.os "darwin" }}
-{{- if eq .isHeadless false }}
-{{- range .packages.gui.casks.common }}
+{{- if eq .chezmoi.os "darwin" -}}
+ git add   {{- if eq .isHeadless false -}}
+        {{- range (.packages.gui.casks.common | sortAlpha | uniq) -}}
 cask '{{ . }}'
-{{- end }}
-{{- if eq .isPersonal true }}
-{{- range .packages.gui.casks.personal }}
+        {{- end -}}
+        {{- if eq .isPersonal true -}}
+            {{- range (.packages.gui.casks.personal | sortAlpha | uniq) -}}
 cask '{{ . }}'
-{{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
+            {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
