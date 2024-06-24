@@ -22,6 +22,7 @@ packages:
         - act
         - git-delta
         - tig
+        - jesseduffield/lazygit/lazygit
 
         # development
         - awscli
