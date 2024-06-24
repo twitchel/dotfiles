@@ -2,7 +2,7 @@
 PATH="${PATH}:${HOME}/.local/bin"
 
 # ---- ZSH plugins -----
-plugins=(git macos docker common-aliases)
+plugins=(brew git macos docker common-aliases)
 
 # ---- FZF -----
 
