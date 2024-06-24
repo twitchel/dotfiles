@@ -39,3 +39,10 @@ refreshPeriod = "168h"
 stripComponents = 1
 type = "archive"
 url = "https://github.com/tmux-plugins/tpm/archive/refs/heads/master.zip"
+
+[".config/fzf/fzf-git.sh"]
+exact = true
+refreshPeriod = "168h"
+stripComponents = 1
+type = "archive"
+url = "https://github.com/junegunn/fzf-git.sh/archive/refs/heads/master.zip"
