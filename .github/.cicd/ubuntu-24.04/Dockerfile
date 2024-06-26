@@ -12,7 +12,7 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
     curl \
     sudo \
-    bats
+    shunit2
 
 RUN useradd -m -s /bin/bash -d /home/docker-ci docker-ci &&  \
     echo "docker-ci ALL=NOPASSWD: ALL" >> /etc/sudoers
