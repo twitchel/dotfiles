@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOTFILES_BRANCH: ${{ github.ref_name }}
+  DOTFILES_BRANCH: ${{ github.head_ref || github.ref_name }}
 
 jobs:
   build:
