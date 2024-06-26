@@ -39,4 +39,4 @@ jobs:
           image: twitchel/dotfiles:${{ matrix.os }}-latest
           name: twitchel-dotfiles
           args: |
-            bats test/
+            bats tests/
