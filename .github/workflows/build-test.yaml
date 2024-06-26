@@ -39,4 +39,4 @@ jobs:
           image: twitchel/dotfiles:${{ matrix.os }}-latest
           options: -v ${{ github.workspace }}:/home/docker-ci/.output
           run: |
-            bats --output /home/docker-ci/.output/ tests/
+            zsh test.sh
