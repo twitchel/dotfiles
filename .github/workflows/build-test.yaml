@@ -26,7 +26,7 @@ jobs:
         with:
           context: .
           platforms: linux/amd64
-          file: ./tests/${{ matrix.os }}/Dockerfile
+          file: ./.github/.cicd/${{ matrix.os }}/Dockerfile
           push: false
           load: true
           tags: twitchel/dotfiles:${{ matrix.os }}-latest
