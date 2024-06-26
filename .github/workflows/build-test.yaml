@@ -37,6 +37,6 @@ jobs:
         uses: tj-actions/docker-run@v2
         with:
           image: twitchel/dotfiles:${{ matrix.os }}-latest
-          name: twitchel/dotfiles
+          name: twitchel-dotfiles
           args: |
             bats test/
