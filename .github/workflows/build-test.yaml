@@ -20,7 +20,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push
+      - name: Build And Install Dotfiles
         id: build
         uses: docker/build-push-action@v6.1.0
         with:
@@ -28,5 +28,14 @@ jobs:
           platforms: linux/amd64
           file: ./tests/${{ matrix.os }}/Dockerfile
           push: false
+          tags: twitchel/dotfiles:${{ matrix.os }}-latest
           build-args: |
             DOTFILES_BRANCH=${{ env.DOTFILES_BRANCH }}
+
+      - name: Run test suite
+        uses: tj-actions/docker-run@v2
+        with:
+          image: twitchel/dotfiles:${{ matrix.ox }}-latest
+          name: twitchel/dotfiles
+          args: |
+            bats test/
