@@ -1,3 +1,0 @@
-which zoxide
-
-exit $?
