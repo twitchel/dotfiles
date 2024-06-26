@@ -14,7 +14,7 @@ RUN apt-get update && \
     sudo \
     bats
 
-RUN useradd -m -s /bin/zsh -d /home/docker-ci docker-ci &&  \
+RUN useradd -m -s /bin/bash -d /home/docker-ci docker-ci &&  \
     echo "docker-ci ALL=NOPASSWD: ALL" >> /etc/sudoers
 
 USER docker-ci
@@ -28,4 +28,8 @@ WORKDIR /home/docker-ci/.local/share/chezmoi
 
 RUN sh install.sh
 
-RUN chsh -s /usr/bin/zsh
+USER root
+
+RUN usermod -s /bin/zsh docker-ci
+
+USER docker-ci
