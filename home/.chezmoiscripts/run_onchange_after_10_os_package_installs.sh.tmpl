@@ -1,16 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
 # packages.yml hash: {{ include ".chezmoidata/packages.yml" | sha256sum }}
 
 echo "Installing packages"
 
-{{- if eq .chezmoi.os "darwin" }}
-BREW_PATH="/opt/homebrew/bin/brew"
-{{- else }}
-BREW_PATH="/home/linuxbrew/.linuxbrew/bin/brew"
-{{- end }}
-
-$BREW_PATH bundle
+if [ -x ${BREW_PATH} ]; then
+  # Source Homebrew environment variables
+  eval "$(${BREW_PATH} shellenv)"
+  brew bundle
+else
+  printf "Error: Homebrew is not installed. Exiting.\n"
+  exit 1
+fi
 
 {{- if (and (eq .chezmoi.os "linux") (eq .isHeadless false)) }}
 sudo apt-get update
