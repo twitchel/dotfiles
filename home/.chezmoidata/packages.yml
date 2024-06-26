@@ -3,7 +3,7 @@ packages:
     brew:
       common:
         # Shell
-        - antigen
+#        - antigen
         - fd
         - fzf
         - thefuck
@@ -22,7 +22,6 @@ packages:
         - act
         - git-delta
         - tig
-        - jesseduffield/lazygit/lazygit
 
         # development
         - awscli
@@ -31,7 +30,7 @@ packages:
         - jq
         - neovim
         - neofetch
-        - openjdk
+#        - openjdk
         - ripgrep
       personal:
   gui:
