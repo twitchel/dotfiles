@@ -1,0 +1,12 @@
+on:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  GIT_BRANCH: ${{ github.head_ref }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
