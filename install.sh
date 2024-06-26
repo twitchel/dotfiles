@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo_task() {
   printf "\033[0;34m--> %s\033[0m\n" "$*"
@@ -45,6 +45,7 @@ if [ -n "${DOTFILES_NO_TTY:-}" ]; then
 fi
 
 if [ -n "${DOTFILES_BRANCH:-}" ]; then
+  echo_task "Chezmoi branch: ${DOTFILES_BRANCH}"
   chezmoi_args="${chezmoi_args} --branch ${DOTFILES_BRANCH}"
 fi
 
