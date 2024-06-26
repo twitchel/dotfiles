@@ -35,7 +35,7 @@ jobs:
       - name: Run test suite
         uses: tj-actions/docker-run@v2
         with:
-          image: twitchel/dotfiles:${{ matrix.ox }}-latest
+          image: twitchel/dotfiles:${{ matrix.os }}-latest
           name: twitchel/dotfiles
           args: |
             bats test/
