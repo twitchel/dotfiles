@@ -34,9 +34,9 @@ jobs:
             DOTFILES_BRANCH=${{ env.DOTFILES_BRANCH }}
 
       - name: Run test suite
-        uses: tj-actions/docker-run@v2
+        uses: addnab/docker-run-action@v3
         with:
           image: twitchel/dotfiles:${{ matrix.os }}-latest
-          name: twitchel-dotfiles
-          args: |
-            bats tests/
+          options: -v ${{ github.workspace }}:/home/docker-ci/.output
+          run: |
+            bats --output /home/docker-ci/.output/ tests/
