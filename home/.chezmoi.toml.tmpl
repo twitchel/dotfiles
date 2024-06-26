@@ -1,13 +1,13 @@
+{{- $email := "me+ci_test@danielkjones.com" -}}
+{{- $isHeadless := true -}}
+{{- $isPersonal := true -}}
+{{- $isWork := true -}}
+
 {{- if stdinIsATTY -}}
-{{-   $email := promptStringOnce . "email" "What is your email address?" -}}
-{{-   $isHeadless := promptBoolOnce . "isHeadless" "Is this machine headless (CLI only)?" -}}
-{{-   $isPersonal := promptBoolOnce . "isPersonal" "Is this machine personal?" -}}
-{{-   $isWork := promptBoolOnce . "isWork" "Is this machine used for work?" -}}
-{{- else -}}
-{{-   $email := "me+ci_test@danielkjones.com" -}}
-{{-   $isHeadless := true -}}
-{{-   $isPersonal := true -}}
-{{-   $isWork := true -}}
+{{-   $email = promptStringOnce . "email" "What is your email address?" -}}
+{{-   $isHeadless = promptBoolOnce . "isHeadless" "Is this machine headless (CLI only)?" -}}
+{{-   $isPersonal = promptBoolOnce . "isPersonal" "Is this machine personal?" -}}
+{{-   $isWork = promptBoolOnce . "isWork" "Is this machine used for work?" -}}
 {{- end -}}
 [data]
 	email = {{ $email | quote }}
