@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo_task() {
   printf "\033[0;34m--> %s\033[0m\n" "$*"
@@ -31,6 +31,7 @@ if ! chezmoi="$(command -v chezmoi)"; then
 fi
 
 chezmoi_args=""
+chezmoi_init_args=""
 
 if [ -n "${DOTFILES_DEBUG:-}" ]; then
   chezmoi_args="${chezmoi_args} --debug"
@@ -45,14 +46,18 @@ if [ -n "${DOTFILES_NO_TTY:-}" ]; then
 fi
 
 if [ -n "${DOTFILES_BRANCH:-}" ]; then
-  chezmoi_args="${chezmoi_args} --branch ${DOTFILES_BRANCH}"
+  echo_task "Chezmoi branch: ${DOTFILES_BRANCH}"
+  chezmoi_init_args="${chezmoi_init_args} --branch ${DOTFILES_BRANCH}"
+fi
+
+# If DOTFILES_LOCAL_COPY is not set, we init from the main twitchel/dotfiles repository
+if [ -z "${DOTFILES_LOCAL_COPY:-}" ]; then
+  chezmoi_init_args="${chezmoi_init_args} twitchel"
 fi
 
 echo_task "Running chezmoi init"
-# replace current process with chezmoi init
-# shellcheck disable=SC2086
-# REtry this execution until it succeeds for a minimum of 3 retries
-# shellcheck disable=SC2086
-"${chezmoi}" init twitchel ${chezmoi_args}
+"${chezmoi}" init ${chezmoi_init_args} ${chezmoi_args}
+
+echo_task "Running chezmoi apply"
 "${chezmoi}" apply ${chezmoi_args}
 

@@ -1,0 +1,33 @@
+{{- $email := "me+ci_test@danielkjones.com" -}}
+{{- $isHeadless := true -}}
+{{- $isPersonal := true -}}
+{{- $isWork := true -}}
+
+{{- $system := dict -}}
+
+{{- if stdinIsATTY -}}
+{{-   $email = promptStringOnce . "email" "What is your email address?" -}}
+{{-   $isHeadless = promptBoolOnce . "isHeadless" "Is this machine headless (CLI only)?" -}}
+{{-   $isPersonal = promptBoolOnce . "isPersonal" "Is this machine personal?" -}}
+{{-   $isWork = promptBoolOnce . "isWork" "Is this machine used for work?" -}}
+{{- end -}}
+{{- if eq .chezmoi.os "darwin" -}}
+  {{- if eq .chezmoi.arch "arm64" -}}
+    {{- $_ := set $system "brewPath" "/opt/homebrew/bin/brew" -}}
+  {{- else -}}
+    {{- $_ := set $system "brewPath" "/usr/local/bin/brew" -}}
+  {{- end -}}
+{{- else -}}
+  {{- $_ := set $system "brewPath" "/home/linuxbrew/.linuxbrew/bin/brew" -}}
+{{- end -}}
+env:
+  BREW_PATH: {{ get $system "brewPath" | quote }}
+data:
+  email: {{ $email | quote }}
+  isHeadless: {{ $isHeadless }}
+  isPersonal: {{ $isPersonal }}
+  isWork: {{ $isWork }}
+  system:
+    {{- range $key, $value := $system }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
