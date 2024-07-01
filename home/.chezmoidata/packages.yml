@@ -79,6 +79,7 @@ packages:
       personal:
         - 1password
         - discord
+        - steam
     snaps:
       common:
         # Browsers
