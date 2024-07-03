@@ -19,7 +19,7 @@ stripComponents = 1
 type = "archive"
 url = "https://github.com/zsh-users/zsh-completions/archive/refs/heads/master.zip"
 
-[".config/.alacritty/themes"]
+[".config/alacritty/themes"]
 exact = true
 refreshPeriod = "168h"
 stripComponents = 1
