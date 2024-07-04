@@ -29,8 +29,4 @@ WORKDIR /home/docker-ci/.local/share/chezmoi
 
 RUN sh install.sh
 
-USER root
-
-RUN usermod -s /bin/zsh docker-ci
-
-USER docker-ci
+ENTRYPOINT [ "/bin/zsh" ]
