@@ -12,9 +12,10 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
     curl \
     sudo \
+    zsh \
     shunit2
 
-RUN useradd -m -s /bin/bash -d /home/docker-ci docker-ci &&  \
+RUN useradd -m -s /bin/zsh -d /home/docker-ci docker-ci &&  \
     echo "docker-ci ALL=NOPASSWD: ALL" >> /etc/sudoers
 
 USER docker-ci
