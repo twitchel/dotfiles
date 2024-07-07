@@ -37,12 +37,12 @@ jobs:
           tags: twitchel/dotfiles:${{ matrix.os }}-latest
           build-args: |
             DOTFILES_BRANCH=${{ env.DOTFILES_BRANCH }}
-#
-#      - name: Run test suite
-#        uses: addnab/docker-run-action@v3
-#        with:
-#          image: twitchel/dotfiles:${{ matrix.os }}-latest
-#          options: -v ${{ github.workspace }}:/home/docker-ci/.output
-#          shell: zsh
-#          run: |
-#            zsh test.sh
+
+      - name: Run test suite
+        uses: addnab/docker-run-action@v3
+        with:
+          image: twitchel/dotfiles:${{ matrix.os }}-latest
+          options: -v ${{ github.workspace }}:/home/docker-ci/.output
+          shell: zsh
+          run: |
+            zsh test.sh
