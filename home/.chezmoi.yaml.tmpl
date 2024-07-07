@@ -3,7 +3,7 @@
 {{- $usage := dict "isPersonal" false "isWork" false }}
 {{- $personalDetails := dict "email" "" "githubUsername" "" "opVault" "" -}}
 {{- $workDetails := dict "domain" "" "email" "" "githubUsername" "" "githubOrg" "" "opVault" "" -}}
-{{- $system := dict "isMac" false "isUbuntuServer" false "isUbuntuDesktop" false "isAndroid" false "shebang" "/usr/bin/env bash" "brewPath" "/dev/null" -}}
+{{- $system := dict "isMac" false "isMacARM" false "isUbuntu" false "isUbuntuServer" false "isUbuntuDesktop" false "isAndroid" false "shebang" "/usr/bin/env bash" "brewPath" "/dev/null" -}}
 {{- $opServiceAccountToken := "" -}}
 {{- $opVaultPersonal := "" -}}
 {{- $opVaultWork := "" -}}
@@ -13,16 +13,18 @@
 {{-   writeToStdout "🍎 Info: Machine is an Apple Mac.\n" -}}
 {{-   $_ := set $system "isMac" true -}}
 {{-   if eq .chezmoi.arch "arm64" -}}
+{{-     $_ := set $system "isMacARM" true -}}
 {{-     $_ := set $system "brewPath" "/opt/homebrew/bin/brew" -}}
 {{-   else -}}
 {{-     $_ := set $system "brewPath" "/usr/local/bin/brew" -}}
 {{-   end -}}
 {{- else if eq .chezmoi.os "linux" -}}
-{{-   if ((and (eq .chezmoi.osRelease.id "ubuntu") (.chezmoi.kernel.osrelease | lower | contains "microsoft" )) | not) -}}
+{{-   if eq .chezmoi.osRelease.id "ubuntu" | not -}}
 {{-     writeToStdout "🛑 Error: Not a supported Linux Distribution. Exiting.\n" -}}
 {{-     exit 1 -}}
 {{-   end -}}
 {{-   $_ := set $system "brewPath" "/home/linuxbrew/.linuxbrew/bin/brew" -}}
+{{-   $_ := set $system "isUbuntu" true -}}
 {{-   if (contains "gnome-shell" (output "bash" "-c" "command -v gnome-shell || true")) }}
 {{-     writeToStdout "🐧 Info: Machine is an Ubuntu Desktop.\n" -}}
 {{-     $_ := set $system "isUbuntuDesktop" true -}}
@@ -86,9 +88,9 @@ data:
       {{- end }}
   system:
     {{- range $key, $value := $system }}
-    {{- if kindOf $value | eq "bool" }}
-    {{ $key }}: {{ $value }}
-    {{- else }}
+    {{- if kindOf $value | eq "string" }}
     {{ $key }}: {{ $value | quote }}
+    {{- else }}
+    {{ $key }}: {{ $value }}
     {{- end }}
     {{- end }}
