@@ -45,4 +45,4 @@ jobs:
           options: -v ${{ github.workspace }}:/home/docker-ci/.output
           shell: zsh
           run: |
-            cat ~/.zshrc && sh test.sh
+            zsh -c ./test.sh

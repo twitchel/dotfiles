@@ -1,16 +1,13 @@
 #!/usr/bin/env zsh
 
-hasFailed=false
+exitCode=0
 
 for FILE in tests/*; do
   sh $FILE;
-  if [ $? -ne 0 ]; then
-    hasFailed=true
+  if [[ $? -ne 0 ]]; then
+    echo "item has failed"
+    exitCode=1
   fi
 done
 
-if [ $hasFailed == 'true' ]; then
-  exit 1;
-fi
-
-exit 0
+exit $exitCode
