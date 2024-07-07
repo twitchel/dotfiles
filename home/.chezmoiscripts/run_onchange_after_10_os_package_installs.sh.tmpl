@@ -1,5 +1,4 @@
-#!/usr/bin/env zsh
-
+#!{{ .system.shebang }}
 # packages.yml hash: {{ include ".chezmoidata/packages.yml" | sha256sum }}
 
 echo "Installing packages"
@@ -13,7 +12,7 @@ else
   exit 1
 fi
 
-{{- if (and (eq .chezmoi.os "linux") (eq .isHeadless false)) }}
+{{ if .system.isUbuntuDesktop }}
 sudo apt-get update
 sudo apt-get install -y {{ range .packages.gui.aptitude.common }}{{ . }} {{ end }}
 
@@ -21,7 +20,7 @@ sudo apt-get install -y {{ range .packages.gui.aptitude.common }}{{ . }} {{ end 
 {{- range .packages.gui.snaps.common }}
 sudo snap install {{ . }} --no-wait
 {{- end }}
-{{- if eq .isPersonal true }}
+{{- if .usage.isPersonal | not | not }}
 {{- range .packages.gui.snaps.personal }}
 sudo snap install {{ . }} --no-wait
 {{- end }}
