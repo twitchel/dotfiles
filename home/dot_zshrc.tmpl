@@ -1,5 +1,6 @@
 # -- Brew -- #
-export BREW_PATH={{ .system.brewPath }}
+export BREW_PATH={{ .system.brewPath }}/bin/brew
+export BREW_BASE_PATH={{ .system.brewPath }}
 eval "$(${BREW_PATH} shellenv)"
 
 # Path to your oh-my-zsh installation.
@@ -99,12 +100,12 @@ source $ZSH/oh-my-zsh.sh
 
 # -- NVM (node version manager) -- #
 export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+[ -s "${BREW_BASE_PATH}/opt/nvm/nvm.sh" ] && \. "${BREW_BASE_PATH}/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "${BREW_BASE_PATH}/opt/nvm/etc/bash_completion.d/nvm" ] && \. "${BREW_BASE_PATH}/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 # -- PostgreSQL Client -- #
-export PATH="/opt/homebrew/opt/postgresql@11/bin:$PATH"
+export PATH="${BREW_BASE_PATH}/opt/postgresql@11/bin:$PATH"
 
 # -- OpenJDK mapping -- #
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+export PATH="${BREW_BASE_PATH}/opt/openjdk/bin:$PATH"
 

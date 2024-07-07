@@ -14,16 +14,16 @@
 {{-   $_ := set $system "isMac" true -}}
 {{-   if eq .chezmoi.arch "arm64" -}}
 {{-     $_ := set $system "isMacARM" true -}}
-{{-     $_ := set $system "brewPath" "/opt/homebrew/bin/brew" -}}
+{{-     $_ := set $system "brewPath" "/opt/homebrew" -}}
 {{-   else -}}
-{{-     $_ := set $system "brewPath" "/usr/local/bin/brew" -}}
+{{-     $_ := set $system "brewPath" "/usr/local" -}}
 {{-   end -}}
 {{- else if eq .chezmoi.os "linux" -}}
 {{-   if eq .chezmoi.osRelease.id "ubuntu" | not -}}
 {{-     writeToStdout "🛑 Error: Not a supported Linux Distribution. Exiting.\n" -}}
 {{-     exit 1 -}}
 {{-   end -}}
-{{-   $_ := set $system "brewPath" "/home/linuxbrew/.linuxbrew/bin/brew" -}}
+{{-   $_ := set $system "brewPath" "/home/linuxbrew/.linuxbrew" -}}
 {{-   $_ := set $system "isUbuntu" true -}}
 {{-   if (contains "gnome-shell" (output "bash" "-c" "command -v gnome-shell || true")) }}
 {{-     writeToStdout "🐧 Info: Machine is an Ubuntu Desktop.\n" -}}
@@ -67,7 +67,8 @@
 {{- end -}}
 
 env:
-  BREW_PATH: {{ get $system "brewPath" | quote }}
+  BREW_PATH: {{ get $system "brewPath" | quote }}/bin/brew
+  BREW_BASE_PATH: {{ get $system "brewPath" | quote }}
   OP_SERVICE_ACCOUNT_TOKEN: {{ $opServiceAccountToken | quote }}
   OP_VAULT_PERSONAL: {{ $opVaultPersonal | quote }}
   OP_VAULT_WORK: {{ $opVaultWork | quote }}
