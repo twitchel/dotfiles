@@ -1,5 +1,32 @@
 packages:
   cli:
+    android:
+      # Shell
+      - fd
+      - fzf
+      - starship
+      - thefuck
+      - tmux
+      - tree
+      - wget
+
+      # Standard tool replacements
+      - bat # better cat
+      - eza # better ls
+      - htop # better top
+      - tlrc # better man
+      - zoxide # better cd
+
+      # git/github
+      - git-delta
+      - tig
+
+      # development
+      - jq
+      - neovim
+      - neofetch
+      - nvm
+      - ripgrep
     brew:
       common:
         # Shell
