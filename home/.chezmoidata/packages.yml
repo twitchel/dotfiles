@@ -3,11 +3,9 @@ packages:
     brew:
       common:
         # Shell
-#        - antigen
         - fd
         - fzf
         - starship
-        - thefuck
         - tmux
         - tree
         - wget
@@ -27,14 +25,17 @@ packages:
         # development
         - awscli
         - awscli-local
-        - aws-sam-cli
         - jq
         - neovim
         - neofetch
         - nvm
-#        - openjdk
+        - openjdk
         - ripgrep
+        - yq
       personal:
+        - thefuck
+      work:
+        - aws-sam-cli
   gui:
     casks:
       common:
