@@ -16,6 +16,8 @@ jobs:
 
     strategy:
       matrix:
+        usage:
+          - personal
         os:
           - ubuntu-24.04
     steps:
@@ -37,12 +39,13 @@ jobs:
           tags: twitchel/dotfiles:${{ matrix.os }}-latest
           build-args: |
             DOTFILES_BRANCH=${{ env.DOTFILES_BRANCH }}
+            CI_USAGE=${{ matrix.usage }}
 
       - name: Run test suite
         uses: addnab/docker-run-action@v3
         with:
-          image: twitchel/dotfiles:${{ matrix.os }}-latest
+          image: twitchel/dotfiles:${{ matrix.os }}-${{ matrix.usage }}-latest
           options: -v ${{ github.workspace }}:/home/docker-ci/.output
           shell: zsh
           run: |
-            zsh test.sh
+            CI_USAGE=${{ matrix.usage }} zunit --output-text
