@@ -1,0 +1,19 @@
+#!{{ .system.shebang }}
+
+## Dev Directories
+DEV_DIR_PREFIX="${HOME}/dev/src"
+
+mkdir -p "${DEV_DIR_PREFIX}/github.com/"
+
+{{- if .usage.isPersonal | not | not }}
+mkdir -p "${DEV_DIR_PREFIX}/github.com/{{ .details.personal.githubUsername }}"
+{{- end }}
+
+{{- if and (.usage.isWork | not | not) }}
+mkdir -p "${DEV_DIR_PREFIX}/github.com/{{ .details.work.githubOrg }}"
+{{- end }}
+
+## Node - Install latest LTS
+export NVM_DIR="$HOME/.nvm"
+[ -s "${BREW_BASE_PATH}/opt/nvm/nvm.sh" ] && \. "${BREW_BASE_PATH}/opt/nvm/nvm.sh"  # This loads nvm
+nvm install --lts

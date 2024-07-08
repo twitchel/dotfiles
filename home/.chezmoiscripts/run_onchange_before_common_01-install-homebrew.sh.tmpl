@@ -1,0 +1,18 @@
+#!{{ .system.shebang }}
+{{ if .system.isAndroid | not | not }}
+# Not an Android environment. Exiting.
+exit 0
+
+{{ end }}
+
+set -e
+
+if [ -x ${BREW_PATH} ]; then
+  eval "$(${BREW_PATH} shellenv)"
+  if command -v brew; then
+    echo "Brew already installed"
+  else
+    echo "Installing Homebrew"
+    which brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+fi

@@ -1,3 +1,4 @@
+{{ if .system.isUbuntu -}}
 #!{{ .system.shebang }}
 # packages.yml hash: {{ include ".chezmoidata/packages.yml" | sha256sum }}
 
@@ -12,17 +13,18 @@ else
   exit 1
 fi
 
-{{ if .system.isUbuntuDesktop }}
+  {{ if .system.isUbuntuDesktop }}
 sudo apt-get update
 sudo apt-get install -y {{ range .packages.gui.aptitude.common }}{{ . }} {{ end }}
 
 # Although you can install multiple snaps on one line, this errors if already installed
-{{- range .packages.gui.snaps.common }}
+    {{- range .packages.gui.snaps.common }}
 sudo snap install {{ . }} --no-wait
-{{- end }}
-{{- if .usage.isPersonal | not | not }}
-{{- range .packages.gui.snaps.personal }}
+    {{- end }}
+    {{- if .usage.isPersonal | not | not }}
+      {{- range .packages.gui.snaps.personal }}
 sudo snap install {{ . }} --no-wait
-{{- end }}
-{{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
 {{- end }}

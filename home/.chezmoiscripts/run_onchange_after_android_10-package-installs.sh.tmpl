@@ -1,0 +1,8 @@
+{{ if .system.isAndroid -}}
+#!{{ .system.shebang }}
+# packages.yml hash: {{ include ".chezmoidata/packages.yml" | sha256sum }}
+
+echo "Installing packages"
+
+pkg install -y {{ range .packages.android }}{{ . }} {{ end }}
+{{- end }}
