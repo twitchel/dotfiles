@@ -16,7 +16,8 @@ RUN apt-get update && \
     curl \
     sudo \
     zsh \
-    shunit2
+    shunit2 \
+    git
 
 RUN useradd -m -s /bin/zsh -d /home/docker-ci docker-ci &&  \
     echo "docker-ci ALL=NOPASSWD: ALL" >> /etc/sudoers
