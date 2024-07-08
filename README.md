@@ -17,6 +17,29 @@ This has been tested on:
 
 It also has had limited testing on Android using the [Termux app located on F-Droid](https://f-droid.org/en/packages/com.termux/). This is still not in a working state as of yet however.
 
+## Dependencies
+While the dotfiles repo is designed to be a one-command install, there are a few dependencies that must be setup first
+
+If running on Linux you will need to install the following packages:
+- `zsh` - should be installed and set as your default shell.
+- `git` - for cloning the repo
+- `curl` or `wget` - for downloading the install script
+
+If running on a Mac you will need to install the Xcode command line tools
+```
+xcode-select --install
+```
+
+If running on Windows you will need to install WSL and Ubuntu 24.04. You will also need to install the following packages:
+- `zsh`
+- `git`
+- `curl` or `wget`
+
+Finally, if running on Android, you will need to install the Termux app from F-Droid. You will also need to install the following packages:
+- `zsh`
+- `git`
+- `curl` or `wget`
+
 ## Install
 
 Install everything with:
