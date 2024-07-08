@@ -36,7 +36,7 @@ jobs:
           file: ./.github/.cicd/${{ matrix.os }}/Dockerfile
           push: false
           load: true
-          tags: twitchel/dotfiles:${{ matrix.os }}-latest
+          tags: twitchel/dotfiles:${{ matrix.os }}-${{ matrix.usage }}-latest
           build-args: |
             DOTFILES_BRANCH=${{ env.DOTFILES_BRANCH }}
             CI_USAGE=${{ matrix.usage }}
