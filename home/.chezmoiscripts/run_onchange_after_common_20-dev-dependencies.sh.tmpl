@@ -1,5 +1,8 @@
 #!{{ .system.shebang }}
 
+## Brew setup
+eval "$(${BREW_PATH} shellenv)"
+
 ## Dev Directories
 DEV_DIR_PREFIX="${HOME}/dev/src"
 
@@ -14,5 +17,7 @@ mkdir -p "${DEV_DIR_PREFIX}/github.com/{{ .details.work.githubOrg }}"
 {{- end }}
 
 ## Node - Install latest LTS
-source $HOME/.zshrc
+if [[ -z $ZSH ]]; then
+  source $HOME/.zshrc
+fi
 nvm install --lts
