@@ -109,6 +109,7 @@ packages:
         - discord
         - steam
         - vnc-viewer
+      work:
     snaps:
       common:
         # Browsers
