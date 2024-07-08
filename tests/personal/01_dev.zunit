@@ -1,0 +1,18 @@
+#!/usr/bin/env zunit
+
+@setup {
+  if [[ $CI_USAGE != "personal" ]]; then
+    skip "Skipping test, not in personal CI environment"
+  fi
+}
+
+@test 'Personal - Dev 01.1: Personal dev folder exists' {
+  assert ~/dev/src/github.com/twitchel is_dir
+}
+
+@test 'Personal - Dev 01.2: gitconfig set with personal email' {
+  personal_email=$(chezmoi data | jq -r .details.personal.email)
+  run git config --get user.email
+
+  assert "$output" same_as "$personal_email"
+}

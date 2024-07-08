@@ -1,0 +1,12 @@
+TAP version 13
+not ok 1 - Error: Subtest
+  ---
+  message: Failed to parse test body (eval):27: parse error near `}'
+  severity: fail
+  ...
+ok 2 - # SKIP Brew is in Path
+  ---
+  message: Skipping test, not in personal CI environment
+  severity: comment
+  ...
+1..2
