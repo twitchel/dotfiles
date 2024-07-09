@@ -1,0 +1,10 @@
+{{- if .system.isAndroid -}}
+#!{{ .system.shebang }}
+
+{{ template "scripts/common/bootstrap.sh.tmpl" . }}
+
+echo "⭐️ Running 20-android-dev-dependencies"
+
+{{ template "scripts/development-setup/dev-directories.sh.tmpl" . }}
+
+{{- end -}}
