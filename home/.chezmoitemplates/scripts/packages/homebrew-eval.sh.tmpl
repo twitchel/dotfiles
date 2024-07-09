@@ -1,0 +1,8 @@
+{{ if .system.isAndroid | not -}}
+if [[ -z ${BREW_PATH} ]]; then
+  echo "Error: Homebrew path not set. Exiting."
+  exit 1
+fi
+
+eval "$(${BREW_PATH} shellenv)"
+{{ end }}

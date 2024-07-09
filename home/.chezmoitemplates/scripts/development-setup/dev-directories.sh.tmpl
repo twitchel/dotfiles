@@ -1,9 +1,3 @@
-{{ if .system.isUbuntu -}}
-#!{{ .system.shebang }}
-
-## Brew setup
-eval "$(${BREW_PATH} shellenv)"
-
 ## Dev Directories
 DEV_DIR_PREFIX="${HOME}/dev/src"
 
@@ -13,13 +7,6 @@ mkdir -p "${DEV_DIR_PREFIX}/github.com/"
 mkdir -p "${DEV_DIR_PREFIX}/github.com/{{ .details.personal.githubUsername }}"
 {{- end }}
 
-{{- if and (.usage.isWork | not | not) }}
+{{- if .usage.isWork | not | not }}
 mkdir -p "${DEV_DIR_PREFIX}/github.com/{{ .details.work.githubOrg }}"
 {{- end }}
-
-## Node - Install latest LTS
-if [[ -z $ZSH ]]; then
-  source $HOME/.zshrc
-fi
-nvm install --lts
-{{- end}}

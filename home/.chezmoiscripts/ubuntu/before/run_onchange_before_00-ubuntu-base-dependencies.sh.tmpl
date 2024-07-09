@@ -1,6 +1,8 @@
 {{ if .system.isUbuntu -}}
 #!{{ .system.shebang }}
 
+{{- template "scripts/common/bootstrap.sh" . -}}
+
 export DEBIAN_FRONTEND=noninteractive
 
 echo "Installing packages"
@@ -8,36 +10,6 @@ sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y git curl build-essential zsh
 
-{{- if .system.isUbuntuDesktop }}
-# Install Meslo nerd font on linux
-sudo apt-get intall -y fontconfig
-wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip \
-&& cd ~/.local/share/fonts && unzip Meslo.zip && rm *Windows* && rm Meslo.zip && fc-cache -fv
-
-{{- end }}
-
-# Set default shell to zsh
-sudo chsh -s $(which zsh) $(whoami)
-
 # Install 1Password CLI if not exists
-if command -v op; then
-  echo "1password cli already installed"
-else
-  echo "Installing 1password-cli"
-  # Add key for 1Password Apt repo
-  curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
-  sudo gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg
-  # Add 1Password apt repo
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" |
-  sudo tee /etc/apt/sources.list.d/1password.list
-  # Add debsig-verify policy
-  sudo mkdir -p /etc/debsig/policies/AC2D62742012EA22/
-  curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | \
-  sudo tee /etc/debsig/policies/AC2D62742012EA22/1password.pol
-  sudo mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22
-  curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
-  sudo gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg
-  # Install 1Password
-  sudo apt update && sudo apt install 1password-cli
-fi
+{{- template "scripts/packages/1password-cli-install.sh" . -}}
 {{- end }}
