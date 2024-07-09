@@ -64,7 +64,7 @@ jobs:
 
       - name: Run installer
         run: |
-          sh install.sh
+          CI_USAGE=${{ matrix.usage }} sh install.sh
         shell: zsh {0}
 
       - name: Run test suite
