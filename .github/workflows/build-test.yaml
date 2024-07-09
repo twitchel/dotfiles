@@ -11,7 +11,51 @@ env:
   DOTFILES_BRANCH: ${{ github.head_ref || github.ref_name || 'master' }}
 
 jobs:
+  build-macos:
+    name: Build and Test macOS
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        usage:
+          - personal
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run installer
+        run: |
+          CI_USAGE=${{ matrix.usage }} sh install.sh
+
+      - name: Run test suite
+        run: |
+          CI_USAGE=${{ matrix.usage }} zunit --output-text
+
   build:
+    name: Build and Test Ubuntu Server
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        usage:
+          - personal
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt install zsh
+
+      - name: Run installer
+        run: |
+          sh install.sh
+        shell: zsh {0}
+
+      - name: Run test suite
+        run: |
+          CI_USAGE=${{ matrix.usage }} zunit --output-text
+        shell: zsh {0}
+
+  build-docker-container:
     runs-on: ubuntu-latest
 
     strategy:
