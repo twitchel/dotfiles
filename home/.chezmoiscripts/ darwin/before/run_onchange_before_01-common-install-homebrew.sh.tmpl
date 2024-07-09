@@ -1,0 +1,20 @@
+{{ if .system.isMac -}}
+#!{{ .system.shebang }}
+
+set -e
+
+echo "Brew Path: ${BREW_PATH}"
+
+if [[ -z ${BREW_PATH} ]]; then
+  echo "Error: Homebrew path not set. Exiting."
+  exit 1
+fi
+
+eval "$(${BREW_PATH} shellenv)"
+if command -v brew; then
+  echo "Brew already installed"
+else
+  echo "Installing Homebrew"
+  which brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+{{- end}}
