@@ -1,9 +1,9 @@
 #!/usr/bin/env zunit
 
 @test 'Common - Packages 00.1: Brew is in Path' {
-  run command -v brew
+  run brew --version
 
-  assert "$output" contains "brew"
+  assert "$state" equals 0
 }
 
 @test 'Common - Packages 00.2: Brew common packages are installed' {
