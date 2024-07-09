@@ -34,7 +34,7 @@ jobs:
 
       - name: Run test suite
         run: |
-          CI_USAGE=${{ matrix.usage }} zunit --output-text
+          CI_USAGE=${{ matrix.usage }} sh test.sh
 
   build:
     name: Build and Test Ubuntu Server 24.04
@@ -69,10 +69,7 @@ jobs:
 
       - name: Run test suite
         run: |
-          if [[ -z ${ZSH_SOURCED} ]]; then
-            source ~/.zshrc
-          fi
-          CI_USAGE=${{ matrix.usage }} zunit --output-text
+          CI_USAGE=${{ matrix.usage }} sh test.sh
         shell: zsh {0}
 
 #  build-docker-container:
