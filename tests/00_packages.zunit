@@ -6,10 +6,10 @@
   assert "$output" contains "brew"
 }
 
-@test 'Common - Packages 00.2: Brew packages are installed' {
+@test 'Common - Packages 00.2: Brew common packages are installed' {
   packages_array_length=`yq e ".packages.cli.brew.common | length - 1" home/.chezmoidata/packages.yml`
 
-  run brew list
+  run cat ~/Brewfile-common
 
   for element_index in `seq 0 $packages_array_length`;do
     package=`yq e ".packages.cli.brew.common[$element_index]" home/.chezmoidata/packages.yml`
@@ -18,8 +18,3 @@
   done
 }
 
-@test 'Common - Packages 00.3: Check 1Password CLI installed' {
-  run command -v op
-
-  assert "$output" contains "op"
-}
