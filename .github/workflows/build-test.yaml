@@ -66,41 +66,41 @@ jobs:
           CI_USAGE=${{ matrix.usage }} zunit --output-text
         shell: zsh {0}
 
-  build-docker-container:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        usage:
-          - personal
-        os:
-          - ubuntu-24.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build And Install Dotfiles
-        id: build
-        uses: docker/build-push-action@v6.1.0
-        with:
-          context: .
-          platforms: linux/amd64
-          file: ./.github/.cicd/${{ matrix.os }}/Dockerfile
-          push: false
-          load: true
-          tags: twitchel/dotfiles:${{ matrix.os }}-${{ matrix.usage }}-latest
-          build-args: |
-            DOTFILES_BRANCH=${{ env.DOTFILES_BRANCH }}
-            CI_USAGE=${{ matrix.usage }}
-
-      - name: Run test suite
-        uses: addnab/docker-run-action@v3
-        with:
-          image: twitchel/dotfiles:${{ matrix.os }}-${{ matrix.usage }}-latest
-          options: -v ${{ github.workspace }}:/home/docker-ci/.output
-          shell: zsh
-          run: |
-            CI_USAGE=${{ matrix.usage }} zunit --output-text
+#  build-docker-container:
+#    runs-on: ubuntu-latest
+#
+#    strategy:
+#      matrix:
+#        usage:
+#          - personal
+#        os:
+#          - ubuntu-24.04
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
+#
+#      - name: Build And Install Dotfiles
+#        id: build
+#        uses: docker/build-push-action@v6.1.0
+#        with:
+#          context: .
+#          platforms: linux/amd64
+#          file: ./.github/.cicd/${{ matrix.os }}/Dockerfile
+#          push: false
+#          load: true
+#          tags: twitchel/dotfiles:${{ matrix.os }}-${{ matrix.usage }}-latest
+#          build-args: |
+#            DOTFILES_BRANCH=${{ env.DOTFILES_BRANCH }}
+#            CI_USAGE=${{ matrix.usage }}
+#
+#      - name: Run test suite
+#        uses: addnab/docker-run-action@v3
+#        with:
+#          image: twitchel/dotfiles:${{ matrix.os }}-${{ matrix.usage }}-latest
+#          options: -v ${{ github.workspace }}:/home/docker-ci/.output
+#          shell: zsh
+#          run: |
+#            CI_USAGE=${{ matrix.usage }} zunit --output-text
