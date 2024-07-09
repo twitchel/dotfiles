@@ -1,11 +1,12 @@
 {{- if .system.isAndroid -}}
-#!{{ .system.shebang }}
+#!/data/data/com.termux/files/usr/bin/bash
 # packages.yml hash: {{ include ".chezmoidata/packages.yml" | sha256sum }}
 
 {{ template "scripts/common/bootstrap.sh.tmpl" . }}
 
 echo "⭐️ Running 10-android-package-installs"
 
-pkg install -y {{ range .packages.android }}{{ . }} {{ end }}
+pkg update
+pkg install -y {{ range .packages.cli.android }}{{ . }} {{ end }}
 
 {{- end -}}

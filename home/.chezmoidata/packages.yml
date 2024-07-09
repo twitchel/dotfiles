@@ -2,13 +2,15 @@ packages:
   cli:
     android:
       # Shell
+      - curl
       - fd
       - fzf
-      - gcc
+      - ncurses-utils
       - starship
       - tmux
       - tree
       - wget
+      - zip
 
       # Standard tool replacements
       - bat # better cat
@@ -24,6 +26,7 @@ packages:
       - jq
       - neovim
       - neofetch
+      - nodejs-lts
       - ripgrep
     brew:
       taps:
