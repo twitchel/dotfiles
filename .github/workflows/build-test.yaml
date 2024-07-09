@@ -34,7 +34,7 @@ jobs:
 
       - name: Run test suite
         run: |
-          CI_USAGE=${{ matrix.usage }} sh test.sh
+          CI_USAGE=${{ matrix.usage }} zsh test.sh
 
   build:
     name: Build and Test Ubuntu Server 24.04
@@ -69,7 +69,7 @@ jobs:
 
       - name: Run test suite
         run: |
-          CI_USAGE=${{ matrix.usage }} sh test.sh
+          CI_USAGE=${{ matrix.usage }} zsh test.sh
         shell: zsh {0}
 
 #  build-docker-container:
