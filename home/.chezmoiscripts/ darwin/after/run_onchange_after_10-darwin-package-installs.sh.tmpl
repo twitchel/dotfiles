@@ -10,8 +10,8 @@ echo "Installing packages"
 if [ -x ${BREW_PATH} ]; then
   # Source Homebrew environment variables
   eval "$(${BREW_PATH} shellenv)"
-  brew bundle --file=~/.Brewfile-common
-  brew bundle --file=~/.Brewfile-mac
+  brew bundle --file=~/Brewfile-common
+  brew bundle --file=~/Brewfile-mac
 else
   printf "Error: Homebrew is not installed. Exiting.\n"
   exit 1
