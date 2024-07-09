@@ -26,6 +26,8 @@ packages:
       - neofetch
       - ripgrep
     brew:
+      taps:
+        - zunit-zsh/zunit
       common:
         # Shell
         - fd

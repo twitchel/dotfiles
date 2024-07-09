@@ -1,6 +1,9 @@
+{{- range .packages.cli.brew.taps }}
+tap '{{ . }}'
+{{- end -}}
 {{- range .packages.cli.brew.common }}
 brew '{{ . }}'
-{{- end -}}
+{{- end }}
 {{- if .usage.isPersonal | not | not }}
   {{- range .packages.cli.brew.personal }}
 brew '{{ . }}'
