@@ -6,6 +6,6 @@
 
 echo "⭐️ Running 10-android-package-installs"
 
-pkg install -y {{ range .packages.android }}{{ . }} {{ end }}
+pkg install -y {{ range .packages.cli.android }}{{ . }} {{ end }}
 
 {{- end -}}
