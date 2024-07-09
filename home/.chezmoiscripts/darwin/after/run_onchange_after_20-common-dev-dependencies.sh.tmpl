@@ -1,8 +1,8 @@
 {{ if .system.isMac -}}
 #!{{ .system.shebang }}
 
-{{- template "scripts/common/bootstrap.sh" . -}}
+{{- template "scripts/common/bootstrap.sh.tmpl" . -}}
 
-{{- template "scripts/development-setup/dev-directories.sh" . -}}
+{{- template "scripts/development-setup/dev-directories.sh.tmpl" . -}}
 
 {{- end}}

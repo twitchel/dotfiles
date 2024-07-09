@@ -1,7 +1,7 @@
 {{ if .system.isUbuntu -}}
 #!{{ .system.shebang }}
 
-{{- template "scripts/common/bootstrap.sh" . -}}
+{{- template "scripts/common/bootstrap.sh.tmpl" . -}}
 
 export DEBIAN_FRONTEND=noninteractive
 
@@ -11,5 +11,5 @@ sudo apt-get upgrade -y
 sudo apt-get install -y git curl build-essential zsh
 
 # Install 1Password CLI if not exists
-{{- template "scripts/packages/1password-cli-install.sh" . -}}
+{{- template "scripts/packages/1password-cli-install.sh.tmpl" . -}}
 {{- end }}

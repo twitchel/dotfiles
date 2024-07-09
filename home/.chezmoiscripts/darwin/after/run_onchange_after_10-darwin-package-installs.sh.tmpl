@@ -2,11 +2,11 @@
 #!{{ .system.shebang }}
 # packages.yml hash: {{ include ".chezmoidata/packages.yml" | sha256sum }}
 
-{{- template "scripts/common/bootstrap.sh" . -}}
+{{- template "scripts/common/bootstrap.sh.tmpl" . -}}
 
 brew bundle --file=~/Brewfile-common
 brew bundle --file=~/Brewfile-mac
 
-{{- template "scripts/packages/node-install.sh" . -}}
+{{- template "scripts/packages/node-install.sh.tmpl" . -}}
 
 {{- end -}}
