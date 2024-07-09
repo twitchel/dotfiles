@@ -1,7 +1,7 @@
 #!/usr/bin/env zunit
 
 @setup {
-  if [[ $CI_USAGE != "personal" ]]; then
+  if [[ $CI_USAGE != "work" ]]; then
     skip "Skipping test, not in personal CI environment"
   fi
 }
