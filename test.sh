@@ -1,23 +1,13 @@
 #!/usr/bin/env zsh
 
-exitCode=0
+if [[ -z ${ZSH_SOURCED} ]]; then
+  source ~/.zshrc
+fi
 
-echo "Prepping Tests"
-echo "Running as user: $(whoami)"
-echo "Running in shell: $(echo $0)"
-echo "Running in dir: $(pwd)"
+if [ "${TERM:-}" = "" ]; then
+  echo "Setting TERM to dumb" # makes tput happy in CI envs
+  export TERM="dumb"
+fi
 
-if [[ -z "${ZSH}" ]]; then
-  echo "Sourcing zshrc"
-  source $HOME/.zshrc
-fi;
-
-for FILE in tests/*; do
-  sh $FILE;
-  if [[ $? -ne 0 ]]; then
-    echo "item has failed"
-    exitCode=1
-  fi
-done
-
-exit $exitCode
+# Run the tests
+zunit --output-text

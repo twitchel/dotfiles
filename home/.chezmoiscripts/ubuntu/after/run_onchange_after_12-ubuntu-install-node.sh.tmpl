@@ -1,0 +1,10 @@
+{{- if .system.isUbuntu -}}
+#!{{ .system.shebang }}
+
+{{ template "scripts/common/bootstrap.sh.tmpl" . }}
+
+echo "⭐️ Running 12-ubuntu-install-node"
+
+{{ template "scripts/packages/node-install.sh.tmpl" . }}
+
+{{- end -}}

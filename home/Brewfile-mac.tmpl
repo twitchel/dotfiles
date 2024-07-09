@@ -1,0 +1,18 @@
+{{- if .system.isMac | not | not -}}
+# specify a directory to install
+cask_args appdir: '/Applications'
+
+{{- range .packages.gui.casks.common }}
+cask '{{ . }}'
+{{- end }}
+{{- if .usage.isPersonal | not | not }}
+  {{- range .packages.gui.casks.personal }}
+cask '{{ . }}'
+  {{- end }}
+{{- end }}
+{{- if .usage.isWork | not | not }}
+  {{- range .packages.gui.casks.work }}
+cask '{{ . }}'
+  {{- end }}
+{{- end }}
+{{- end }}

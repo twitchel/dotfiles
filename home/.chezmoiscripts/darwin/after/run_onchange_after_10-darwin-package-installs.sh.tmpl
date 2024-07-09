@@ -1,0 +1,12 @@
+{{- if .system.isMac -}}
+#!{{ .system.shebang }}
+# packages.yml hash: {{ include ".chezmoidata/packages.yml" | sha256sum }}
+
+{{ template "scripts/common/bootstrap.sh.tmpl" . }}
+
+echo "⭐️ Running 10-darwin-package-installs"
+
+brew bundle --file=~/Brewfile-common
+brew bundle --file=~/Brewfile-mac
+
+{{- end -}}

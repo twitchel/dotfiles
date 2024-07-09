@@ -1,7 +1,10 @@
 [user]
-	email = {{ .chezmoi.config.data.email }}
-	name = Daniel K. Jones
-
+{{- if .usage.isPersonal | not | not }}
+	email = {{ .details.personal.email }}
+{{- else }}
+	email = {{ .details.work.email }}
+{{ end}}
+	name = {{ .name }}
 [alias]
 	a = add
 	ap = add -p

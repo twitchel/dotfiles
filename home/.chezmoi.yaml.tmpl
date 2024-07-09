@@ -1,33 +1,105 @@
-{{- $email := "me+ci_test@danielkjones.com" -}}
-{{- $isHeadless := true -}}
-{{- $isPersonal := true -}}
-{{- $isWork := true -}}
+{{/* Setup Default Values */}}
+{{- $name := "Daniel Jones" -}}
+{{- $usage := dict "isPersonal" false "isWork" false }}
+{{- $personalDetails := dict "email" "" "githubUsername" "twitchel" "opVault" "" -}}
+{{- $workDetails := dict "domain" "" "email" "" "githubUsername" "" "githubOrg" "" "opVault" "" -}}
+{{- $system := dict "isMac" false "isMacARM" false "isUbuntu" false "isUbuntuServer" false "isUbuntuDesktop" false "isAndroid" false "shebang" "/usr/bin/env zsh" "brewPath" "/dev/null" -}}
+{{- $opServiceAccountToken := "" -}}
+{{- $opVaultPersonal := "" -}}
+{{- $opVaultWork := "" -}}
 
-{{- $system := dict -}}
-
-{{- if stdinIsATTY -}}
-{{-   $email = promptStringOnce . "email" "What is your email address?" -}}
-{{-   $isHeadless = promptBoolOnce . "isHeadless" "Is this machine headless (CLI only)?" -}}
-{{-   $isPersonal = promptBoolOnce . "isPersonal" "Is this machine personal?" -}}
-{{-   $isWork = promptBoolOnce . "isWork" "Is this machine used for work?" -}}
-{{- end -}}
+{{/* Operating System level detections */}}
 {{- if eq .chezmoi.os "darwin" -}}
-  {{- if eq .chezmoi.arch "arm64" -}}
-    {{- $_ := set $system "brewPath" "/opt/homebrew/bin/brew" -}}
-  {{- else -}}
-    {{- $_ := set $system "brewPath" "/usr/local/bin/brew" -}}
-  {{- end -}}
+{{-   writeToStdout "🍎 Info: Machine is an Apple Mac.\n" -}}
+{{-   $_ := set $system "isMac" true -}}
+{{-   if eq .chezmoi.arch "arm64" -}}
+{{-     $_ := set $system "isMacARM" true -}}
+{{-     $_ := set $system "brewPath" "/opt/homebrew" -}}
+{{-   else -}}
+{{-     $_ := set $system "brewPath" "/usr/local" -}}
+{{-   end -}}
+{{- else if eq .chezmoi.os "linux" -}}
+{{-   if eq .chezmoi.osRelease.id "ubuntu" | not -}}
+{{-     writeToStdout "🛑 Error: Not a supported Linux Distribution. Exiting.\n" -}}
+{{-     exit 1 -}}
+{{-   end -}}
+{{-   $_ := set $system "brewPath" "/home/linuxbrew/.linuxbrew" -}}
+{{-   $_ := set $system "isUbuntu" true -}}
+{{-   if (contains "gnome-shell" (output "bash" "-c" "command -v gnome-shell || true")) }}
+{{-     writeToStdout "🐧 Info: Machine is an Ubuntu Desktop.\n" -}}
+{{-     $_ := set $system "isUbuntuDesktop" true -}}
+{{-   else -}}
+{{-     writeToStdout "🐧 Info: Machine is an Ubuntu Server.\n" -}}
+{{-     $_ := set $system "isUbuntuServer" true -}}
+{{-   end -}}
+{{- else if eq .chezmoi.os "android" -}}
+{{-   writeToStdout "🤖 Info: Machine is an Android Device.\n" -}}
+{{-   $_ := set $system "isAndroid" true -}}
+{{-   $_ := set $system "shebang" "/data/data/com.termux/files/usr/bin/bash" -}}
 {{- else -}}
-  {{- $_ := set $system "brewPath" "/home/linuxbrew/.linuxbrew/bin/brew" -}}
+{{-   writeToStdout "🛑 Error: Not a supported OS environment. Exiting.\n" -}}
+{{-   exit 1 -}}
 {{- end -}}
+{{- $brewPathFull := (print (get $system "brewPath") "/bin/brew") -}}
+
+{{/* If User Input is available, prompt for values */}}
+{{- if stdinIsATTY -}}
+{{-   $_ := set $usage "isPersonal" (promptBoolOnce . "isPersonal" "Is this machine personal?") -}}
+{{-   $_ := set $usage "isWork" (promptBoolOnce . "isWork" "Is this machine used for work?") -}}
+{{/* $opServiceAccountToken := (promptStringOnce . "opServiceAccountToken" "What is your 1Password Service Account Token?") */}}
+{{-   if $usage.isPersonal -}}
+{{-     $_ := set $personalDetails "email" (promptStringOnce . "email" "PERSONAL: What is your email address?") -}}
+{{-     $_ := set $personalDetails "githubUsername" (promptStringOnce . "githubUsername" "PERSONAL: What is your GitHub username?") -}}
+{{/* $opVaultPersonal = (promptStringOnce . "opVaultPersonal" "PERSONAL: What is your 1Password Vault name?") */}}
+{{-   end -}}
+{{-   if $usage.isWork -}}
+{{-     $_ := set $workDetails "domain" (promptStringOnce . "domain" "WORK: What is your work domain name (example.com)?") -}}
+{{-     $_ := set $workDetails "email" (promptStringOnce . "email" "WORK: What is your work email address?") -}}
+{{-     $_ := set $workDetails "githubUsername" (promptStringOnce . "githubUsername" "WORK: What is your GitHub username?") -}}
+{{-     $_ := set $workDetails "githubOrg" (promptStringOnce . "githubAcct" "WORK: What is your GitHub Org name?") -}}
+{{/* $opVaultWork = (promptStringOnce . "opVaultWork" "WORK: What is your 1Password Vault name?") */}}
+{{-   end -}}
+{{- end -}}
+
+{{/* CI/Testing Environments */}}
+{{- if eq (env "CI_USAGE") "personal" -}}
+  {{- $_ := set $usage "isPersonal" true -}}
+  {{- $_ := set $personalDetails "email" "contact@danieljones.net" -}}
+{{- end -}}
+{{- if eq (env "CI_USAGE") "work" -}}
+  {{- $_ := set $usage "isWork" true -}}
+  {{- $_ := set $workDetails "domain" "example.com" -}}
+  {{- $_ := set $workDetails "email" "daniel@example.com" -}}
+  {{- $_ := set $workDetails "githubUsername" "daniel_exampleco" -}}
+  {{- $_ := set $workDetails "githubOrg" "exampleco" -}}
+{{- end -}}
+
 env:
-  BREW_PATH: {{ get $system "brewPath" | quote }}
+  BREW_PATH: {{ $brewPathFull | quote }}
+  BREW_BASE_PATH: {{ get $system "brewPath" | quote }}
+  OP_SERVICE_ACCOUNT_TOKEN: {{ $opServiceAccountToken | quote }}
+  OP_VAULT_PERSONAL: {{ $opVaultPersonal | quote }}
+  OP_VAULT_WORK: {{ $opVaultWork | quote }}
 data:
-  email: {{ $email | quote }}
-  isHeadless: {{ $isHeadless }}
-  isPersonal: {{ $isPersonal }}
-  isWork: {{ $isWork }}
+  name: {{ $name | quote }}
+  usage:
+    {{- range $key, $value := $usage }}
+    {{ $key }}: {{ $value | not | not }}
+    {{- end }}
+  details:
+    personal:
+      {{- range $key, $value := $personalDetails }}
+      {{ $key }}: {{ $value | quote }}
+      {{- end }}
+    work:
+      {{- range $key, $value := $workDetails }}
+      {{ $key }}: {{ $value | quote }}
+      {{- end }}
   system:
     {{- range $key, $value := $system }}
+    {{- if kindOf $value | eq "string" }}
     {{ $key }}: {{ $value | quote }}
+    {{- else }}
+    {{ $key }}: {{ $value }}
+    {{- end }}
     {{- end }}

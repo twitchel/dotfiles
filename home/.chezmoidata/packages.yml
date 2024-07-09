@@ -1,13 +1,38 @@
 packages:
   cli:
+    android:
+      # Shell
+      - fd
+      - fzf
+      - gcc
+      - starship
+      - tmux
+      - tree
+      - wget
+
+      # Standard tool replacements
+      - bat # better cat
+      - eza # better ls
+      - htop # better top
+      - zoxide # better cd
+
+      # git/github
+      - git-delta
+      - tig
+
+      # development
+      - jq
+      - neovim
+      - neofetch
+      - ripgrep
     brew:
+      taps:
+        - zunit-zsh/zunit
       common:
         # Shell
-#        - antigen
         - fd
         - fzf
         - starship
-        - thefuck
         - tmux
         - tree
         - wget
@@ -27,18 +52,23 @@ packages:
         # development
         - awscli
         - awscli-local
-        - aws-sam-cli
         - jq
         - neovim
         - neofetch
-#        - openjdk
+        - nvm
+        - openjdk
         - ripgrep
+        - yq
+#        - zunit-zsh/zunit/zunit
       personal:
+        - thefuck
+      work:
+        - aws-sam-cli
   gui:
     casks:
       common:
         # Nerd fonts
-        - homebrew/cask-fonts/font-meslo-lg-nerd-font
+        - font-meslo-lg-nerd-font
 
         # Browsers
         - brave-browser
@@ -81,6 +111,8 @@ packages:
         - 1password
         - discord
         - steam
+        - vnc-viewer
+      work:
     snaps:
       common:
         # Browsers

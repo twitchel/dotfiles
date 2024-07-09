@@ -10,39 +10,103 @@ on:
 env:
   DOTFILES_BRANCH: ${{ github.head_ref || github.ref_name || 'master' }}
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+name: Build and Test dotfiles
 
+jobs:
+  build-macos:
+    name: Build and Test macOS Sonoma (14.x)
+    runs-on: macos-latest
     strategy:
       matrix:
-        os:
-          - ubuntu-24.04
+        usage:
+          - personal
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Install zunit
+        run: |
+          brew install zunit-zsh/zunit/zunit
 
-      - name: Build And Install Dotfiles
-        id: build
-        uses: docker/build-push-action@v6.1.0
-        with:
-          context: .
-          platforms: linux/amd64
-          file: ./.github/.cicd/${{ matrix.os }}/Dockerfile
-          push: false
-          load: true
-          tags: twitchel/dotfiles:${{ matrix.os }}-latest
-          build-args: |
-            DOTFILES_BRANCH=${{ env.DOTFILES_BRANCH }}
+      - name: Run installer
+        run: |
+          CI_USAGE=${{ matrix.usage }} sh install.sh
 
       - name: Run test suite
-        uses: addnab/docker-run-action@v3
-        with:
-          image: twitchel/dotfiles:${{ matrix.os }}-latest
-          options: -v ${{ github.workspace }}:/home/docker-ci/.output
-          shell: zsh
-          run: |
-            zsh test.sh
+        run: |
+          CI_USAGE=${{ matrix.usage }} zsh test.sh
+
+  build:
+    name: Build and Test Ubuntu Server 24.04
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        usage:
+          - personal
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt install zsh
+
+      - name: Install zunit
+        run: |
+          # Install revolver
+          curl -L https://raw.githubusercontent.com/molovo/revolver/master/revolver > /usr/local/bin/revolver
+          chmod +x /usr/local/bin/revolver
+  
+          # Install ZUnit into $path
+          curl -L https://github.com/zunit-zsh/zunit/releases/download/v0.8.2/zunit > /usr/local/bin/zunit
+          chmod +x /usr/local/bin/zunit
+        shell: zsh {0}
+
+      - name: Run installer
+        run: |
+          CI_USAGE=${{ matrix.usage }} sh install.sh
+        shell: zsh {0}
+
+      - name: Run test suite
+        run: |
+          CI_USAGE=${{ matrix.usage }} zsh test.sh
+        shell: zsh {0}
+
+#  build-docker-container:
+#    runs-on: ubuntu-latest
+#
+#    strategy:
+#      matrix:
+#        usage:
+#          - personal
+#        os:
+#          - ubuntu-24.04
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
+#
+#      - name: Build And Install Dotfiles
+#        id: build
+#        uses: docker/build-push-action@v6.1.0
+#        with:
+#          context: .
+#          platforms: linux/amd64
+#          file: ./.github/.cicd/${{ matrix.os }}/Dockerfile
+#          push: false
+#          load: true
+#          tags: twitchel/dotfiles:${{ matrix.os }}-${{ matrix.usage }}-latest
+#          build-args: |
+#            DOTFILES_BRANCH=${{ env.DOTFILES_BRANCH }}
+#            CI_USAGE=${{ matrix.usage }}
+#
+#      - name: Run test suite
+#        uses: addnab/docker-run-action@v3
+#        with:
+#          image: twitchel/dotfiles:${{ matrix.os }}-${{ matrix.usage }}-latest
+#          options: -v ${{ github.workspace }}:/home/docker-ci/.output
+#          shell: zsh
+#          run: |
+#            CI_USAGE=${{ matrix.usage }} zunit --output-text

@@ -1,0 +1,11 @@
+#!/usr/bin/env zunit
+
+@test 'Common - Dev 01.1: Base dev path exists' {
+  assert ~/dev/src is_dir
+}
+
+@test 'Common - Dev 01.2: Node is installed' {
+  run command -v node
+
+  assert "$output" contains "node"
+}

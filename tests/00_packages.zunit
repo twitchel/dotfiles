@@ -1,0 +1,20 @@
+#!/usr/bin/env zunit
+
+@test 'Common - Packages 00.1: Brew is in Path' {
+  run brew --version
+
+  assert "$state" equals 0
+}
+
+@test 'Common - Packages 00.2: Brew common packages are installed' {
+  packages_array_length=`yq e ".packages.cli.brew.common | length - 1" home/.chezmoidata/packages.yml`
+
+  run cat ~/Brewfile-common
+
+  for element_index in `seq 0 $packages_array_length`;do
+    package=`yq e ".packages.cli.brew.common[$element_index]" home/.chezmoidata/packages.yml`
+
+    assert "$output" contains $package
+  done
+}
+
