@@ -6,7 +6,7 @@ fi
 
 if [ "${TERM:-}" = "" ]; then
   echo "Setting TERM to dumb" # makes tput happy in CI envs
-  TERM="dumb"
+  export TERM="dumb"
 fi
 
 # Run the tests
