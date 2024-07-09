@@ -24,6 +24,7 @@ packages:
       - jq
       - neovim
       - neofetch
+      - node-lts
       - ripgrep
     brew:
       taps:
