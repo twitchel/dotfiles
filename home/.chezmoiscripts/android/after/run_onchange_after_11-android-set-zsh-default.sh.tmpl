@@ -1,0 +1,10 @@
+{{- if .system.isAndroid -}}
+#!/data/data/com.termux/files/usr/bin/bash
+
+{{ template "scripts/common/bootstrap.sh.tmpl" . }}
+
+echo "⭐️ Running 11-android-set-zsh-default"
+
+chsh -s zsh
+
+{{- end -}}
