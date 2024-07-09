@@ -1,0 +1,19 @@
+on:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  DOTFILES_BRANCH: ${{ github.head_ref || github.ref_name || 'master' }}
+  CI: personal
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run installer
+        run: |
+          sh install.sh
