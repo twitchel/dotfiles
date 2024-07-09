@@ -14,7 +14,7 @@ name: Build and Test dotfiles
 
 jobs:
   build-macos:
-    name: Build and Test macOS
+    name: Build and Test macOS Sonoma (14.x)
     runs-on: macos-latest
     strategy:
       matrix:
@@ -37,8 +37,8 @@ jobs:
           CI_USAGE=${{ matrix.usage }} zunit --output-text
 
   build:
-    name: Build and Test Ubuntu Server
-    runs-on: ubuntu-latest
+    name: Build and Test Ubuntu Server 24.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         usage:
