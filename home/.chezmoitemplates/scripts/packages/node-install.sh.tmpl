@@ -1,4 +1,7 @@
 # Install node if not already installed
-if [[ ! command -v node ]]; then
+
+if command -v node >&2; then
+  echo "node installed already"
+else
   nvm install --lts
 fi;

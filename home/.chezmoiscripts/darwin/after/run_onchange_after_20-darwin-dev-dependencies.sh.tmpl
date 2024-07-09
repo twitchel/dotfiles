@@ -1,9 +1,9 @@
-{{- if .system.isUbuntu -}}
+{{- if .system.isMac -}}
 #!{{ .system.shebang }}
 
 {{ template "scripts/common/bootstrap.sh.tmpl" . }}
 
-echo "⭐️ Running 20-ubuntu-dev-dependencies"
+echo "⭐️ Running 20-darwin-dev-dependencies"
 
 {{ template "scripts/development-setup/dev-directories.sh.tmpl" . }}
 

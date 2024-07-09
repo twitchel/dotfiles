@@ -1,12 +1,9 @@
 {{- if .system.isUbuntu -}}
 #!{{ .system.shebang }}
-# packages.yml hash: {{ include ".chezmoidata/packages.yml" | sha256sum }}
 
 {{ template "scripts/common/bootstrap.sh.tmpl" . }}
 
-echo "⭐️ Running 10-ubuntu-package-installs"
-
-brew bundle --file=~/Brewfile-common
+echo "⭐️ Running 12-ubuntu-install-node"
 
 {{ template "scripts/packages/node-install.sh.tmpl" . }}
 

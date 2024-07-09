@@ -4,6 +4,8 @@
 
 {{- template "scripts/common/bootstrap.sh.tmpl" . -}}
 
+echo "⭐️ Running 11-ubuntu-gui-installs"
+
 sudo apt-get update
 sudo apt-get install -y {{ range .packages.gui.aptitude.common }}{{ . }} {{ end }} fontconfig
 

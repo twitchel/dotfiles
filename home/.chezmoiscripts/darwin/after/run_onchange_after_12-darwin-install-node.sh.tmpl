@@ -1,0 +1,10 @@
+{{- if .system.isMac -}}
+#!{{ .system.shebang }}
+
+{{ template "scripts/common/bootstrap.sh.tmpl" . }}
+
+echo "⭐️ Running 12-darwin-install-node"
+
+{{ template "scripts/packages/node-install.sh.tmpl" . }}
+
+{{- end -}}

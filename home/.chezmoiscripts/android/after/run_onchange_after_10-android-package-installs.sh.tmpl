@@ -1,8 +1,11 @@
-{{ if .system.isAndroid -}}
+{{- if .system.isAndroid -}}
 #!{{ .system.shebang }}
 # packages.yml hash: {{ include ".chezmoidata/packages.yml" | sha256sum }}
 
-echo "Installing packages"
+{{ template "scripts/common/bootstrap.sh.tmpl" . }}
+
+echo "⭐️ Running 10-android-package-installs"
 
 pkg install -y {{ range .packages.android }}{{ . }} {{ end }}
-{{- end }}
+
+{{- end -}}

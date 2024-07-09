@@ -1,4 +1,4 @@
-{{ if .system.isAndroid | not }}
+{{- if .system.isAndroid | not -}}
 if [[ -z ${BREW_PATH} ]]; then
   echo "Error: Homebrew path not set. Exiting."
   exit 1
@@ -10,4 +10,4 @@ else
   echo "Installing Homebrew"
   which brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
-{{ end }}
+{{- end -}}

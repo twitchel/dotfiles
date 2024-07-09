@@ -1,8 +1,10 @@
-{{ if .system.isUbuntu -}}
+{{- if .system.isUbuntu -}}
 #!{{ .system.shebang }}
 
-{{- template "scripts/common/bootstrap.sh.tmpl" . -}}
+{{ template "scripts/common/bootstrap.sh.tmpl" . }}
 
-{{- template "scripts/packages/homebrew-install.sh.tmpl" . -}}
+echo "⭐️ Running 01-ubuntu-install-homebrew"
 
-{{- end}}
+{{ template "scripts/packages/homebrew-install.sh.tmpl" . }}
+
+{{- end -}}
