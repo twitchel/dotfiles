@@ -10,7 +10,7 @@ cask '{{ . }}'
 cask '{{ . }}'
   {{- end }}
 {{- end }}
-{{- if .usage.work | not | not }}
+{{- if .usage.isWork | not | not }}
   {{- range .packages.gui.casks.work }}
 cask '{{ . }}'
   {{- end }}
