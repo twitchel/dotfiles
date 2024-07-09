@@ -69,6 +69,9 @@ jobs:
 
       - name: Run test suite
         run: |
+          if [[ -z ${ZSH_SOURCED} ]]; then
+            source ~/.zshrc
+          fi
           CI_USAGE=${{ matrix.usage }} zunit --output-text
         shell: zsh {0}
 
