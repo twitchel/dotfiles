@@ -59,7 +59,7 @@ packages:
         - openjdk
         - ripgrep
         - yq
-        - zunit-zsh/zunit/zunit
+#        - zunit-zsh/zunit/zunit
       personal:
         - thefuck
       work:

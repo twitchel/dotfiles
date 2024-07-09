@@ -26,6 +26,10 @@ jobs:
         run: |
           CI_USAGE=${{ matrix.usage }} sh install.sh
 
+      - name: Install zunit
+        run: |
+          brew install zunit-zsh/zunit/zunit
+
       - name: Run test suite
         run: |
           CI_USAGE=${{ matrix.usage }} zunit --output-text
@@ -48,6 +52,11 @@ jobs:
       - name: Run installer
         run: |
           sh install.sh
+        shell: zsh {0}
+
+      - name: Install zunit
+        run: |
+          brew install zunit-zsh/zunit/zunit
         shell: zsh {0}
 
       - name: Run test suite
