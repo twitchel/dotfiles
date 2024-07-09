@@ -65,7 +65,7 @@ packages:
     casks:
       common:
         # Nerd fonts
-        - homebrew/cask-fonts/font-meslo-lg-nerd-font
+        - font-meslo-lg-nerd-font
 
         # Browsers
         - brave-browser
