@@ -6,7 +6,7 @@
 
 echo "⭐️ Running 10-android-package-installs"
 
-apt update
-apt install -y {{ range .packages.cli.android }}{{ . }} {{ end }}
+pkg update
+pkg install -y {{ range .packages.cli.android }}{{ . }} {{ end }}
 
 {{- end -}}
