@@ -24,13 +24,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install zunit
+        run: |
+          # Install revolver
+          curl -L https://raw.githubusercontent.com/molovo/revolver/master/revolver > /usr/local/bin/revolver
+
+          # Install ZUnit into $path
+          curl -L https://github.com/zunit-zsh/zunit/releases/download/v0.8.2/zunit > /usr/local/bin/zunit
+
       - name: Run installer
         run: |
           CI_USAGE=${{ matrix.usage }} sh install.sh
-
-      - name: Install zunit
-        run: |
-          brew install zunit-zsh/zunit/zunit
 
       - name: Run test suite
         run: |
@@ -51,14 +55,18 @@ jobs:
         run: |
           sudo apt install zsh
 
+      - name: Install zunit
+        run: |
+          # Install revolver
+          curl -L https://raw.githubusercontent.com/molovo/revolver/master/revolver > /usr/local/bin/revolver
+  
+          # Install ZUnit into $path
+          curl -L https://github.com/zunit-zsh/zunit/releases/download/v0.8.2/zunit > /usr/local/bin/zunit
+        shell: zsh {0}
+
       - name: Run installer
         run: |
           sh install.sh
-        shell: zsh {0}
-
-      - name: Install zunit
-        run: |
-          brew install zunit-zsh/zunit/zunit
         shell: zsh {0}
 
       - name: Run test suite
