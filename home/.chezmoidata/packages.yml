@@ -5,7 +5,6 @@ packages:
       - curl
       - fd
       - fzf
-      - gcc
       - ncurses-utils
       - starship
       - tmux
