@@ -1,0 +1,19 @@
+#!/usr/bin/env zunit
+
+@setup {
+  if [[ $CI_USAGE != "personal" ]]; then
+    skip "Skipping test, not in personal CI environment"
+  fi
+}
+
+@test 'Work - Dev 01.1: Work dev folder exists' {
+  githubOrg=$(chezmoi data | jq -r .details.work.githubOrg)
+  assert ~/dev/src/github.com/${githubOrg} is_dir
+}
+
+@test 'Work - Dev 01.2: gitconfig set with work email' {
+  work_email=$(chezmoi data | jq -r .details.work.email)
+  run git config --get user.work
+
+  assert "$output" same_as "$work_email"
+}

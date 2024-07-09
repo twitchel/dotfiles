@@ -1,0 +1,20 @@
+#!/usr/bin/env zunit
+
+@setup {
+  if [[ $CI_USAGE != "work" ]]; then
+    skip "Skipping test, not in work CI environment"
+  fi
+}
+
+@test 'Work - Packages 00.1: Brew packages are installed' {
+  packages_array_length=`yq e ".packages.cli.brew.work | length - 1" home/.chezmoidata/packages.yml`
+
+  run cat ~/Brewfile-common
+
+  for element_index in `seq 0 $packages_array_length`;do
+    package=`yq e ".packages.cli.brew.work[$element_index]" home/.chezmoidata/packages.yml`
+
+    assert "$output" contains $package
+  done
+}
+
