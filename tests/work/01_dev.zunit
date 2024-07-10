@@ -13,7 +13,7 @@
 
 @test 'Work - Dev 01.2: gitconfig set with work email' {
   work_email=$(chezmoi data | jq -r .details.work.email)
-  run git config --get user.work
+  run git config --get user.email
 
   assert "$output" same_as "$work_email"
 }
