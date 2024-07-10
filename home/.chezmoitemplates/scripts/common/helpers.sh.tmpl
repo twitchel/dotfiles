@@ -1,0 +1,4 @@
+function isInstalled() {
+  local command=$1
+  command -v $command >/dev/null 2>&1
+}
