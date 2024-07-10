@@ -36,6 +36,7 @@ packages:
         - fd
         - figlet
         - fzf
+        - gawk
         - starship
         - tmux
         - tree
