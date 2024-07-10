@@ -8,3 +8,5 @@ alias og-ls="ls"
 alias ls="eza --color=always --long --git --icons=always"
 alias og-cd="cd"
 alias cd="z"
+
+alias v="nvim" # neovim
