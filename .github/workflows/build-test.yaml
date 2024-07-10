@@ -37,11 +37,11 @@ jobs:
         run: |
           CI_USAGE=${{ matrix.usage }} zsh test.sh
 
-      #- name: Summarize test results
-      #  uses: pcolby/tap-summary@v1
-      #  if: ${{ always() }}
-      #  with:
-      #     path: tests/_output/output.txt
+      - name: Summarize test results
+        uses: pcolby/tap-summary@v1
+        if: ${{ always() }}
+        with:
+           path: tests/_output/output.txt
 
   build-ubuntu-desktop:
     name: Build and Test Ubuntu Desktop 24.04
@@ -61,6 +61,7 @@ jobs:
       - name: Fake desktop environment
         run: |
           sudo touch /usr/bin/gnome-shell && sudo chmod +x /usr/bin/gnome-shell
+
       - name: Install zunit
         run: |
           # Install revolver
@@ -81,6 +82,12 @@ jobs:
         run: |
           CI_USAGE=${{ matrix.usage }} zsh test.sh
         shell: zsh {0}
+
+      - name: Summarize test results
+        uses: pcolby/tap-summary@v1
+        if: ${{ always() }}
+        with:
+          path: tests/_output/output.txt
 
   build-ubuntu-server:
     name: Build and Test Ubuntu Server 24.04
@@ -118,11 +125,12 @@ jobs:
           CI_USAGE=${{ matrix.usage }} zsh test.sh
         shell: zsh {0}
 
-      #      - name: Summarize test results
-      # uses: pcolby/tap-summary@v1
-      #  if: ${{ always() }}
-      #with:
-      # path: tests/_output/output.txt
+      - name: Summarize test results
+        uses: pcolby/tap-summary@v1
+        if: ${{ always() }}
+        with:
+          path: tests/_output/output.txt
+
 #  build-docker-container:
 #    runs-on: ubuntu-latest
 #
