@@ -34,6 +34,7 @@ packages:
       common:
         # Shell
         - fd
+        - figlet
         - fzf
         - starship
         - tmux
@@ -55,14 +56,17 @@ packages:
         # development
         - awscli
         - awscli-local
+        - go
         - jq
+        - k9s
         - neovim
         - neofetch
         - nvm
+        - minikube
         - openjdk
         - ripgrep
         - yq
-#        - zunit-zsh/zunit/zunit
+      #        - zunit-zsh/zunit/zunit
       personal:
         - thefuck
       work:
