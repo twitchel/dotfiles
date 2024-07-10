@@ -22,4 +22,8 @@ sudo snap install {{ . }} --no-wait
 sudo snap install {{ . }} --no-wait
     {{- end }}
   {{- end }}
+
+# Install uLauncher
+{{ template "scripts/packages/ulauncher-install.sh.tmpl" . }}
+
 {{- end }}
