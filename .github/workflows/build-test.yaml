@@ -25,9 +25,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install zunit
+      - name: Install zunit and dependencies
         run: |
-          brew install zunit-zsh/zunit/zunit
+          brew install zunit-zsh/zunit/zunit gawk
 
       - name: Run installer
         run: |
