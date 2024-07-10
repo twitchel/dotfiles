@@ -58,9 +58,9 @@ jobs:
         run: |
           sudo apt install zsh
 
-      - name: Install Ubuntu desktop dependencies
+      - name: Fake desktop environment
         run: |
-          sudo apt install slim ubuntu-desktop
+          sudo touch /usr/bin/gnome-shell && sudo chmod +x /usr/bin/gnome-shell
       - name: Install zunit
         run: |
           # Install revolver
