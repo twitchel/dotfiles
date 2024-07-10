@@ -20,13 +20,14 @@ jobs:
       matrix:
         usage:
           - personal
+          - work
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install zunit
+      - name: Install zunit and dependencies
         run: |
-          brew install zunit-zsh/zunit/zunit
+          brew install zunit-zsh/zunit/zunit gawk
 
       - name: Run installer
         run: |
@@ -36,7 +37,59 @@ jobs:
         run: |
           CI_USAGE=${{ matrix.usage }} zsh test.sh
 
-  build:
+      - name: Summarize test results
+        uses: pcolby/tap-summary@v1
+        if: ${{ always() }}
+        with:
+           path: tests/_output/output.txt
+
+  build-ubuntu-desktop:
+    name: Build and Test Ubuntu Desktop 24.04
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        usage:
+          - personal
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt install zsh
+
+      - name: Fake desktop environment
+        run: |
+          sudo touch /usr/bin/gnome-shell && sudo chmod +x /usr/bin/gnome-shell
+
+      - name: Install zunit
+        run: |
+          # Install revolver
+          curl -L https://raw.githubusercontent.com/molovo/revolver/master/revolver > /usr/local/bin/revolver
+          chmod +x /usr/local/bin/revolver
+
+          # Install ZUnit into $path
+          curl -L https://github.com/zunit-zsh/zunit/releases/download/v0.8.2/zunit > /usr/local/bin/zunit
+          chmod +x /usr/local/bin/zunit
+        shell: zsh {0}
+
+      - name: Run installer
+        run: |
+          CI_USAGE=${{ matrix.usage }} sh install.sh
+        shell: zsh {0}
+
+      - name: Run test suite
+        run: |
+          CI_USAGE=${{ matrix.usage }} zsh test.sh
+        shell: zsh {0}
+
+      - name: Summarize test results
+        uses: pcolby/tap-summary@v1
+        if: ${{ always() }}
+        with:
+          path: tests/_output/output.txt
+
+  build-ubuntu-server:
     name: Build and Test Ubuntu Server 24.04
     runs-on: ubuntu-24.04
     strategy:
@@ -56,7 +109,7 @@ jobs:
           # Install revolver
           curl -L https://raw.githubusercontent.com/molovo/revolver/master/revolver > /usr/local/bin/revolver
           chmod +x /usr/local/bin/revolver
-  
+
           # Install ZUnit into $path
           curl -L https://github.com/zunit-zsh/zunit/releases/download/v0.8.2/zunit > /usr/local/bin/zunit
           chmod +x /usr/local/bin/zunit
@@ -71,6 +124,12 @@ jobs:
         run: |
           CI_USAGE=${{ matrix.usage }} zsh test.sh
         shell: zsh {0}
+
+      - name: Summarize test results
+        uses: pcolby/tap-summary@v1
+        if: ${{ always() }}
+        with:
+          path: tests/_output/output.txt
 
 #  build-docker-container:
 #    runs-on: ubuntu-latest

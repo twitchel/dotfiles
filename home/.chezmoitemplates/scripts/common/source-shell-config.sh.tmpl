@@ -1,3 +1,3 @@
-if [[ -z $ZSH_SOURCED ]]; then
+if [[ -z $ZSH_SOURCED ]] && [ -f $HOME/.zshrc ]; then
   source $HOME/.zshrc
 fi

@@ -7,8 +7,10 @@ plugins=(brew git macos docker common-aliases)
 # ---- FZF -----
 
 # Set up fzf key bindings and fuzzy completion
-eval "$(fzf --zsh)"
-source ~/.config/fzf/fzf-git.sh/fzf-git.sh
+if command -v fzf > /dev/null; then
+  eval "$(fzf --zsh)"
+  source ~/.config/fzf/fzf-git.sh/fzf-git.sh
+fi
 
 # -- Use fd instead of fzf --
 
@@ -48,7 +50,11 @@ _fzf_comprun() {
   esac
 }
 
-eval $(thefuck --alias)
+if command -v thefuck > /dev/null; then
+  eval $(thefuck --alias)
+fi
 
 # ---- Zoxide (better cd) ----
-eval "$(zoxide init zsh)"
+if command -v zoxide > /dev/null; then
+  eval "$(zoxide init zsh)"
+fi
