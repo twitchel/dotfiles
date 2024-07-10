@@ -37,11 +37,11 @@ jobs:
         run: |
           CI_USAGE=${{ matrix.usage }} zsh test.sh
 
-      - name: Summarize test results
-        uses: pcolby/tap-summary@v1
-        if: ${{ always() }}
-        with:
-          path: tests/_output/output.txt
+      #- name: Summarize test results
+      #  uses: pcolby/tap-summary@v1
+      #  if: ${{ always() }}
+      #  with:
+      #     path: tests/_output/output.txt
 
   build-ubuntu-server:
     name: Build and Test Ubuntu Server 24.04
@@ -79,12 +79,11 @@ jobs:
           CI_USAGE=${{ matrix.usage }} zsh test.sh
         shell: zsh {0}
 
-      - name: Summarize test results
-        uses: pcolby/tap-summary@v1
-        if: ${{ always() }}
-        with:
-          path: tests/_output/output.txt
-
+      #      - name: Summarize test results
+      # uses: pcolby/tap-summary@v1
+      #  if: ${{ always() }}
+      #with:
+      # path: tests/_output/output.txt
 #  build-docker-container:
 #    runs-on: ubuntu-latest
 #
