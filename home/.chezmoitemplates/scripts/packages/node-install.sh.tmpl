@@ -3,5 +3,6 @@
 if command -v node >&2; then
   echo "node installed already"
 else
+  source $HOME/.nvm/nvm.sh
   nvm install --lts
 fi;
