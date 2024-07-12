@@ -16,7 +16,7 @@ set -e
 # Install Chezmoi if not already installed
 if ! chezmoi="$(command -v chezmoi)"; then
   bin_dir="${HOME}/.local/bin"
-  mkdir -p ${bin_dir}
+  mkdir -p "${bin_dir}"
   chezmoi="${bin_dir}/chezmoi"
   echo_task "Installing chezmoi to ${chezmoi}"
   if command -v curl >/dev/null; then
@@ -56,8 +56,8 @@ if [ -z "${DOTFILES_LOCAL_COPY:-}" ]; then
 fi
 
 echo_task "Running chezmoi init"
-"${chezmoi}" init ${chezmoi_init_args} ${chezmoi_args}
+"${chezmoi} init ${chezmoi_init_args} ${chezmoi_args}"
 
 echo_task "Running chezmoi apply"
-"${chezmoi}" apply ${chezmoi_args}
 
+"${chezmoi} apply ${chezmoi_args}"
