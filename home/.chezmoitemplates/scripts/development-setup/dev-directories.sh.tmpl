@@ -7,7 +7,7 @@ mkdir -p "${DEV_DIR_PREFIX}/github.com/"
 PERSONAL_DIR="${DEV_DIR_PREFIX}/github.com/{{ .details.personal.githubUsername }}"
 mkdir -p "${PERSONAL_DIR}"
 tee "${PERSONAL_DIR}/.gitconfig" <<EOF
-{{ template "files/dot_config_include.tmpl" .details.personal }}
+{{ template "files/dot_gitconfig_include.tmpl" .details.personal }}
 EOF
 {{- end }}
 
@@ -15,6 +15,6 @@ EOF
 WORK_DIR="${DEV_DIR_PREFIX}/github.com/{{ .details.work.githubOrg }}"
 mkdir -p "${WORK_DIR}"
 tee "${WORK_DIR}/.gitconfig" <<EOF
-{{ template "files/dot_config_include.tmpl" .details.work }}
+{{ template "files/dot_gitconfig_include.tmpl" .details.work }}
 EOF
 {{- end }}
