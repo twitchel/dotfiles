@@ -61,12 +61,12 @@ Install everything with:
 
 ### curl
 ```
-sh -c "$(curl -fsLS https://raw.githubusercontent.com/twitchel/dotfiles/master/install.sh)"
+sh -c "$(curl -fsLS https://raw.githubusercontent.com/benrowe/dotfiles/master/install.sh)"
 ```
 
 ### wget
 ```
-sh -c "$(wget -qO- https://raw.githubusercontent.com/twitchel/dotfiles/master/install.sh)"
+sh -c "$(wget -qO- https://raw.githubusercontent.com/benrowe/dotfiles/master/install.sh)"
 ```
 
 There are some config flags you can set via environment variables

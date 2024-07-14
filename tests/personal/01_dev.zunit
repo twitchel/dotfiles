@@ -7,7 +7,7 @@
 }
 
 @test 'Personal - Dev 01.1: Personal dev folder exists' {
-  assert ~/dev/src/github.com/twitchel is_dir
+  assert ~/dev/src/github.com/benrowe is_dir
 }
 
 @test 'Personal - Dev 01.2: gitconfig set with personal email' {

@@ -156,7 +156,7 @@ jobs:
 #          file: ./.github/.cicd/${{ matrix.os }}/Dockerfile
 #          push: false
 #          load: true
-#          tags: twitchel/dotfiles:${{ matrix.os }}-${{ matrix.usage }}-latest
+#          tags: benrowe/dotfiles:${{ matrix.os }}-${{ matrix.usage }}-latest
 #          build-args: |
 #            DOTFILES_BRANCH=${{ env.DOTFILES_BRANCH }}
 #            CI_USAGE=${{ matrix.usage }}
@@ -164,7 +164,7 @@ jobs:
 #      - name: Run test suite
 #        uses: addnab/docker-run-action@v3
 #        with:
-#          image: twitchel/dotfiles:${{ matrix.os }}-${{ matrix.usage }}-latest
+#          image: benrowe/dotfiles:${{ matrix.os }}-${{ matrix.usage }}-latest
 #          options: -v ${{ github.workspace }}:/home/docker-ci/.output
 #          shell: zsh
 #          run: |
