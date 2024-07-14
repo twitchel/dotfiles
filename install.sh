@@ -50,9 +50,9 @@ if [ -n "${DOTFILES_BRANCH:-}" ]; then
   chezmoi_init_args="${chezmoi_init_args} --branch ${DOTFILES_BRANCH}"
 fi
 
-# If DOTFILES_LOCAL_COPY is not set, we init from the main twitchel/dotfiles repository
+# If DOTFILES_LOCAL_COPY is not set, we init from the main benrowe/dotfiles repository
 if [ -z "${DOTFILES_LOCAL_COPY:-}" ]; then
-  chezmoi_init_args="${chezmoi_init_args} twitchel"
+  chezmoi_init_args="${chezmoi_init_args} benrowe/dotfiles"
 fi
 
 echo_task "Running chezmoi init"
