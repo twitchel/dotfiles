@@ -17,3 +17,17 @@
 
   assert "$output" same_as "$work_email"
 }
+
+@test 'Work - Dev 01.3: work gitconfig exists in work dev folder' {
+  githubOrg=$(chezmoi data | jq -r .details.work.githubOrg)
+  assert ~/dev/src/github.com/${githubOrg}/.gitconfig is_file
+
+  run cat ~/dev/src/github.com/${githubOrg}/.gitconfig
+
+  assert "$output" contains "email = $(chezmoi data | jq -r .details.work.email)"
+  assert "$output" contains "name = $(chezmoi data | jq -r .details.work.name)"
+
+  run cat ~/.gitconfig
+  assert "$output" contains "[includeIf \"gitdir:~/dev/src/github.com/${githubOrg}/\"]"
+  assert "$output" contains "path = ~/dev/src/github.com/${githubOrg}/.gitconfig"
+}

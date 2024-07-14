@@ -88,11 +88,13 @@ data:
     {{- end }}
   details:
     personal:
-      {{- range $key, $value := $personalDetails }}
+      name: {{ $name | quote }}
+      {{ range $key, $value := $personalDetails }}
       {{ $key }}: {{ $value | quote }}
       {{- end }}
     work:
-      {{- range $key, $value := $workDetails }}
+      name: {{ $name | quote }}
+      {{ range $key, $value := $workDetails }}
       {{ $key }}: {{ $value | quote }}
       {{- end }}
   system:

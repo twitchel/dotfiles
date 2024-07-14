@@ -4,9 +4,17 @@ DEV_DIR_PREFIX="${HOME}/dev/src"
 mkdir -p "${DEV_DIR_PREFIX}/github.com/"
 
 {{- if .usage.isPersonal | not | not }}
-mkdir -p "${DEV_DIR_PREFIX}/github.com/{{ .details.personal.githubUsername }}"
+PERSONAL_DIR="${DEV_DIR_PREFIX}/github.com/{{ .details.personal.githubUsername }}"
+mkdir -p "${PERSONAL_DIR}"
+tee "${PERSONAL_DIR}/.gitconfig" <<EOF
+{{ template "files/dot_gitconfig_include.tmpl" .details.personal }}
+EOF
 {{- end }}
 
 {{- if .usage.isWork | not | not }}
-mkdir -p "${DEV_DIR_PREFIX}/github.com/{{ .details.work.githubOrg }}"
+WORK_DIR="${DEV_DIR_PREFIX}/github.com/{{ .details.work.githubOrg }}"
+mkdir -p "${WORK_DIR}"
+tee "${WORK_DIR}/.gitconfig" <<EOF
+{{ template "files/dot_gitconfig_include.tmpl" .details.work }}
+EOF
 {{- end }}

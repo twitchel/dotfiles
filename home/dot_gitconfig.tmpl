@@ -46,3 +46,10 @@
 
 [rerere]
   enabled = true #REuse REcorded REsoltions (in merge conflicts)
+
+[includeIf "gitdir:~/dev/src/github.com/{{ .details.work.githubOrg }}/"]
+  path = ~/dev/src/github.com/{{ .details.work.githubOrg }}/.gitconfig
+
+[includeIf "gitdir:~/dev/src/github.com/{{ .details.personal.githubUsername }}/"]
+  path = ~/dev/src/github.com/{{ .details.personal.githubUsername }}/.gitconfig
+

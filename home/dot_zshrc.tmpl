@@ -57,9 +57,11 @@ export DEV_GH_WORK="$DEV_GH_DIR/{{ .details.work.githubOrg }}"
 
 ### ------ Aliases ------ ###
 ## ---- Work Dirs ---- ##
-alias dgh="cd ~/dev/src/github.com/"
-alias tdd="cd ~/dev/src/github.com/twitchel/"
-alias wdd="cd ~/dev/src/github.com/545490/"
+alias dgh="cd ${DEV_GH_DIR}"
+alias tdd="cd ${DEV_GH_MYDIR}"
+{{ if and (.usage.isWork) (.details.work.githubOrg) }}
+alias wdd="cd ${DEV_GH_WORK}"
+{{ end }}
 
 ## ---- Applications ---- ## 
 alias ls="eza --color=always --long --git --icons=always"
