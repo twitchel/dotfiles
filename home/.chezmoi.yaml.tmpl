@@ -3,7 +3,7 @@
 {{- $usage := dict "isPersonal" false "isWork" false }}
 {{- $personalDetails := dict "email" "" "githubUsername" "twitchel" "opVault" "" -}}
 {{- $workDetails := dict "domain" "" "email" "" "githubUsername" "" "githubOrg" "" "opVault" "" -}}
-{{- $system := dict "isMac" false "isMacARM" false "isUbuntu" false "isUbuntuServer" false "isUbuntuDesktop" false "isAndroid" false "shebang" "/usr/bin/env zsh" "brewPath" "/dev/null" -}}
+{{- $system := dict "isMac" false "isMacARM" false "isUbuntu" false "isUbuntuServer" false "isUbuntuDesktop" false "shebang" "/usr/bin/env zsh" "brewPath" "/dev/null" -}}
 {{- $opServiceAccountToken := "" -}}
 {{- $opVaultPersonal := "" -}}
 {{- $opVaultWork := "" -}}
@@ -32,10 +32,6 @@
 {{-     writeToStdout "🐧 Info: Machine is an Ubuntu Server.\n" -}}
 {{-     $_ := set $system "isUbuntuServer" true -}}
 {{-   end -}}
-{{- else if eq .chezmoi.os "android" -}}
-{{-   writeToStdout "🤖 Info: Machine is an Android Device.\n" -}}
-{{-   $_ := set $system "isAndroid" true -}}
-{{-   $_ := set $system "shebang" "/data/data/com.termux/files/usr/bin/bash" -}}
 {{- else -}}
 {{-   writeToStdout "🛑 Error: Not a supported OS environment. Exiting.\n" -}}
 {{-   exit 1 -}}
