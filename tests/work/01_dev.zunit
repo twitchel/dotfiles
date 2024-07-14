@@ -24,10 +24,10 @@
 
   run cat ~/dev/src/github.com/${githubOrg}/.gitconfig
 
-  assert_output_contains "email = $(chezmoi data | jq -r .details.work.email)"
-  assert_output_contains "name = $(chezmoi data | jq -r .details.work.name)"
+  assert "$output" contains "email = $(chezmoi data | jq -r .details.work.email)"
+  assert "$output" contains "name = $(chezmoi data | jq -r .details.work.name)"
 
   run cat ~/.gitconfig
-  assert_output_contains "[includeIf \"gitdir:~/dev/src/github.com/${githubOrg}/\"]"
-  assert_output_contains "path = ~/dev/src/github.com/${githubOrg}/.gitconfig"
+  assert "$output" contains "[includeIf \"gitdir:~/dev/src/github.com/${githubOrg}/\"]"
+  assert "$output" contains "path = ~/dev/src/github.com/${githubOrg}/.gitconfig"
 }
