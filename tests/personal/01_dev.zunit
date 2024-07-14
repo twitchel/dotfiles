@@ -7,7 +7,8 @@
 }
 
 @test 'Personal - Dev 01.1: Personal dev folder exists' {
-  assert ~/dev/src/github.com/twitchel is_dir
+  gitUsername=$(chezmoi data | jq -r .details.personal.githubUsername)
+  assert ~/dev/src/github.com/${gitUsername} is_dir
 }
 
 @test 'Personal - Dev 01.2: gitconfig set with personal email' {
@@ -18,10 +19,15 @@
 }
 
 @test 'Personal - Dev 01.3: personal gitconfig exists in personal dev folder' {
-  assert ~/dev/src/github.com/twitchel/.gitconfig is_file
+  gitUsername=$(chezmoi data | jq -r .details.personal.githubUsername)
+  assert ~/dev/src/github.com/${gitUsername}/.gitconfig is_file
 
-  run cat ~/dev/src/github.com/twitchel/.gitconfig
+  run cat ~/dev/src/github.com/${gitUsername}/.gitconfig
 
   assert_output_contains "email = $(chezmoi data | jq -r .details.personal.email)"
   assert_output_contains "name = $(chezmoi data | jq -r .details.personal.name)"
+
+  run cat ~/.gitconfig
+  assert_output_contains "[includeIf \"gitdir:~/dev/src/github.com/${gitUsername}/\"]"
+  assert_output_contains "path = ~/dev/src/github.com/${gitUsername}/.gitconfig"
 }

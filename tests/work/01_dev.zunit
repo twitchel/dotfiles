@@ -26,4 +26,8 @@
 
   assert_output_contains "email = $(chezmoi data | jq -r .details.work.email)"
   assert_output_contains "name = $(chezmoi data | jq -r .details.work.name)"
+
+  run cat ~/.gitconfig
+  assert_output_contains "[includeIf \"gitdir:~/dev/src/github.com/${githubOrg}/\"]"
+  assert_output_contains "path = ~/dev/src/github.com/${githubOrg}/.gitconfig"
 }
