@@ -16,3 +16,12 @@
 
   assert "$output" same_as "$personal_email"
 }
+
+@test 'Personal - Dev 01.3: personal gitconfig exists in personal dev folder' {
+  assert ~/dev/src/github.com/twitchel/.gitconfig is_file
+
+  run cat ~/dev/src/github.com/twitchel/.gitconfig
+
+  assert_output_contains "email = $(chezmoi data | jq -r .details.personal.email)"
+  assert_output_contains "name = $(chezmoi data | jq -r .details.personal.name)"
+}
