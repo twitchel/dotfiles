@@ -6,10 +6,10 @@
   fi
 }
 
-@test 'Personal - Packages 00.1: Brew packages are installed' {
+@test 'Personal - Packages 00.1: Brew personal packages are in Brewfile' {
   packages_array_length=`yq e ".packages.cli.brew.personal | length - 1" home/.chezmoidata/packages.yml`
 
-  run cat ~/Brewfile-common
+  run cat ~/Brewfile
 
   for element_index in `seq 0 $packages_array_length`;do
     package=`yq e ".packages.cli.brew.personal[$element_index]" home/.chezmoidata/packages.yml`
