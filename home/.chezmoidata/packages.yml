@@ -60,7 +60,7 @@ packages:
         - nvm
         - ripgrep
         - yq
-      common-postinstall:
+      common_postinstall:
         - act
         - awscli
         - awscli-local

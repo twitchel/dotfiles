@@ -8,7 +8,7 @@ tap '{{ . }}'
 {{- range .packages.cli.brew.common }}
 brew '{{ . }}'
 {{- end }}
-{{- range .packages.cli.brew.common-postinstall }}
+{{- range .packages.cli.brew.common_postinstall }}
 brew '{{ . }}'
 {{- end }}
 {{- if .usage.isPersonal | not | not }}
