@@ -35,7 +35,6 @@ packages:
       common:
         # Shell
         - fd
-        - figlet
         - fzf
         - gawk
         - starship
@@ -46,28 +45,31 @@ packages:
         # Standard tool replacements
         - bat # better cat
         - eza # better ls
-        - htop # better top
-        - tlrc # better man
         - zoxide # better cd
 
         # git/github
-        - act
         - git-delta
         - tig
 
         # development
-        - awscli
-        - awscli-local
         - go
         - jesseduffield/lazygit/lazygit
         - jq
-        - k9s
         - neovim
         - neofetch
         - nvm
-        - minikube
         - ripgrep
         - yq
+      common-postinstall:
+        - act
+        - awscli
+        - awscli-local
+        - figlet
+        - htop # better top
+        - k9s
+        - minikube
+        - openjdk
+        - tlrc # better man
       personal:
         - thefuck
       work:
