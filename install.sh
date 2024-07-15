@@ -51,9 +51,13 @@ if [ -n "${DOTFILES_BRANCH:-}" ]; then
 fi
 
 # If DOTFILES_LOCAL_COPY is not set, we init from the main benrowe/dotfiles repository
-if [ -z "${DOTFILES_REPOSITORY:-}" ]; then
+if [ -n "${DOTFILES_REPOSITORY:-}" ]; then
+
+  echo_task "Chezmoi repo: ${DOTFILES_REPOSITORY}"
   chezmoi_init_args="${chezmoi_init_args} ${DOTFILES_REPOSITORY}"
 else
+
+  echo_task "Chezmoi default repo: benrowe"
   chezmoi_init_args="${chezmoi_init_args} benrowe"
 fi
 
