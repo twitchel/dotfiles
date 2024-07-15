@@ -35,7 +35,6 @@ packages:
       common:
         # Shell
         - fd
-        - figlet
         - fzf
         - gawk
         - starship
@@ -46,30 +45,31 @@ packages:
         # Standard tool replacements
         - bat # better cat
         - eza # better ls
-        - htop # better top
-        - tlrc # better man
         - zoxide # better cd
 
         # git/github
-        - act
         - git-delta
         - tig
 
         # development
-        - awscli
-        - awscli-local
         - go
         - jesseduffield/lazygit/lazygit
         - jq
-        - k9s
         - neovim
         - neofetch
         - nvm
-        - minikube
-        - openjdk
         - ripgrep
         - yq
-#        - zunit-zsh/zunit/zunit
+      common_postinstall:
+        - act
+        - awscli
+        - awscli-local
+        - figlet
+        - htop # better top
+        - k9s
+        - minikube
+        - openjdk
+        - tlrc # better man
       personal:
         - thefuck
       work:
@@ -88,8 +88,6 @@ packages:
 
         # Comms
         - slack
-        - telegram
-        - whatsapp
 
         # Productivity
         - gimp
@@ -98,7 +96,6 @@ packages:
 
         # OS Tooling
         - caffeine
-        - lulu
         - rectangle
         - raycast
         - stats
@@ -116,7 +113,6 @@ packages:
 
         # Misc
         - avidemux
-        - notunes
         - spotify
         - vlc
         - android-file-transfer
@@ -124,9 +120,12 @@ packages:
         - 1password
         - discord
         - docker
+        - lulu
         - steam
         - tailscale # VPN
+        - telegram
         - vnc-viewer
+        - whatsapp
       work:
     snaps:
       common:
@@ -136,7 +135,6 @@ packages:
 
         # Comms
         - slack
-        - telegram-desktop
 
         # Productivity
         - gimp
@@ -154,8 +152,8 @@ packages:
         - spotify
         - vlc
       personal:
-        - steam
         - discord
+        - steam
     aptitude:
       common:
         # OS Tooling

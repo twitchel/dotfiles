@@ -13,6 +13,27 @@ error() {
 # -u: exit on unset variables
 set -e
 
+if [ -f /etc/debian_version ]; then
+  echo_task "ensure required dependencies are installed"
+
+  # Function to add dependency if missing
+  install_if_missing() {
+    if ! command -v "$1" >/dev/null; then
+      sudo apt-get -y install $1
+    else
+      echo_task "$1 is already installed"
+    fi
+  }
+
+  # Check and add dependencies
+  install_if_missing zsh
+  install_if_missing git
+  install_if_missing wget
+  install_if_missing curl
+  sudo chsh -s $(which zsh) $(whoami)
+  sudo usermod -s $(which zsh) $(whoami)
+fi
+
 # Install Chezmoi if not already installed
 if ! chezmoi="$(command -v chezmoi)"; then
   bin_dir="${HOME}/.local/bin"
@@ -50,14 +71,17 @@ if [ -n "${DOTFILES_BRANCH:-}" ]; then
   chezmoi_init_args="${chezmoi_init_args} --branch ${DOTFILES_BRANCH}"
 fi
 
-# If DOTFILES_LOCAL_COPY is not set, we init from the main twitchel/dotfiles repository
-if [ -z "${DOTFILES_LOCAL_COPY:-}" ]; then
-  chezmoi_init_args="${chezmoi_init_args} twitchel"
+# If DOTFILES_REPOSITORY is not set, we init from the main twitchel/dotfiles repository
+if [ -n "${DOTFILES_REPOSITORY:-}" ]; then
+  echo_task "Chezmoi repo: ${DOTFILES_REPOSITORY}"
+  chezmoi_init_args="${chezmoi_init_args} ${DOTFILES_REPOSITORY}"
+else
+  echo_task "Chezmoi default repo: twitchel/dotfiles"
+  chezmoi_init_args="${chezmoi_init_args} twitchel/dotfiles"
 fi
 
 echo_task "Running chezmoi init"
 "${chezmoi}" init ${chezmoi_init_args} ${chezmoi_args}
 
-echo_task "Running chezmoi apply"
-"${chezmoi}" apply ${chezmoi_args}
-
+echo_task "Running chezmoi update"
+"${chezmoi}" update ${chezmoi_args}

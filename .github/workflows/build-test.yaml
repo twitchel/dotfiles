@@ -5,10 +5,11 @@ on:
     branches:
       - master
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: "0 0 * * 0"
 
 env:
   DOTFILES_BRANCH: ${{ github.head_ref || github.ref_name || 'master' }}
+  DOTFILES_REPOSITORY: ${{ github.repository }}
 
 name: Build and Test dotfiles
 
@@ -25,13 +26,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install zunit and dependencies
-        run: |
-          brew install zunit-zsh/zunit/zunit gawk
-
       - name: Run installer
         run: |
           CI_USAGE=${{ matrix.usage }} sh install.sh
+
+      - name: Install zunit and dependencies
+        run: |
+          brew install zunit-zsh/zunit/zunit gawk
 
       - name: Run test suite
         run: |
@@ -41,7 +42,7 @@ jobs:
         uses: pcolby/tap-summary@v1
         if: ${{ always() }}
         with:
-           path: tests/_output/output.txt
+          path: tests/_output/output.txt
 
   build-ubuntu-desktop:
     name: Build and Test Ubuntu Desktop 24.04
@@ -54,6 +55,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Remove dependencies
+        run: |
+          rm -rf /usr/local/bin/node
+
       - name: Install dependencies
         run: |
           sudo apt install zsh
@@ -61,6 +66,11 @@ jobs:
       - name: Fake desktop environment
         run: |
           sudo touch /usr/bin/gnome-shell && sudo chmod +x /usr/bin/gnome-shell
+
+      - name: Run installer
+        run: |
+          CI_USAGE=${{ matrix.usage }} sh install.sh
+        shell: zsh {0}
 
       - name: Install zunit
         run: |
@@ -71,11 +81,6 @@ jobs:
           # Install ZUnit into $path
           curl -L https://github.com/zunit-zsh/zunit/releases/download/v0.8.2/zunit > /usr/local/bin/zunit
           chmod +x /usr/local/bin/zunit
-        shell: zsh {0}
-
-      - name: Run installer
-        run: |
-          CI_USAGE=${{ matrix.usage }} sh install.sh
         shell: zsh {0}
 
       - name: Run test suite
@@ -100,9 +105,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Remove dependencies
+        run: |
+          rm -rf /usr/local/bin/node
+
       - name: Install dependencies
         run: |
           sudo apt install zsh
+
+      - name: Run installer
+        run: |
+          CI_USAGE=${{ matrix.usage }} sh install.sh
+        shell: zsh {0}
 
       - name: Install zunit
         run: |
@@ -115,11 +129,6 @@ jobs:
           chmod +x /usr/local/bin/zunit
         shell: zsh {0}
 
-      - name: Run installer
-        run: |
-          CI_USAGE=${{ matrix.usage }} sh install.sh
-        shell: zsh {0}
-
       - name: Run test suite
         run: |
           CI_USAGE=${{ matrix.usage }} zsh test.sh
@@ -130,7 +139,6 @@ jobs:
         if: ${{ always() }}
         with:
           path: tests/_output/output.txt
-
 #  build-docker-container:
 #    runs-on: ubuntu-latest
 #

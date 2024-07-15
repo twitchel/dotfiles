@@ -6,13 +6,25 @@
   assert "$state" equals 0
 }
 
-@test 'Common - Packages 00.2: Brew common packages are installed' {
+@test 'Common - Packages 00.2: Brew common packages are in Brewfile' {
   packages_array_length=`yq e ".packages.cli.brew.common | length - 1" home/.chezmoidata/packages.yml`
 
-  run cat ~/Brewfile-common
+  run cat ~/Brewfile
 
   for element_index in `seq 0 $packages_array_length`;do
     package=`yq e ".packages.cli.brew.common[$element_index]" home/.chezmoidata/packages.yml`
+
+    assert "$output" contains $package
+  done
+}
+
+@test 'Common - Packages 00.3: Brew common postinstall packages are in Brewfile' {
+  packages_array_length=`yq e ".packages.cli.brew.common_postinstall | length - 1" home/.chezmoidata/packages.yml`
+
+  run cat ~/Brewfile
+
+  for element_index in `seq 0 $packages_array_length`;do
+    package=`yq e ".packages.cli.brew.common_postinstall[$element_index]" home/.chezmoidata/packages.yml`
 
     assert "$output" contains $package
   done

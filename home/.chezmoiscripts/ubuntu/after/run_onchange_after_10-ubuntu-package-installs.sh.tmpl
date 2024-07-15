@@ -6,8 +6,6 @@
 
 echo "⭐️ Running 10-ubuntu-package-installs"
 
-brew bundle --file=~/Brewfile-common
-
-{{ template "scripts/packages/node-install.sh.tmpl" . }}
+{{ template "scripts/packages/homebrew-bundle.sh.tmpl" . }}
 
 {{- end -}}
