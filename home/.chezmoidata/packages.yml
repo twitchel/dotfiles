@@ -66,10 +66,8 @@ packages:
         - neofetch
         - nvm
         - minikube
-        - openjdk
         - ripgrep
         - yq
-#        - zunit-zsh/zunit/zunit
       personal:
         - thefuck
       work:
@@ -88,17 +86,13 @@ packages:
 
         # Comms
         - slack
-        - telegram
-        - whatsapp
 
         # Productivity
-        - gimp
         - notion
         - screenflow
 
         # OS Tooling
         - caffeine
-        - lulu
         - rectangle
         - raycast
         - stats
@@ -115,8 +109,6 @@ packages:
         - visual-studio-code
 
         # Misc
-        - avidemux
-        - notunes
         - spotify
         - vlc
         - android-file-transfer
@@ -124,9 +116,8 @@ packages:
         - 1password
         - discord
         - docker
-        - steam
+        - lulu
         - tailscale # VPN
-        - vnc-viewer
       work:
     snaps:
       common:
@@ -136,10 +127,8 @@ packages:
 
         # Comms
         - slack
-        - telegram-desktop
 
         # Productivity
-        - gimp
 
         # OS Tooling
 
@@ -154,7 +143,6 @@ packages:
         - spotify
         - vlc
       personal:
-        - steam
         - discord
     aptitude:
       common:
