@@ -62,5 +62,5 @@ fi
 echo_task "Running chezmoi init"
 "${chezmoi}" init ${chezmoi_init_args} ${chezmoi_args}
 
-echo_task "Running chezmoi apply"
-"${chezmoi}" apply ${chezmoi_args}
+echo_task "Running chezmoi update"
+"${chezmoi}" update ${chezmoi_args}
