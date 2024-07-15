@@ -90,6 +90,7 @@ packages:
         - slack
 
         # Productivity
+        - gimp
         - notion
         - screenflow
 
@@ -111,6 +112,7 @@ packages:
         - visual-studio-code
 
         # Misc
+        - avidemux
         - spotify
         - vlc
         - android-file-transfer
@@ -119,7 +121,11 @@ packages:
         - discord
         - docker
         - lulu
+        - steam
         - tailscale # VPN
+        - telegram
+        - vnc-viewer
+        - whatsapp
       work:
     snaps:
       common:
@@ -131,6 +137,7 @@ packages:
         - slack
 
         # Productivity
+        - gimp
 
         # OS Tooling
 
@@ -146,6 +153,7 @@ packages:
         - vlc
       personal:
         - discord
+        - steam
     aptitude:
       common:
         # OS Tooling
