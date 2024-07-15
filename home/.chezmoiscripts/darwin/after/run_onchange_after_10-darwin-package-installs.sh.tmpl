@@ -6,7 +6,6 @@
 
 echo "⭐️ Running 10-darwin-package-installs"
 
-brew bundle --file=~/Brewfile-common
-brew bundle --file=~/Brewfile-mac
+{{ template "scripts/packages/homebrew-bundle.sh.tmpl" . }}
 
 {{- end -}}

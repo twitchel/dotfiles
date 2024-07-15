@@ -1,0 +1,5 @@
+brew bundle --no-lock --file=/dev/stdin <<EOF
+{{- range .packages.cli.brew.common }}
+brew {{ . | quote }}
+{{- end }}
+EOF
