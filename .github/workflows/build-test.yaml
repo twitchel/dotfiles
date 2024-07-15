@@ -26,13 +26,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install zunit and dependencies
-        run: |
-          brew install zunit-zsh/zunit/zunit gawk
-
       - name: Run installer
         run: |
           CI_USAGE=${{ matrix.usage }} sh install.sh
+
+      - name: Install zunit and dependencies
+        run: |
+          brew install zunit-zsh/zunit/zunit gawk
 
       - name: Run test suite
         run: |
@@ -67,6 +67,11 @@ jobs:
         run: |
           sudo touch /usr/bin/gnome-shell && sudo chmod +x /usr/bin/gnome-shell
 
+      - name: Run installer
+        run: |
+          CI_USAGE=${{ matrix.usage }} sh install.sh
+        shell: zsh {0}
+
       - name: Install zunit
         run: |
           # Install revolver
@@ -76,11 +81,6 @@ jobs:
           # Install ZUnit into $path
           curl -L https://github.com/zunit-zsh/zunit/releases/download/v0.8.2/zunit > /usr/local/bin/zunit
           chmod +x /usr/local/bin/zunit
-        shell: zsh {0}
-
-      - name: Run installer
-        run: |
-          CI_USAGE=${{ matrix.usage }} sh install.sh
         shell: zsh {0}
 
       - name: Run test suite
@@ -113,6 +113,16 @@ jobs:
         run: |
           sudo apt install zsh
 
+      - name: Run installer
+        run: |
+          CI_USAGE=${{ matrix.usage }} sh install.sh
+        shell: zsh {0}
+
+      - name: Run test suite
+        run: |
+          CI_USAGE=${{ matrix.usage }} zsh test.sh
+        shell: zsh {0}
+
       - name: Install zunit
         run: |
           # Install revolver
@@ -122,16 +132,6 @@ jobs:
           # Install ZUnit into $path
           curl -L https://github.com/zunit-zsh/zunit/releases/download/v0.8.2/zunit > /usr/local/bin/zunit
           chmod +x /usr/local/bin/zunit
-        shell: zsh {0}
-
-      - name: Run installer
-        run: |
-          CI_USAGE=${{ matrix.usage }} sh install.sh
-        shell: zsh {0}
-
-      - name: Run test suite
-        run: |
-          CI_USAGE=${{ matrix.usage }} zsh test.sh
         shell: zsh {0}
 
       - name: Summarize test results
