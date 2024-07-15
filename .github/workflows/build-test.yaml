@@ -57,7 +57,7 @@ jobs:
 
       - name: Remove dependencies
         run: |
-          sudo apt remove nodejs 
+          rm -rf /usr/local/bin/node
 
       - name: Install dependencies
         run: |
@@ -107,7 +107,7 @@ jobs:
 
       - name: Remove dependencies
         run: |
-          sudo apt remove nodejs 
+          rm -rf /usr/local/bin/node
 
       - name: Install dependencies
         run: |
