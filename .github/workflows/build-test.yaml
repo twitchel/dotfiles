@@ -5,10 +5,11 @@ on:
     branches:
       - master
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: "0 0 * * 0"
 
 env:
   DOTFILES_BRANCH: ${{ github.head_ref || github.ref_name || 'master' }}
+  DOTFILES_REPOSITORY: ${{ github.repository }}
 
 name: Build and Test dotfiles
 
@@ -41,7 +42,7 @@ jobs:
         uses: pcolby/tap-summary@v1
         if: ${{ always() }}
         with:
-           path: tests/_output/output.txt
+          path: tests/_output/output.txt
 
   build-ubuntu-desktop:
     name: Build and Test Ubuntu Desktop 24.04
@@ -130,7 +131,6 @@ jobs:
         if: ${{ always() }}
         with:
           path: tests/_output/output.txt
-
 #  build-docker-container:
 #    runs-on: ubuntu-latest
 #
