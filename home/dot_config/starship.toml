@@ -4,6 +4,7 @@ format = """
 [](color_grey)\
 $os\
 $username\
+$hostname\
 [](bg:color_blue fg:color_grey)\
 $directory\
 [](fg:color_blue bg:color_aqua)\
@@ -58,7 +59,7 @@ style = 'bg:color_fg0 fg:color_bg1'
 [os]
 disabled = false
 style = "bg:color_grey fg:color_fg0"
-format = '[$symbol ]($style)'
+format = '[$symbol]($style)'
 
 [os.symbols]
 Windows = "󰍲"
@@ -83,11 +84,14 @@ RedHatEnterprise = "󱄛"
 
 [username]
 show_always = false
-style_user = "bg:color_orange fg:color_fg0"
-style_root = "bg:color_orange fg:color_fg0"
+style_user = "bg:color_grey fg:color_fg0"
+style_root = "bg:color_grey fg:color_fg0"
 format = '[ $user ]($style)'
 
 [hostname]
+ssh_only = true
+format = "[$ssh_symbol$hostname]($style)"
+style = "bg:color_grey fg:color_fg0"
 
 
 [directory]
@@ -101,7 +105,7 @@ truncation_symbol = "…/"
 "Downloads" = " "
 "Music" = "󰝚 "
 "Pictures" = " "
-"Developer" = "󰲋 "
+"dev" = "󰲋 "
 
 [git_branch]
 symbol = ""
