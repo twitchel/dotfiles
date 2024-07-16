@@ -71,10 +71,5 @@ alias v="nvim" # neovim
 alias sv="sudoedit"
 alias t="tmux"
 
-{{ if .system.isMac }}
-alias brewup="brew bundle --file ~/Brewfile-common && brew bundle --file ~/BrewFile-mac"
-{{ else }}
-alias brewup="brew bundle --file ~/Brewfile-common"
-{{ end }}
-
+alias brewup="brew bundle --file ~/Brewfile"
 
