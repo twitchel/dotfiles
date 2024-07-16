@@ -46,7 +46,7 @@ export GITUSER="{{ .details.personal.githubUsername }}"
 
 export DEV_DIR="$HOME/dev/src"
 export DEV_GH_DIR="$DEV_DIR/github.com"
-export DEV_GH_MYDIR="$DEV_GH_DIR/$GIT_USERNAME"
+export DEV_GH_MYDIR="$DEV_GH_DIR/$GITUSER"
 {{ if and (.usage.isWork) (.details.work.githubOrg) }}
 export DEV_GH_WORK="$DEV_GH_DIR/{{ .details.work.githubOrg }}"
 {{ end }}
