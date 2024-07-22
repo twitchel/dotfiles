@@ -45,7 +45,9 @@ A quick one liner to install all the above dependencies is below
 sudo apt-get update && sudo apt-get -y install zsh git wget curl && sudo chsh -s /usr/bin/zsh $(whoami)
 ```
 
-You'll need to restart your system afterwards
+You'll need to restart your system afterwards to have `zsh` as your default shell. Otherwise, you can run 
+`zsh` manually in your terminal to switch (select the option to create an empty `~/.zshrc` file) and 
+continue with the installation.
 
 ### Mac OS
 
