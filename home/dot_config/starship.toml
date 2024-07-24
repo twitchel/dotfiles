@@ -59,7 +59,7 @@ style = 'bg:color_fg0 fg:color_bg1'
 [os]
 disabled = false
 style = "bg:color_grey fg:color_fg0"
-format = '[$symbol]($style)'
+format = '[$symbol ]($style)'
 
 [os.symbols]
 Windows = "󰍲"
