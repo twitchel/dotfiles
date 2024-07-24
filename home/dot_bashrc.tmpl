@@ -1,0 +1,12 @@
+### ------ Bootstrapping ------ ###
+## ---- Brew ---- ##
+
+export BREW_PATH={{ .system.brewPath }}/bin/brew
+export BREW_BASE_PATH={{ .system.brewPath }}
+eval "$(${BREW_PATH} shellenv)"
+
+## ---- Starship ---- ##
+if command -v starship > /dev/null; then
+  eval "$(starship init bash)"
+fi
+
