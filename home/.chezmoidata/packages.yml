@@ -43,6 +43,16 @@ packages:
         - wget
         - yazi
 
+        # Outdated GNU core utilities
+        - coreutils
+        - findutils
+        - moreutils
+        - bash
+        - grep
+        - vim
+        - openssh
+        - screen
+
         # Standard tool replacements
         - bat # better cat
         - eza # better ls
