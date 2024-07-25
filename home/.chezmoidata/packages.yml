@@ -105,8 +105,8 @@ packages:
         - cyberduck
         - gas-mask
         - insomnia
-        - iterm2
         - jetbrains-toolbox
+        - kitty
         - mqttx
         - postman
         - visual-studio-code
