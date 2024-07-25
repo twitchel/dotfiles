@@ -41,6 +41,7 @@ packages:
         - tmux
         - tree
         - wget
+        - yazi
 
         # Standard tool replacements
         - bat # better cat
