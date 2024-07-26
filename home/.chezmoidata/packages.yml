@@ -157,6 +157,9 @@ packages:
         - steam
     aptitude:
       common:
+        # Desktop Applications
+        - kitty
+
         # OS Tooling
         - caffeine
         - gnome-tweaks
