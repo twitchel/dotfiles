@@ -1,0 +1,10 @@
+{{- if .system.isAndroid -}}
+#!/data/data/com.termux/files/usr/bin/bash
+
+{{ template "scripts/common/bootstrap.sh.tmpl" . }}
+
+echo "⭐️ Running 99-android-post-run"
+
+{{ template "scripts/common/postrun-notes.sh.tmpl" . }}
+
+{{- end -}}
