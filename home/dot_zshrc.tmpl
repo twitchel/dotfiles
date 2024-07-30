@@ -50,6 +50,9 @@ export DEV_GH_MYDIR="$DEV_GH_DIR/$GITUSER"
 {{ if and (.usage.isWork) (.details.work.githubOrg) }}
 export DEV_GH_WORK="$DEV_GH_DIR/{{ .details.work.githubOrg }}"
 {{ end }}
+{{ if and (.usage.isWork) (.details.work.githubUsername) }}
+export DEV_GH_WORK_USERNAME="$DEV_GH_DIR/{{ .details.work.githubUsername }}"
+{{ end }}
 
 ### ------ Functions ------ ###
 
@@ -61,6 +64,9 @@ alias dgh="cd ${DEV_GH_DIR}"
 alias tdd="cd ${DEV_GH_MYDIR}"
 {{ if and (.usage.isWork) (.details.work.githubOrg) }}
 alias wdd="cd ${DEV_GH_WORK}"
+{{ end }}
+{{ if and (.usage.isWork) (.details.work.githubUsername) }}
+alias wudd="cd ${DEV_GH_WORK_USERNAME}"
 {{ end }}
 
 ## ---- Applications ---- ## 

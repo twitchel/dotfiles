@@ -17,4 +17,10 @@ mkdir -p "${WORK_DIR}"
 tee "${WORK_DIR}/.gitconfig" <<EOF
 {{ template "files/dot_gitconfig_include.tmpl" .details.work }}
 EOF
+
+WORK_USER_DIR="${DEV_DIR_PREFIX}/github.com/{{ .details.work.githubUsername }}"
+mkdir -p "${WORK_USER_DIR}"
+tee "${WORK_USER_DIR}/.gitconfig" <<EOF
+{{ template "files/dot_gitconfig_include.tmpl" .details.work }}
+EOF
 {{- end }}
