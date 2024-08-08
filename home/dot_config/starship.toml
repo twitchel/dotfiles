@@ -100,13 +100,6 @@ format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
 
-[directory.substitutions]
-"Documents" = "󰈙 "
-"Downloads" = " "
-"Music" = "󰝚 "
-"Pictures" = " "
-"dev" = "󰲋 "
-
 [git_branch]
 symbol = ""
 format = '[[ $symbol $branch ](fg:color_fg0 bg:color_aqua)]($style)'
