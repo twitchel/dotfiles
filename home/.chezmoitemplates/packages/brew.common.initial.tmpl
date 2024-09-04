@@ -1,0 +1,50 @@
+# brew.common.initial
+#
+# Initial package installs for common usage
+
+cask_args appdir: '/Applications'
+
+tap 'jesseduffield/lazygit'
+tap 'zunit-zsh/zunit'
+
+### Fonts <<<
+  cask 'font-meslo-lg-nerd-font' if OS.mac?
+### >>>
+
+### Shell <<<
+  brew 'fd'
+  brew 'fzf'
+  brew 'gawk'
+  brew 'starship'
+  brew 'tmux'
+  brew 'tree'
+  brew 'wget'
+  brew 'yazi'
+### >>>
+
+### Standard Tool Replacements <<<
+  brew 'bat' # better cat
+  brew 'eza' # better ls
+  brew 'zoxide' # better cd
+### >>>
+
+### Development <<<
+  brew 'jq'
+  brew 'neovim'
+  brew 'neofetch'
+  brew 'ripgrep'
+  brew 'yq'
+### >>>
+
+### Development - Runtimes <<<
+  # Golang
+  brew 'go'
+  # Node Version Manager
+  brew 'nvm'
+### >>>
+
+### Development - Git <<<
+  brew 'git-delta'
+  brew 'jesseduffield/lazygit/lazygit'
+  brew 'tig'
+### >>>
