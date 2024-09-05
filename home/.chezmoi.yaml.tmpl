@@ -47,10 +47,10 @@
 {{-   $_ := set $usage "isPersonal" (promptBoolOnce . "isPersonal" "Is this machine personal?") -}}
 {{-   $_ := set $usage "isWork" (promptBoolOnce . "isWork" "Is this machine used for work?") -}}
 {{/* $opServiceAccountToken := (promptStringOnce . "opServiceAccountToken" "What is your 1Password Service Account Token?") */}}
+{{-   $_ := set $personalDetails "email" (promptStringOnce . "email" "PERSONAL: What is your email address?") -}}
+{{-   $_ := set $personalDetails "githubUsername" (promptStringOnce . "githubUsername" "PERSONAL: What is your GitHub username?") -}}
 {{-   if $usage.isPersonal -}}
 {{-     $_ := set $usage "type" "personal" -}}
-{{-     $_ := set $personalDetails "email" (promptStringOnce . "email" "PERSONAL: What is your email address?") -}}
-{{-     $_ := set $personalDetails "githubUsername" (promptStringOnce . "githubUsername" "PERSONAL: What is your GitHub username?") -}}
 {{/* $opVaultPersonal = (promptStringOnce . "opVaultPersonal" "PERSONAL: What is your 1Password Vault name?") */}}
 {{-   end -}}
 {{-   if $usage.isWork -}}
