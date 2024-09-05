@@ -9,7 +9,7 @@ echo "⭐️ Running 10-android-package-installs"
 {{ $myUsage := .usage.type }}
 
 pkg update
-pkg install -y {{ range .packages_pkg.categories }}{{ range $key, $val := .items }}{{ if (or (eq $val.usage "common") (eq $val.usage $myUsage )) }}{{ $key }} {{ end }}{{ end }}{{ end }} fontconfig
+pkg install -y {{ range .packages_pkg.categories }}{{ range $key, $val := .items }}{{ if (or (eq $myUsage "common") (eq $val.usage "common") (eq $val.usage $myUsage )) }}{{ $key }} {{ end }}{{ end }}{{ end }} fontconfig
 
 
 {{- end -}}

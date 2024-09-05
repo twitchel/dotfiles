@@ -13,7 +13,7 @@ sudo apt-get update
 sudo apt-get install -y
 {{- range .packages_apt.categories -}}
 {{- range $key, $val := .items -}}
-{{- if (or (eq $val.usage "common") (eq $val.usage $myUsage )) }} {{ $key }}{{- end -}}
+{{- if (or (eq $myUsage "common") (eq $val.usage "common") (eq $val.usage $myUsage )) }} {{ $key }}{{- end -}}
 {{- end -}}
 {{- end }} fontconfig
 
@@ -24,7 +24,7 @@ wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/la
 # Although you can install multiple snaps on one line, this errors if already installed
 {{- range .packages_snap.categories -}}
 {{- range $key, $val := .items -}}
-{{ if (or (eq $val.usage "common") (eq $val.usage $myUsage )) }}
+{{ if (or (eq $myUsage "common") (eq $val.usage "common") (eq $val.usage $myUsage )) }}
 sudo snap install {{ $key }}{{ if $val.arguments }} {{ $val.arguments }}{{ end }} --no-wait
 {{- end -}}
 {{- end -}}

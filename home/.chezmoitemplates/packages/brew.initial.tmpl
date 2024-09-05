@@ -12,7 +12,7 @@ tap 'zunit-zsh/zunit'
 {{- range .packages_brew.categories }}
 ### {{ .category }} <<<
 {{- range $key, $val := .items }}
-{{- if (and (eq $val.install "initial") (or (eq $val.usage "common") (eq $val.usage $myUsage ))) }}
+{{- if (and (eq $val.install "initial") (or (eq $myUsage "common") (eq $val.usage "common") (eq $val.usage $myUsage ))) }}
   # {{ $val.comment }}
   {{ $val.prefix }} '{{ $key }}'{{ if $val.arguments }} {{ $val.arguments }}{{ end }}
 {{- end }}
