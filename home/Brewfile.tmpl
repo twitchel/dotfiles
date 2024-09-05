@@ -1,10 +1,1 @@
-{{ template "packages/brew.common.initial.tmpl" . }}
-{{ template "packages/brew.common.post-install.tmpl" . }}
-
-{{ if .usage.isPersonal | not | not }}
-{{ template "packages/brew.personal.post-install.tmpl" . }}
-{{ end }}
-
-{{ if .usage.isWork | not | not }}
-{{ template "packages/brew.work.post-install.tmpl" . }}
-{{ end }}
+{{ template "packages/brew.post-install.tmpl" . }}
