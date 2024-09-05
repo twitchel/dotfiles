@@ -54,9 +54,21 @@ packages_brew:
           comment: whatsapp - 'Private' messaging
           prefix: cask
           arguments: if OS.mac?
+        zoom:
+          usage: personal
+          install: post-install
+          comment: zoom - Video conferencing
+          prefix: cask
+          arguments: if OS.mac?
     dev_git:
       category: Development - GIT
       items:
+        gh:
+          usage: personal
+          install: post-install
+          comment: gh - Github CLI utility
+          prefix: brew
+          arguments: ''
         git-delta:
           usage: common
           install: initial
@@ -90,27 +102,15 @@ packages_brew:
           comment: neovim - The do it all editor
           prefix: brew
           arguments: ''
-        ripgrep:
-          usage: common
-          install: initial
-          comment: ripgrep - nvim plugin
-          prefix: brew
-          arguments: ''
         visual-studio-code:
           usage: common
           install: post-install
           comment: visual-studio-code - Free editor
           prefix: cask
           arguments: if OS.mac?
-    dev_infra:
-      category: Development - Infrastructure
+    dev_infra_aws:
+      category: Development - Infrastructure AWS
       items:
-        act:
-          usage: personal
-          install: post-install
-          comment: act - Local github actions runner
-          prefix: brew
-          arguments: ''
         awscli:
           usage: common
           install: post-install
@@ -129,12 +129,33 @@ packages_brew:
           comment: aws-sam-cli - AWS SAM (Serverless) Local CLI
           prefix: brew
           arguments: ''
+    dev_infra_cicd:
+      category: Development - Infrastructure CI/CD
+      items:
+        act:
+          usage: personal
+          install: post-install
+          comment: act - Local github actions runner
+          prefix: brew
+          arguments: ''
+    dev_infra_docker:
+      category: Development - Infrastructure Docker
+      items:
         docker:
           usage: common
           install: post-install
-          comment: docker - Containers
+          comment: docker - Docker community edition for Mac
           prefix: cask
           arguments: if OS.mac?
+        lazydocker:
+          usage: common
+          install: post-install
+          comment: lazydocker - A lazy way to manage docker containers
+          prefix: brew
+          arguments: ''
+    dev_infra_kubernetes:
+      category: Development - Infrastructure Kubernetes
+      items:
         k9s:
           usage: personal
           install: post-install
@@ -150,6 +171,11 @@ packages_brew:
     dev_runtimes:
       category: Development - Runtimes
       items:
+        android-platform-tools:
+          usage: personal
+          install: post-install
+          prefix: cask
+          arguments: if OS.mac?
         go:
           usage: common
           install: initial
@@ -213,6 +239,12 @@ packages_brew:
     gaming:
       category: Gaming
       items:
+        openemu:
+          usage: personal
+          install: post-install
+          comment: openemu - Retro video game emulation
+          prefix: cask
+          arguments: ''
         steam:
           usage: personal
           install: post-install
@@ -255,6 +287,12 @@ packages_brew:
           comment: lulu - A better firewall
           prefix: cask
           arguments: if OS.mac?
+        nmap:
+          usage: common
+          install: post-install
+          comment: nmap - Personal VPN
+          prefix: brew
+          arguments: ''
         tailscale:
           usage: personal
           install: post-install
@@ -274,6 +312,12 @@ packages_brew:
           usage: common
           install: post-install
           comment: android-file-transfer - Android filesystem browser (USB)
+          prefix: cask
+          arguments: if OS.mac?
+        bartender:
+          usage: personal
+          install: post-install
+          comment: bartender - Organize Mac menubar
           prefix: cask
           arguments: if OS.mac?
         caffeine:
@@ -315,6 +359,12 @@ packages_brew:
           comment: 1password - Password Manager
           prefix: cask
           arguments: if OS.mac?
+        1password-cli:
+          usage: common
+          install: post-install
+          comment: 1password - Password Manager
+          prefix: cask
+          arguments: if OS.mac?
         notion:
           usage: personal
           install: post-install
@@ -336,6 +386,12 @@ packages_brew:
           comment: bat - a better cat
           prefix: brew
           arguments: ''
+        cheat:
+          usage: common
+          install: post-install
+          comment: Create/view cheaetsheets in the CLI
+          prefix: brew
+          arguments: ''
         eza:
           usage: common
           install: initial
@@ -345,7 +401,7 @@ packages_brew:
         fd:
           usage: common
           install: initial
-          comment: fd - Find files on filesystem
+          comment: fd - A better find
           prefix: brew
           arguments: ''
         figlet:
@@ -372,6 +428,12 @@ packages_brew:
           comment: htop - A better top
           prefix: brew
           arguments: ''
+        iterm2:
+          usage: common
+          install: post-install
+          comment: iterm2 - The defacto terminal Emulator for Mac
+          prefix: cask
+          arguments: if OS.mac?
         jq:
           usage: common
           install: initial
@@ -388,6 +450,12 @@ packages_brew:
           usage: common
           install: initial
           comment: neofetch - System stats tool
+          prefix: brew
+          arguments: ''
+        ripgrep:
+          usage: common
+          install: initial
+          comment: ripgrep - A better grep (fast!)
           prefix: brew
           arguments: ''
         starship:
@@ -411,7 +479,7 @@ packages_brew:
         tmux:
           usage: common
           install: initial
-          comment: tmux - window/pane management in CLI
+          comment: tmux - terminal multiplexer
           prefix: brew
           arguments: ''
         tree:
