@@ -165,7 +165,7 @@ packages_brew:
         openjdk:
           usage: common
           install: post-install
-          comment: go - Golang runtime
+          comment: openjdk - Open Source Java Development Kit
           prefix: brew
           arguments: ''
     dev_utilities:

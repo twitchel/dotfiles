@@ -1,0 +1,14 @@
+packages_snap:
+  categories:
+    os_linux:
+      category: OS Tooling - Linux
+      items:
+        gnome-tweaks:
+          usage: common
+          comment: Gnome Desktop Tweaks
+    shell:
+      category: Shell
+      items:
+        kitty:
+          usage: common
+          comment: kitty - Preferred Terminal Emulator
