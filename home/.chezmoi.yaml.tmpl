@@ -1,6 +1,6 @@
 {{/* Setup Default Values */}}
 {{- $name := "Daniel Jones" -}}
-{{- $usage := dict "isPersonal" false "isWork" false }}
+{{- $usage := dict "isPersonal" false "isWork" false "type" "" }}
 {{- $personalDetails := dict "email" "" "githubUsername" "twitchel" "opVault" "" -}}
 {{- $workDetails := dict "domain" "" "email" "" "githubUsername" "" "githubOrg" "" "opVault" "" -}}
 {{- $system := dict "isMac" false "isMacARM" false "isUbuntu" false "isUbuntuServer" false "isUbuntuDesktop" false "isAndroid" false "shebang" "/usr/bin/env zsh" "brewPath" "/dev/null" -}}
@@ -48,26 +48,33 @@
 {{-   $_ := set $usage "isWork" (promptBoolOnce . "isWork" "Is this machine used for work?") -}}
 {{/* $opServiceAccountToken := (promptStringOnce . "opServiceAccountToken" "What is your 1Password Service Account Token?") */}}
 {{-   if $usage.isPersonal -}}
+{{-     $_ := set $usage "type" "personal" -}}
 {{-     $_ := set $personalDetails "email" (promptStringOnce . "email" "PERSONAL: What is your email address?") -}}
 {{-     $_ := set $personalDetails "githubUsername" (promptStringOnce . "githubUsername" "PERSONAL: What is your GitHub username?") -}}
 {{/* $opVaultPersonal = (promptStringOnce . "opVaultPersonal" "PERSONAL: What is your 1Password Vault name?") */}}
 {{-   end -}}
 {{-   if $usage.isWork -}}
+{{-     $_ := set $usage "type" "work" -}}
 {{-     $_ := set $workDetails "domain" (promptStringOnce . "domain" "WORK: What is your work domain name (example.com)?") -}}
 {{-     $_ := set $workDetails "email" (promptStringOnce . "email" "WORK: What is your work email address?") -}}
 {{-     $_ := set $workDetails "githubUsername" (promptStringOnce . "githubUsername" "WORK: What is your GitHub username?") -}}
 {{-     $_ := set $workDetails "githubOrg" (promptStringOnce . "githubAcct" "WORK: What is your GitHub Org name?") -}}
 {{/* $opVaultWork = (promptStringOnce . "opVaultWork" "WORK: What is your 1Password Vault name?") */}}
 {{-   end -}}
+{{-   if (and ($usage.isWork) ($usage.isPersonal)) -}}
+{{-     $_ := set $usage "type" "common" -}}
+{{-   end -}}
 {{- end -}}
 
 {{/* CI/Testing Environments */}}
 {{- if eq (env "CI_USAGE") "personal" -}}
   {{- $_ := set $usage "isPersonal" true -}}
+  {{- $_ := set $usage "type" "personal" -}}
   {{- $_ := set $personalDetails "email" "contact@danieljones.net" -}}
 {{- end -}}
 {{- if eq (env "CI_USAGE") "work" -}}
   {{- $_ := set $usage "isWork" true -}}
+  {{- $_ := set $usage "type" "work" -}}
   {{- $_ := set $workDetails "domain" "example.com" -}}
   {{- $_ := set $workDetails "email" "daniel@example.com" -}}
   {{- $_ := set $workDetails "githubUsername" "daniel_exampleco" -}}
@@ -84,7 +91,11 @@ data:
   name: {{ $name | quote }}
   usage:
     {{- range $key, $value := $usage }}
-    {{ $key }}: {{ $value | not | not }}
+    {{- if kindOf $value | eq "string" }}
+    {{ $key }}: {{ $value | quote }}
+    {{- else }}
+    {{ $key }}: {{ $value }}
+    {{- end }}
     {{- end }}
   details:
     personal:
