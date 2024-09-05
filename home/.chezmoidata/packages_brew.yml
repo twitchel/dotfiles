@@ -315,12 +315,6 @@ packages_brew:
           comment: android-file-transfer - Android filesystem browser (USB)
           prefix: cask
           arguments: if OS.mac?
-        bartender:
-          usage: personal
-          install: post-install
-          comment: bartender - Organize Mac menubar
-          prefix: cask
-          arguments: if OS.mac?
         caffeine:
           usage: common
           install: post-install
