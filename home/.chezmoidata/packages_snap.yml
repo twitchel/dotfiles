@@ -1,0 +1,78 @@
+packages_snap:
+  categories:
+    browsers:
+      category: Browsers
+      items:
+        brave:
+          usage: common
+          comment: brave - Private + Fast browser, webkit based
+          arguments: ''
+        firefox:
+          usage: common
+          comment: firefox - Private + Fast browser, gecko based
+          arguments: ''
+    communications:
+      category: Communications
+      items:
+        discord:
+          usage: personal
+          comment: discord - Gaming focused chat
+          arguments: ''
+        slack:
+          usage: personal
+          comment: slack - Effective team comms
+          arguments: ''
+    dev_ide:
+      category: Development - IDEs
+      items:
+        intellij-idea-ultimate:
+          usage: common
+          comment: intellij-idea-ultimate - Jetbrains IntelliJ IDE
+          arguments: '--classic'
+        code:
+          usage: common
+          comment: code - Free editor
+          arguments: '--classic'
+    dev_utilities:
+      category: Development - Utilities
+      items:
+        insomnia:
+          usage: common
+          comment: insomnia - REST Client
+          arguments: ''
+        postman:
+          usage: common
+          comment: postman - REST Client
+          arguments: ''
+    gaming:
+      category: Gaming
+      items:
+        steam:
+          usage: personal
+          comment: steam - gaming library
+          arguments: ''
+    media:
+      category: Media
+      items:
+        gimp:
+          usage: personal
+          comment: gimp - Free + Open Source image editor
+          arguments: ''
+        spotify:
+          usage: common
+          comment: spotify - Music tunes yo!
+          arguments: ''
+        vlc:
+          usage: common
+          comment: vlc - Free video player
+          arguments: ''
+    productivity:
+      category: Productivity
+      items:
+    shell:
+      category: Shell
+      items:
+        alacritty:
+          usage: common
+          comment: alacritty - Terminal Emulator
+          arguments: '--classic'

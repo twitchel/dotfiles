@@ -1,8 +1,3 @@
 brew bundle --no-lock --file=/dev/stdin <<EOF
-{{ range .packages.cli.brew.taps -}}
-tap {{ . | quote}}
-{{ end -}}
-{{ range .packages.cli.brew.common -}}
-brew {{ . | quote }}
-{{ end -}}
+{{ template "packages/brew.initial.tmpl" . }}
 EOF

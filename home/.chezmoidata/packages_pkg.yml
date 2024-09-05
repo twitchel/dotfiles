@@ -1,0 +1,92 @@
+packages_pkg:
+  categories:
+    dev_git:
+      category: Development - GIT
+      items:
+        git-delta:
+          usage: common
+          comment: git-delta - Diffing tool for git
+        tig:
+          usage: common
+          comment: tig - Git tree viewer
+    dev_ide:
+      category: Development - IDEs
+      items:
+        neovim:
+          usage: common
+          comment: neovim - The do it all editor
+        ripgrep:
+          usage: common
+          comment: ripgrep - nvim plugin
+    dev_runtimes:
+      category: Development - Runtimes
+      items:
+        nodejs-lts:
+          usage: common
+          comment: nodejs-lts - current LTS node version
+    shell:
+      category: Shell
+      items:
+        bat:
+          usage: common
+          comment: bat - a better cat
+        curl:
+          usage: common
+          comment: curl - CLI download tool
+        eza:
+          usage: common
+          comment: eza - a better ls
+        fd:
+          usage: common
+          comment: fd - Find files on filesystem
+        figlet:
+          usage: common
+          comment: figlet - ASCII text art in the CLI
+        fzf:
+          usage: common
+          comment: fzf - Fuzzy finding tool
+        gawk:
+          usage: common
+          comment: gawk - pattern scanning and processing language
+        htop:
+          usage: common
+          comment: htop - A better top
+        jq:
+          usage: common
+          comment: jq - JSON CLI parser
+        ncurses-utils:
+          usage: common
+          comment: ncurses-utils - System dependency
+        neofetch:
+          usage: common
+          comment: neofetch - System stats tool
+        starship:
+          usage: common
+          comment: starship - Customisable prompt
+        thefuck:
+          usage: personal
+          comment: thefuck - Fix mis-typed commands
+        tlrc:
+          usage: common
+          comment: tlrc - A better man
+        tmux:
+          usage: common
+          comment: tmux - window/pane management in CLI
+        tree:
+          usage: common
+          comment: Directory tree tool
+        wget:
+          usage: common
+          comment: wget - CLI download tool
+        yazi:
+          usage: common
+          comment: yazi - CLI File Explorer
+        yq:
+          usage: common
+          comment: yq - YAML CLI parser
+        zip:
+          usage: common
+          comment: zip - Handle compressed zip files
+        zoxide:
+          usage: common
+          comment: zoxide - a better cd

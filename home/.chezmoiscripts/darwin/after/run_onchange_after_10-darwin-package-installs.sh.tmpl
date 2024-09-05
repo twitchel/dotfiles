@@ -1,6 +1,6 @@
 {{- if .system.isMac -}}
 #!{{ .system.shebang }}
-# packages.yml hash: {{ include ".chezmoidata/packages.yml" | sha256sum }}
+# packages_brew.yml hash: {{ include ".chezmoidata/packages_brew.yml" | sha256sum }}
 
 {{ template "scripts/common/bootstrap.sh.tmpl" . }}
 

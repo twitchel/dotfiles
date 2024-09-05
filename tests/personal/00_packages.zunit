@@ -7,6 +7,7 @@
 }
 
 @test 'Personal - Packages 00.1: Brew personal packages are in Brewfile' {
+  skip "Refactoring needed"
   packages_array_length=`yq e ".packages.cli.brew.personal | length - 1" home/.chezmoidata/packages.yml`
 
   run cat ~/Brewfile

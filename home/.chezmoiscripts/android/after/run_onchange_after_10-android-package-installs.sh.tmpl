@@ -1,12 +1,15 @@
 {{- if .system.isAndroid -}}
 #!/data/data/com.termux/files/usr/bin/bash
-# packages.yml hash: {{ include ".chezmoidata/packages.yml" | sha256sum }}
+# packages_pkg.yml hash: {{ include ".chezmoidata/packages_pkg.yml" | sha256sum }}
 
 {{ template "scripts/common/bootstrap.sh.tmpl" . }}
 
 echo "⭐️ Running 10-android-package-installs"
 
+{{ $myUsage := .usage.type }}
+
 pkg update
-pkg install -y {{ range .packages.cli.android }}{{ . }} {{ end }}
+pkg install -y {{ range .packages_pkg.categories }}{{ range $key, $val := .items }}{{ if (or (eq $myUsage "common") (eq $val.usage "common") (eq $val.usage $myUsage )) }}{{ $key }} {{ end }}{{ end }}{{ end }} fontconfig
+
 
 {{- end -}}

@@ -1,0 +1,515 @@
+packages_brew:
+  categories:
+    browsers:
+      category: Browsers
+      items:
+        brave-browser:
+          usage: common
+          install: post-install
+          comment: brave - Private + Fast browser, webkit based
+          prefix: cask
+          arguments: if OS.mac?
+        firefox:
+          usage: common
+          install: post-install
+          comment: firefox - Private + Fast browser, gecko based
+          prefix: cask
+          arguments: if OS.mac?
+        google-chrome:
+          usage: common
+          install: post-install
+          comment: chrome - The defacto standard
+          prefix: cask
+          arguments: if OS.mac?
+        microsoft-edge:
+          usage: common
+          install: post-install
+          comment: edge - Microsoft webkit based browser
+          prefix: cask
+          arguments: if OS.mac?
+    communications:
+      category: Communications
+      items:
+        discord:
+          usage: personal
+          install: post-install
+          comment: discord - Gaming focused chat
+          prefix: cask
+          arguments: if OS.mac?
+        slack:
+          usage: personal
+          install: post-install
+          comment: slack - Effective team comms
+          prefix: cask
+          arguments: if OS.mac?
+        telegram:
+          usage: personal
+          install: post-install
+          comment: telegram - Private messaging
+          prefix: cask
+          arguments: if OS.mac?
+        whatsapp:
+          usage: personal
+          install: post-install
+          comment: whatsapp - 'Private' messaging
+          prefix: cask
+          arguments: if OS.mac?
+        zoom:
+          usage: personal
+          install: post-install
+          comment: zoom - Video conferencing
+          prefix: cask
+          arguments: if OS.mac?
+    dev_git:
+      category: Development - GIT
+      items:
+        gh:
+          usage: personal
+          install: post-install
+          comment: gh - Github CLI utility
+          prefix: brew
+          arguments: ''
+        git-delta:
+          usage: common
+          install: initial
+          comment: git-delta - Diffing tool for git
+          prefix: brew
+          arguments: ''
+        'jesseduffield/lazygit/lazygit':
+          usage: common
+          install: initial
+          comment: jesseduffield/lazygit/lazygit - Powerful GIT CLI UI
+          prefix: brew
+          arguments: ''
+        tig:
+          usage: common
+          install: initial
+          comment: tig - Git tree viewer
+          prefix: brew
+          arguments: ''
+    dev_ide:
+      category: Development - IDEs
+      items:
+        jetbrains-toolbox:
+          usage: common
+          install: post-install
+          comment: jetbrains-toolbox - Manage Jetbrains IDEs (IntelliJ, etc)
+          prefix: cask
+          arguments: if OS.mac?
+        neovim:
+          usage: common
+          install: initial
+          comment: neovim - The do it all editor
+          prefix: brew
+          arguments: ''
+        visual-studio-code:
+          usage: common
+          install: post-install
+          comment: visual-studio-code - Free editor
+          prefix: cask
+          arguments: if OS.mac?
+    dev_infra_aws:
+      category: Development - Infrastructure AWS
+      items:
+        awscli:
+          usage: common
+          install: post-install
+          comment: awscli - aws cloud management
+          prefix: brew
+          arguments: ''
+        awscli-local:
+          usage: common
+          install: post-install
+          comment: awscli-local - aws localstack management
+          prefix: brew
+          arguments: ''
+        aws-sam-cli:
+          usage: work
+          install: post-install
+          comment: aws-sam-cli - AWS SAM (Serverless) Local CLI
+          prefix: brew
+          arguments: ''
+    dev_infra_cicd:
+      category: Development - Infrastructure CI/CD
+      items:
+        act:
+          usage: personal
+          install: post-install
+          comment: act - Local github actions runner
+          prefix: brew
+          arguments: ''
+    dev_infra_docker:
+      category: Development - Infrastructure Docker
+      items:
+        docker:
+          usage: common
+          install: post-install
+          comment: docker - Docker community edition for Mac
+          prefix: cask
+          arguments: if OS.mac?
+        lazydocker:
+          usage: common
+          install: post-install
+          comment: lazydocker - A lazy way to manage docker containers
+          prefix: brew
+          arguments: ''
+    dev_infra_kubernetes:
+      category: Development - Infrastructure Kubernetes
+      items:
+        k9s:
+          usage: personal
+          install: post-install
+          comment: k9s - kubernetes management UI
+          prefix: brew
+          arguments: ''
+        minikube:
+          usage: personal
+          install: post-install
+          comment: minikube - local kubernetes instance
+          prefix: brew
+          arguments: ''
+    dev_runtimes:
+      category: Development - Runtimes
+      items:
+        android-platform-tools:
+          usage: personal
+          install: post-install
+          comment: android-platform-tools - Android SDK tools
+          prefix: cask
+          arguments: if OS.mac?
+        go:
+          usage: common
+          install: initial
+          comment: go - Golang runtime
+          prefix: brew
+          arguments: ''
+        nvm:
+          usage: common
+          install: initial
+          comment: nvm - Node Version Manager
+          prefix: brew
+          arguments: ''
+        openjdk:
+          usage: common
+          install: post-install
+          comment: openjdk - Open Source Java Development Kit
+          prefix: brew
+          arguments: ''
+    dev_utilities:
+      category: Development - Utilities
+      items:
+        cyberduck:
+          usage: common
+          install: post-install
+          comment: cyberduck - FTP Client
+          prefix: cask
+          arguments: if OS.mac?
+        gas-mask:
+          usage: common
+          install: post-install
+          comment: gas-mask - Hosts files/local DNS management
+          prefix: cask
+          arguments: if OS.mac?
+        insomnia:
+          usage: common
+          install: post-install
+          comment: insomnia - REST Client
+          prefix: cask
+          arguments: if OS.mac?
+        mqttx:
+          usage: common
+          install: post-install
+          comment: mqttx - mqtt client
+          prefix: cask
+          arguments: if OS.mac?
+        postman:
+          usage: common
+          install: post-install
+          comment: postman - REST Client
+          prefix: cask
+          arguments: if OS.mac?
+    fonts:
+      category: Fonts
+      items:
+        font-meslo-lg-nerd-font:
+          usage: common
+          install: initial
+          comment: font-meslo-lg-nerd-font - Nerdfont for MacOS
+          prefix: cask
+          arguments: if OS.mac?
+    gaming:
+      category: Gaming
+      items:
+        openemu:
+          usage: personal
+          install: post-install
+          comment: openemu - Retro video game emulation
+          prefix: cask
+          arguments: ''
+        steam:
+          usage: personal
+          install: post-install
+          comment: steam - gaming library
+          prefix: cask
+          arguments: if OS.mac?
+    media:
+      category: Media
+      items:
+        avidemux:
+          usage: personal
+          install: post-install
+          comment: avidemux - Quickly slice video footage
+          prefix: cask
+          arguments: if OS.mac?
+        gimp:
+          usage: personal
+          install: post-install
+          comment: gimp - Free + Open Source image editor
+          prefix: cask
+          arguments: if OS.mac?
+        spotify:
+          usage: common
+          install: post-install
+          comment: spotify - Music tunes yo!
+          prefix: cask
+          arguments: if OS.mac?
+        vlc:
+          usage: common
+          install: post-install
+          comment: vlc - Free video player
+          prefix: cask
+          arguments: if OS.mac?
+    networking:
+      category: Networking
+      items:
+        lulu:
+          usage: personal
+          install: post-install
+          comment: lulu - A better firewall
+          prefix: cask
+          arguments: if OS.mac?
+        nmap:
+          usage: common
+          install: post-install
+          comment: nmap - Personal VPN
+          prefix: brew
+          arguments: ''
+        tailscale:
+          usage: personal
+          install: post-install
+          comment: tailscale - Personal VPN
+          prefix: cask
+          arguments: if OS.mac?
+        vnc-viewer:
+          usage: personal
+          install: post-install
+          comment: vnc-viewer - Remote desktop viewer (MacOS, Linux)
+          prefix: cask
+          arguments: if OS.mac?
+    os_mac:
+      category: OS Tooling - Mac
+      items:
+        android-file-transfer:
+          usage: common
+          install: post-install
+          comment: android-file-transfer - Android filesystem browser (USB)
+          prefix: cask
+          arguments: if OS.mac?
+        caffeine:
+          usage: common
+          install: post-install
+          comment: caffeine - Keep the screen on!
+          prefix: cask
+          arguments: if OS.mac?
+        jordanbaird-ice:
+          usage: common
+          install: post-install
+          comment: jordanbaird-ice - Free version of Bartender, menu bar manager
+          prefix: cask
+          arguments: if OS.mac?
+        m-cli:
+          usage: common
+          install: post-install
+          comment: m-cli - Swiss army knife for MacOS
+          prefix: brew
+          arguments: if OS.mac?
+        mas:
+          usage: common
+          install: post-install
+          comment: mas - Mac App Store via CLI
+          prefix: brew
+          arguments: if OS.mac?
+        raycast:
+          usage: common
+          install: post-install
+          comment: raycast - A better spotlight
+          prefix: cask
+          arguments: if OS.mac?
+        stats:
+          usage: common
+          install: post-install
+          comment: stats - Stats in the Menubar
+          prefix: cask
+          arguments: if OS.mac?
+    productivity:
+      category: Productivity
+      items:
+        1password:
+          usage: personal
+          install: post-install
+          comment: 1password - Password Manager
+          prefix: cask
+          arguments: if OS.mac?
+        1password-cli:
+          usage: common
+          install: post-install
+          comment: 1password - Password Manager
+          prefix: cask
+          arguments: if OS.mac?
+        notion:
+          usage: personal
+          install: post-install
+          comment: notion - personal wiki
+          prefix: cask
+          arguments: if OS.mac?
+    shell:
+      category: Shell
+      items:
+        alacritty:
+          usage: common
+          install: post-install
+          comment: alacritty - Terminal Emulator
+          prefix: cask
+          arguments: if OS.mac?
+        bat:
+          usage: common
+          install: initial
+          comment: bat - a better cat
+          prefix: brew
+          arguments: ''
+        cheat:
+          usage: common
+          install: post-install
+          comment: Create/view cheaetsheets in the CLI
+          prefix: brew
+          arguments: ''
+        eza:
+          usage: common
+          install: initial
+          comment: eza - a better ls
+          prefix: brew
+          arguments: ''
+        fd:
+          usage: common
+          install: initial
+          comment: fd - A better find
+          prefix: brew
+          arguments: ''
+        figlet:
+          usage: common
+          install: post-install
+          comment: figlet - ASCII text art in the CLI
+          prefix: brew
+          arguments: ''
+        fzf:
+          usage: common
+          install: initial
+          comment: fzf - Fuzzy finding tool
+          prefix: brew
+          arguments: ''
+        gawk:
+          usage: common
+          install: initial
+          comment: gawk - pattern scanning and processing language
+          prefix: brew
+          arguments: ''
+        htop:
+          usage: common
+          install: post-install
+          comment: htop - A better top
+          prefix: brew
+          arguments: ''
+        iterm2:
+          usage: common
+          install: post-install
+          comment: iterm2 - The defacto terminal Emulator for Mac
+          prefix: cask
+          arguments: if OS.mac?
+        jq:
+          usage: common
+          install: initial
+          comment: jq - JSON CLI parser
+          prefix: brew
+          arguments: ''
+        kitty:
+          usage: common
+          install: post-install
+          comment: kitty - Preferred Terminal Emulator
+          prefix: cask
+          arguments: if OS.mac?
+        neofetch:
+          usage: common
+          install: initial
+          comment: neofetch - System stats tool
+          prefix: brew
+          arguments: ''
+        ripgrep:
+          usage: common
+          install: initial
+          comment: ripgrep - A better grep (fast!)
+          prefix: brew
+          arguments: ''
+        starship:
+          usage: common
+          install: initial
+          comment: starship - Customisable prompt
+          prefix: brew
+          arguments: ''
+        thefuck:
+          usage: personal
+          install: post-install
+          comment: thefuck - Fix mis-typed commands
+          prefix: brew
+          arguments: ''
+        tlrc:
+          usage: common
+          install: post-install
+          comment: tlrc - A better man
+          prefix: brew
+          arguments: ''
+        tmux:
+          usage: common
+          install: initial
+          comment: tmux - terminal multiplexer
+          prefix: brew
+          arguments: ''
+        tree:
+          usage: common
+          install: initial
+          comment: Directory tree tool
+          prefix: brew
+          arguments: ''
+        wget:
+          usage: common
+          install: initial
+          comment: wget - CLI download tool
+          prefix: brew
+          arguments: ''
+        yazi:
+          usage: common
+          install: initial
+          comment: yazi - CLI File Explorer
+          prefix: brew
+          arguments: ''
+        yq:
+          usage: common
+          install: initial
+          comment: yq - YAML CLI parser
+          prefix: brew
+          arguments: ''
+        zoxide:
+          usage: common
+          install: initial
+          comment: zoxide - a better cd
+          prefix: brew
+          arguments: ''
