@@ -54,10 +54,6 @@ packages_snap:
     media:
       category: Media
       items:
-        avidemux:
-          usage: personal
-          comment: avidemux - Quickly slice video footage
-          arguments: ''
         gimp:
           usage: personal
           comment: gimp - Free + Open Source image editor
