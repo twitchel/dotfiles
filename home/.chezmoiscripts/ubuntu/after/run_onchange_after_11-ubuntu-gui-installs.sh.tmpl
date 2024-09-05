@@ -10,17 +10,24 @@ echo "⭐️ Running 11-ubuntu-gui-installs"
 {{ $myUsage := .usage.type }}
 
 sudo apt-get update
-sudo apt-get install -y {{ range .packages_apt.categories }}{{ range $key, $val := .items }}{{ if (or (eq $val.usage "common") (eq $val.usage $myUsage )) }}{{ $key }} {{ end }}{{ end }}{{ end }} fontconfig
+sudo apt-get install -y
+{{- range .packages_apt.categories -}}
+{{- range $key, $val := .items -}}
+{{- if (or (eq $val.usage "common") (eq $val.usage $myUsage )) }} {{ $key }}{{- end -}}
+{{- end -}}
+{{- end }} fontconfig
 
 # Install Meslo nerd font on linux
 wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip \
 && cd ~/.local/share/fonts && unzip Meslo.zip && rm *Windows* && rm Meslo.zip && fc-cache -fv
 
 # Although you can install multiple snaps on one line, this errors if already installed
-{{ range .packages_snap.categories }}
-{{ range $key, $val := .items }}
+{{- range .packages_snap.categories -}}
+{{- range $key, $val := .items -}}
 {{ if (or (eq $val.usage "common") (eq $val.usage $myUsage )) }}
 sudo snap install {{ $key }} --no-wait
-{{ end }}
-{{ end }}
+{{- end -}}
+{{- end -}}
+{{- end }}
+
 {{ end }}
