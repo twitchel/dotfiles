@@ -321,6 +321,12 @@ packages_brew:
           comment: caffeine - Keep the screen on!
           prefix: cask
           arguments: if OS.mac?
+        jordanbaird-ice:
+          usage: common
+          install: post-install
+          comment: jordanbaird-ice - Free version of Bartender, menu bar manager
+          prefix: cask
+          arguments: if OS.mac?
         m-cli:
           usage: common
           install: post-install
