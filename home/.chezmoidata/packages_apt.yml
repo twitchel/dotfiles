@@ -1,4 +1,4 @@
-packages_snap:
+packages_apt:
   categories:
     os_linux:
       category: OS Tooling - Linux
