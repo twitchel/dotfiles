@@ -1,66 +1,38 @@
 packages:
-  cli:
-    android:
-      # Shell
-      - curl
-      - fd
-      - fzf
-      - ncurses-utils
-      - starship
-      - tmux
-      - tree
-      - wget
-      - zip
-
-      # Standard tool replacements
-      - bat # better cat
-      - eza # better ls
-      - htop # better top
-      - zoxide # better cd
-
-      # git/github
-      - git-delta
-      - tig
-
-      # development
-      - jq
-      - neovim
-      - neofetch
-      - nodejs-lts
-      - ripgrep
-  gui:
-    snaps:
-      common:
-        # Browsers
-        - brave
-        - firefox
-
-        # Comms
-        - slack
-
-        # Productivity
-        - gimp
-
-        # OS Tooling
-
-        # Development
-        - alacritty --classic
-        - code --classic # vscode
-        - insomnia
-        - intellij-idea-ultimate --classic
-        - postman
-
-        # Misc
-        - spotify
-        - vlc
-      personal:
-        - discord
-        - steam
-    aptitude:
-      common:
-        # Desktop Applications
-        - kitty
-
-        # OS Tooling
-        - caffeine
-        - gnome-tweaks
+  categories:
+    - category: Development - IDEs
+      items:
+        - name: code
+          usage: common
+          install: post
+          comment: VS Code
+          source: snap
+          prefix:
+          arguments: --classic
+    - category: Development - Infrastructure
+      items:
+        - name: aws-sam-cli
+          usage: work
+          install: post
+          comment: AWS SAM (Serverless) Local CLI
+          source: brew
+          prefix: brew
+          arguments:
+    - category: Fonts
+      items:
+        - name: font-meslo-lg-nerd-font
+          usage: common
+          install: initial
+          comment: Nerdfort for MacOS
+          source: brew
+          prefix: cask
+          arguments: if OS.mac?
+    - category: Shell
+      items:
+        - name: fd
+          usage: common
+          install: initial
+          comment: Find files on filesystem
+          source: brew
+          prefix: brew
+          arguments:

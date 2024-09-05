@@ -7,6 +7,21 @@ cask_args appdir: '/Applications'
 tap 'jesseduffield/lazygit'
 tap 'zunit-zsh/zunit'
 
+## START AUTO
+
+{{ range .packages.categories }}
+### {{ .category }} <<<
+{{ range .items }}
+{{ if .source eq 'brew' }}
+{{ .prefix }} '{{ .name }}' {{ .arguments }}
+{{ end }}
+{{ end }}
+### >>>
+
+{{ end }}
+
+## END AUTO
+
 ### Fonts <<<
   cask 'font-meslo-lg-nerd-font' if OS.mac?
 ### >>>
