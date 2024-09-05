@@ -25,7 +25,7 @@ wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/la
 {{- range .packages_snap.categories -}}
 {{- range $key, $val := .items -}}
 {{ if (or (eq $val.usage "common") (eq $val.usage $myUsage )) }}
-sudo snap install {{ $key }} --no-wait
+sudo snap install {{ $key }}{{ if $val.arguments }} {{ $val.arguments }}{{ end }} --no-wait
 {{- end -}}
 {{- end -}}
 {{- end }}
