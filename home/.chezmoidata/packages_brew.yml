@@ -366,6 +366,12 @@ packages_brew:
           comment: 1password - Password Manager
           prefix: cask
           arguments: if OS.mac?
+        msty:
+          usage: personal
+          install: post-install
+          comment: msty - Run LLM's locally
+          prefix: cask
+          arguments: if OS.mac?
         notion:
           usage: personal
           install: post-install
