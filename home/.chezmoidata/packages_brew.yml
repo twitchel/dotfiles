@@ -381,12 +381,6 @@ packages_brew:
     shell:
       category: Shell
       items:
-        alacritty:
-          usage: common
-          install: post-install
-          comment: alacritty - Terminal Emulator
-          prefix: cask
-          arguments: if OS.mac?
         bat:
           usage: common
           install: initial
@@ -435,24 +429,12 @@ packages_brew:
           comment: htop - A better top
           prefix: brew
           arguments: ''
-        iterm2:
-          usage: common
-          install: post-install
-          comment: iterm2 - The defacto terminal Emulator for Mac
-          prefix: cask
-          arguments: if OS.mac?
         jq:
           usage: common
           install: initial
           comment: jq - JSON CLI parser
           prefix: brew
           arguments: ''
-        kitty:
-          usage: common
-          install: post-install
-          comment: kitty - Preferred Terminal Emulator
-          prefix: cask
-          arguments: if OS.mac?
         neofetch:
           usage: common
           install: initial
@@ -519,3 +501,24 @@ packages_brew:
           comment: zoxide - a better cd
           prefix: brew
           arguments: ''
+    terminal-emulators:
+      category: Terminal Emulators
+      items:
+        alacritty:
+          usage: common
+          install: post-install
+          comment: alacritty - Terminal Emulator
+          prefix: cask
+          arguments: if OS.mac?
+        iterm2:
+          usage: common
+          install: post-install
+          comment: iterm2 - The defacto terminal Emulator for Mac
+          prefix: cask
+          arguments: if OS.mac?
+        kitty:
+          usage: common
+          install: post-install
+          comment: kitty - Preferred Terminal Emulator
+          prefix: cask
+          arguments: if OS.mac?
