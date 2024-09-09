@@ -381,10 +381,22 @@ packages_brew:
     shell:
       category: Shell
       items:
+        bash:
+          usage: common
+          install: initial
+          comment: bash - Updated version of bash
+          prefix: brew
+          arguments: ''
         bat:
           usage: common
           install: initial
           comment: bat - a better cat
+          prefix: brew
+          arguments: ''
+        coreutils:
+          usage: common
+          install: initial
+          comment: coreutils - Updated core dependencies
           prefix: brew
           arguments: ''
         cheat:
@@ -411,6 +423,12 @@ packages_brew:
           comment: figlet - ASCII text art in the CLI
           prefix: brew
           arguments: ''
+        findutils:
+          usage: common
+          install: initial
+          comment: findutils - Updated core dependencies
+          prefix: brew
+          arguments: ''
         fzf:
           usage: common
           install: initial
@@ -421,6 +439,12 @@ packages_brew:
           usage: common
           install: initial
           comment: gawk - pattern scanning and processing language
+          prefix: brew
+          arguments: ''
+        grep:
+          usage: common
+          install: initial
+          comment: grep - Updated version of grep
           prefix: brew
           arguments: ''
         htop:
@@ -435,16 +459,34 @@ packages_brew:
           comment: jq - JSON CLI parser
           prefix: brew
           arguments: ''
+        moreutils:
+          usage: common
+          install: initial
+          comment: moreutils - Updated core utils
+          prefix: brew
+          arguments: ''
         neofetch:
           usage: common
           install: initial
           comment: neofetch - System stats tool
           prefix: brew
           arguments: ''
+        openssh:
+          usage: common
+          install: initial
+          comment: openssh - Updated version of openssh
+          prefix: brew
+          arguments: ''
         ripgrep:
           usage: common
           install: initial
           comment: ripgrep - A better grep (fast!)
+          prefix: brew
+          arguments: ''
+        screen:
+          usage: common
+          install: post-install
+          comment: screen - Updated version of screen
           prefix: brew
           arguments: ''
         starship:
@@ -475,6 +517,12 @@ packages_brew:
           usage: common
           install: initial
           comment: Directory tree tool
+          prefix: brew
+          arguments: ''
+        vim:
+          usage: common
+          install: post-install
+          comment: vim - Updated version of vim
           prefix: brew
           arguments: ''
         wget:
