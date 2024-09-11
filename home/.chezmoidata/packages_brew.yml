@@ -16,7 +16,7 @@ packages_brew:
           prefix: cask
           arguments: if OS.mac?
         google-chrome:
-          usage: common
+          usage: personal
           install: post-install
           comment: chrome - The defacto standard
           prefix: cask
@@ -190,7 +190,7 @@ packages_brew:
           prefix: brew
           arguments: ''
         openjdk:
-          usage: common
+          usage: personal
           install: post-install
           comment: openjdk - Open Source Java Development Kit
           prefix: brew
@@ -274,7 +274,7 @@ packages_brew:
           prefix: cask
           arguments: if OS.mac?
         vlc:
-          usage: common
+          usage: personal
           install: post-install
           comment: vlc - Free video player
           prefix: cask
