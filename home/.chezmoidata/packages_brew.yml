@@ -68,25 +68,25 @@ packages_brew:
           install: post-install
           comment: gh - Github CLI utility
           prefix: brew
-          arguments: ''
+          arguments: ""
         git-delta:
           usage: common
           install: initial
           comment: git-delta - Diffing tool for git
           prefix: brew
-          arguments: ''
-        'jesseduffield/lazygit/lazygit':
+          arguments: ""
+        "jesseduffield/lazygit/lazygit":
           usage: common
           install: initial
           comment: jesseduffield/lazygit/lazygit - Powerful GIT CLI UI
           prefix: brew
-          arguments: ''
+          arguments: ""
         tig:
           usage: common
           install: initial
           comment: tig - Git tree viewer
           prefix: brew
-          arguments: ''
+          arguments: ""
     dev_ide:
       category: Development - IDEs
       items:
@@ -101,7 +101,7 @@ packages_brew:
           install: initial
           comment: neovim - The do it all editor
           prefix: brew
-          arguments: ''
+          arguments: ""
         visual-studio-code:
           usage: common
           install: post-install
@@ -116,19 +116,19 @@ packages_brew:
           install: post-install
           comment: awscli - aws cloud management
           prefix: brew
-          arguments: ''
+          arguments: ""
         awscli-local:
           usage: common
           install: post-install
           comment: awscli-local - aws localstack management
           prefix: brew
-          arguments: ''
+          arguments: ""
         aws-sam-cli:
           usage: work
           install: post-install
           comment: aws-sam-cli - AWS SAM (Serverless) Local CLI
           prefix: brew
-          arguments: ''
+          arguments: ""
     dev_infra_cicd:
       category: Development - Infrastructure CI/CD
       items:
@@ -137,7 +137,7 @@ packages_brew:
           install: post-install
           comment: act - Local github actions runner
           prefix: brew
-          arguments: ''
+          arguments: ""
     dev_infra_docker:
       category: Development - Infrastructure Docker
       items:
@@ -152,7 +152,7 @@ packages_brew:
           install: post-install
           comment: lazydocker - A lazy way to manage docker containers
           prefix: brew
-          arguments: ''
+          arguments: ""
     dev_infra_kubernetes:
       category: Development - Infrastructure Kubernetes
       items:
@@ -161,13 +161,13 @@ packages_brew:
           install: post-install
           comment: k9s - kubernetes management UI
           prefix: brew
-          arguments: ''
+          arguments: ""
         minikube:
           usage: personal
           install: post-install
           comment: minikube - local kubernetes instance
           prefix: brew
-          arguments: ''
+          arguments: ""
     dev_runtimes:
       category: Development - Runtimes
       items:
@@ -182,19 +182,19 @@ packages_brew:
           install: initial
           comment: go - Golang runtime
           prefix: brew
-          arguments: ''
+          arguments: ""
         nvm:
           usage: common
           install: initial
           comment: nvm - Node Version Manager
           prefix: brew
-          arguments: ''
+          arguments: ""
         openjdk:
           usage: personal
           install: post-install
           comment: openjdk - Open Source Java Development Kit
           prefix: brew
-          arguments: ''
+          arguments: ""
     dev_utilities:
       category: Development - Utilities
       items:
@@ -245,7 +245,7 @@ packages_brew:
           install: post-install
           comment: openemu - Retro video game emulation
           prefix: cask
-          arguments: ''
+          arguments: ""
         steam:
           usage: personal
           install: post-install
@@ -293,7 +293,7 @@ packages_brew:
           install: post-install
           comment: nmap - Personal VPN
           prefix: brew
-          arguments: ''
+          arguments: ""
         tailscale:
           usage: personal
           install: post-install
@@ -392,49 +392,49 @@ packages_brew:
           install: initial
           comment: bat - a better cat
           prefix: brew
-          arguments: ''
+          arguments: ""
         cheat:
           usage: common
           install: post-install
           comment: Create/view cheaetsheets in the CLI
           prefix: brew
-          arguments: ''
+          arguments: ""
         eza:
           usage: common
           install: initial
           comment: eza - a better ls
           prefix: brew
-          arguments: ''
+          arguments: ""
         fd:
           usage: common
           install: initial
           comment: fd - A better find
           prefix: brew
-          arguments: ''
+          arguments: ""
         figlet:
           usage: common
           install: post-install
           comment: figlet - ASCII text art in the CLI
           prefix: brew
-          arguments: ''
+          arguments: ""
         fzf:
           usage: common
           install: initial
           comment: fzf - Fuzzy finding tool
           prefix: brew
-          arguments: ''
+          arguments: ""
         gawk:
           usage: common
           install: initial
           comment: gawk - pattern scanning and processing language
           prefix: brew
-          arguments: ''
+          arguments: ""
         htop:
           usage: common
           install: post-install
           comment: htop - A better top
           prefix: brew
-          arguments: ''
+          arguments: ""
         iterm2:
           usage: common
           install: post-install
@@ -446,7 +446,7 @@ packages_brew:
           install: initial
           comment: jq - JSON CLI parser
           prefix: brew
-          arguments: ''
+          arguments: ""
         kitty:
           usage: common
           install: post-install
@@ -458,64 +458,65 @@ packages_brew:
           install: initial
           comment: neofetch - System stats tool
           prefix: brew
-          arguments: ''
+          arguments: ""
         ripgrep:
           usage: common
           install: initial
           comment: ripgrep - A better grep (fast!)
           prefix: brew
-          arguments: ''
+          arguments: ""
         starship:
           usage: common
           install: initial
           comment: starship - Customisable prompt
           prefix: brew
-          arguments: ''
+          arguments: ""
         thefuck:
           usage: personal
           install: post-install
           comment: thefuck - Fix mis-typed commands
           prefix: brew
-          arguments: ''
+          arguments: ""
         tlrc:
           usage: common
           install: post-install
           comment: tlrc - A better man
           prefix: brew
-          arguments: ''
+          arguments: ""
         tmux:
           usage: common
           install: initial
           comment: tmux - terminal multiplexer
           prefix: brew
-          arguments: ''
+          arguments: ""
         tree:
           usage: common
           install: initial
           comment: Directory tree tool
           prefix: brew
-          arguments: ''
+          arguments: ""
         wget:
           usage: common
           install: initial
           comment: wget - CLI download tool
           prefix: brew
-          arguments: ''
+          arguments: ""
         yazi:
           usage: common
           install: initial
           comment: yazi - CLI File Explorer
           prefix: brew
-          arguments: ''
+          arguments: ""
         yq:
           usage: common
           install: initial
           comment: yq - YAML CLI parser
           prefix: brew
-          arguments: ''
+          arguments: ""
         zoxide:
           usage: common
           install: initial
           comment: zoxide - a better cd
           prefix: brew
-          arguments: ''
+          arguments: ""
+
