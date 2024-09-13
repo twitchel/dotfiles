@@ -183,6 +183,24 @@ packages_brew:
           comment: go - Golang runtime
           prefix: brew
           arguments: ""
+        golangci-lint:
+          usage: common
+          install: post-install
+          comment: golangci-lint - Linting tool for golang
+          prefix: brew
+          arguments: ""
+        gosec:
+          usage: common
+          install: post-install
+          comment: gosec - golang security scanning
+          prefix: brew
+          arguments: ""
+        govulncheck:
+          usage: common
+          install: post-install
+          comment: govulncheck - golang vulnerability checker
+          prefix: brew
+          arguments: ""
         nvm:
           usage: common
           install: initial
@@ -193,6 +211,12 @@ packages_brew:
           usage: personal
           install: post-install
           comment: openjdk - Open Source Java Development Kit
+          prefix: brew
+          arguments: ""
+        trivy:
+          usage: common
+          install: post-install
+          comment: trivy - Open Source vulnerability scanner
           prefix: brew
           arguments: ""
     dev_utilities:
@@ -519,4 +543,3 @@ packages_brew:
           comment: zoxide - a better cd
           prefix: brew
           arguments: ""
-
