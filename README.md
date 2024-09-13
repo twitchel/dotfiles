@@ -8,9 +8,6 @@ I'm building this repository in order to create a consistent shell environment
 on whichever machine i may be using. I'm currently learning to use vim so that
 I can be productive no-matter the environment/machine im currently working on.
 
-My pipedream is to be able to work off an Android tablet for the ultimate
-ultra-light dev setup.
-
 ## Supported operating systems
 
 This is my standard set of applications + configuration and is designed to run
@@ -45,8 +42,8 @@ A quick one liner to install all the above dependencies is below
 sudo apt-get update && sudo apt-get -y install zsh git wget curl && sudo chsh -s /usr/bin/zsh $(whoami)
 ```
 
-You'll need to restart your system afterwards to have `zsh` as your default shell. Otherwise, you can run 
-`zsh` manually in your terminal to switch (select the option to create an empty `~/.zshrc` file) and 
+You'll need to restart your system afterwards to have `zsh` as your default shell. Otherwise, you can run
+`zsh` manually in your terminal to switch (select the option to create an empty `~/.zshrc` file) and
 continue with the installation.
 
 ### Mac OS
@@ -57,7 +54,7 @@ If running on a Mac you will need to install the Xcode command line tools
 xcode-select --install
 ```
 
-### Wundows
+### Windows
 
 If running on Windows you will need to install WSL and Ubuntu 24.04. You will
 also need to install the following packages:
