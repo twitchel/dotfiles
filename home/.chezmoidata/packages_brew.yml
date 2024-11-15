@@ -60,6 +60,15 @@ packages_brew:
           comment: zoom - Video conferencing
           prefix: cask
           arguments: if OS.mac?
+    dev_databases:
+      category: Development - Databases
+      items:
+        duckdb:
+          usage: common
+          install: post-install
+          comment: duckdb - quack quack!
+          prefix: brew
+          arguments: ""
     dev_git:
       category: Development - GIT
       items:
