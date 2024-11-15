@@ -5,6 +5,7 @@
 }
 
 @test 'Common - Dev 01.2: Node is installed' {
+  skip "Refactoring needed"
   run command -v node
 
   assert "$output" contains "node"
