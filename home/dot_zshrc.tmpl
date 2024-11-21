@@ -80,3 +80,7 @@ alias t="tmux"
 alias brewup="brew bundle --file ~/Brewfile"
 
 alias rav="rsync -rav"
+
+### ----- Env Overrides ------ ###
+touch $HOME/.env
+eval export $(cat $HOME/.env) > /dev/null 2>&1
