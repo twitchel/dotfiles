@@ -1,6 +1,5 @@
 ### ------ Bootstrapping ------ ###
 ## ---- Brew ---- ##
-
 export BREW_PATH={{ .system.brewPath }}/bin/brew
 export BREW_BASE_PATH={{ .system.brewPath }}
 eval "$(${BREW_PATH} shellenv)"
@@ -11,6 +10,12 @@ if command -v starship > /dev/null; then
 fi
 
 ## ---- oh-my-zsh ---- ##
+# Fix for missing pygmentize
+if ! command -v pygmentize; then
+  mkdir -p $HOME/.local/bin
+  touch $HOME/.local/bin/pygmentize && chmod +x $HOME/.local/bin/pygmentize
+fi
+
 export ZSH="$HOME/.oh-my-zsh"
 zstyle ':omz:update' mode disabled  # disable automatic updates
 ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
