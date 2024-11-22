@@ -6,9 +6,13 @@ packages_apt:
         gnome-tweaks:
           usage: common
           comment: Gnome Desktop Tweaks
+        powertop:
+          usage: common
+          comment: Power monitoring for laptops
     shell:
       category: Shell
       items:
         kitty:
           usage: common
           comment: kitty - Preferred Terminal Emulator
+
