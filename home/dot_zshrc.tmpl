@@ -11,7 +11,7 @@ fi
 
 ## ---- oh-my-zsh ---- ##
 # Fix for missing pygmentize
-if ! command -v pygmentize; then
+if ! command -v pygmentize > /dev/null; then
   mkdir -p $HOME/.local/bin
   touch $HOME/.local/bin/pygmentize && chmod +x $HOME/.local/bin/pygmentize
 fi
