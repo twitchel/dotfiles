@@ -528,6 +528,12 @@ packages_brew:
           comment: Directory tree tool
           prefix: brew
           arguments: ""
+        wezterm:
+          usage: common
+          install: initial
+          comment: wezterm - Fast terminal Emulator
+          prefix: cask
+          arguments: if OS.mac?
         wget:
           usage: common
           install: initial
