@@ -15,10 +15,13 @@ name: Build and Test dotfiles
 
 jobs:
   build-macos:
-    name: Build and Test macOS Sonoma (14.x)
-    runs-on: macos-latest
+    name: Build and Test ${{ matrix.macos-version }}
+    runs-on: ${{ matrix.macos-version }}
     strategy:
       matrix:
+        macos-version:
+          - macos-14
+          - macos-15
         usage:
           - personal
           - work
