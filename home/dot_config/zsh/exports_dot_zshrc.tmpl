@@ -1,0 +1,25 @@
+## ---- OS Common ---- ##
+# Path
+export PATH="${BREW_BASE_PATH}/opt/postgresql@11/bin:$PATH" # PostgreSQL
+export PATH="${BREW_BASE_PATH}/opt/openjdk/bin:$PATH" # OpenJDL
+
+# Shell History
+export HISTSIZE=25000
+export SAVEHIST=25000
+
+## ---- Development ---- ##
+# Editors
+export EDITOR=nvim
+export VISUAL=nvim
+
+# GIT dirs
+export GITUSER="{{ .details.personal.githubUsername }}"
+export DEV_DIR="$HOME/dev/src"
+export DEV_GH_DIR="$DEV_DIR/github.com"
+export DEV_GH_MYDIR="$DEV_GH_DIR/$GITUSER"
+{{ if and (.usage.isWork) (.details.work.githubOrg) }}
+export DEV_GH_WORK="$DEV_GH_DIR/{{ .details.work.githubOrg }}"
+{{ end }}
+{{ if and (.usage.isWork) (.details.work.githubUsername) }}
+export DEV_GH_WORK_USERNAME="$DEV_GH_DIR/{{ .details.work.githubUsername }}"
+{{ end }}
