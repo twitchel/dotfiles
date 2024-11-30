@@ -1,3 +1,8 @@
+## ---- Bootstrapping functions ---- ###
+source_file() {
+  [ -f "$1" ] && source "$1"
+}
+
 ## ---- Brew ---- ##
 export BREW_PATH={{ .system.brewPath }}/bin/brew
 export BREW_BASE_PATH={{ .system.brewPath }}
@@ -12,3 +17,4 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "${BREW_BASE_PATH}/opt/nvm/nvm.sh" ] && \. "${BREW_BASE_PATH}/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "${BREW_BASE_PATH}/opt/nvm/etc/bash_completion.d/nvm" ] && \. "${BREW_BASE_PATH}/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
