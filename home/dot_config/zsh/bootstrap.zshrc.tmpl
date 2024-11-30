@@ -10,6 +10,7 @@ eval "$(${BREW_PATH} shellenv)"
 
 ## ---- Antidote ---- ##
 source "$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh"
+antidote load
 
 ## ---- Starship ---- ##
 if command -v starship > /dev/null; then
