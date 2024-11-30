@@ -8,6 +8,9 @@ export BREW_PATH={{ .system.brewPath }}/bin/brew
 export BREW_BASE_PATH={{ .system.brewPath }}
 eval "$(${BREW_PATH} shellenv)"
 
+## ---- Antidote ---- ##
+source "$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh"
+
 ## ---- Starship ---- ##
 if command -v starship > /dev/null; then
   eval "$(starship init zsh)"
