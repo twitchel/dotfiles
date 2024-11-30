@@ -162,21 +162,6 @@ packages_brew:
           comment: lazydocker - A lazy way to manage docker containers
           prefix: brew
           arguments: ""
-    dev_infra_kubernetes:
-      category: Development - Infrastructure Kubernetes
-      items:
-        k9s:
-          usage: personal
-          install: post-install
-          comment: k9s - kubernetes management UI
-          prefix: brew
-          arguments: ""
-        minikube:
-          usage: personal
-          install: post-install
-          comment: minikube - local kubernetes instance
-          prefix: brew
-          arguments: ""
     dev_runtimes:
       category: Development - Runtimes
       items:
