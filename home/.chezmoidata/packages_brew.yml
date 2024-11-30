@@ -410,7 +410,7 @@ packages_brew:
           install: initial
           comment: antidote - zsh plugin manager
           prefix: brew
-          argument: ""
+          arguments: ""
         bat:
           usage: common
           install: initial
