@@ -405,6 +405,12 @@ packages_brew:
     shell:
       category: Shell
       items:
+        antidote:
+          usage: common
+          install: initial
+          comment: antidote - zsh plugin manager
+          prefix: brew
+          argument: ""
         bat:
           usage: common
           install: initial
@@ -523,6 +529,12 @@ packages_brew:
           usage: common
           install: initial
           comment: zoxide - a better cd
+          prefix: brew
+          arguments: ""
+        zsh:
+          usage: common
+          install: initial
+          comment: zsh - ZShell
           prefix: brew
           arguments: ""
     terminal-emulators:
