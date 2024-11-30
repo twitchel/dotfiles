@@ -1,8 +1,27 @@
-# ---- Add home bin dir to PATH -----
-PATH="${PATH}:${HOME}/.local/bin"
+## ---- Bootstrapping functions ---- ###
+source_file() {
+  [ -f "$1" ] && source "$1"
+}
 
-# ---- ZSH plugins -----
-plugins=(brew git macos docker common-aliases)
+## ---- Brew ---- ##
+export BREW_PATH={{ .system.brewPath }}/bin/brew
+export BREW_BASE_PATH={{ .system.brewPath }}
+eval "$(${BREW_PATH} shellenv)"
+
+## ---- Antidote ---- ##
+source "$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh"
+antidote load
+
+## ---- Starship ---- ##
+if command -v starship > /dev/null; then
+  export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+  eval "$(starship init zsh)"
+fi
+
+## ---- NVM (node version manager) ---- ##
+export NVM_DIR="$HOME/.nvm"
+[ -s "${BREW_BASE_PATH}/opt/nvm/nvm.sh" ] && \. "${BREW_BASE_PATH}/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "${BREW_BASE_PATH}/opt/nvm/etc/bash_completion.d/nvm" ] && \. "${BREW_BASE_PATH}/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 # ---- FZF -----
 
@@ -12,7 +31,7 @@ if command -v fzf > /dev/null; then
   source ~/.config/fzf/fzf-git.sh/fzf-git.sh
 fi
 
-# -- Use fd instead of fzf --
+# -- Use fd instead of fzf -- #
 
 export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

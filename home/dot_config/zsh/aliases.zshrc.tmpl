@@ -1,0 +1,23 @@
+## ---- Work Dirs ---- ##
+alias dgh="cd ${DEV_GH_DIR}"
+alias tdd="cd ${DEV_GH_MYDIR}"
+{{ if and (.usage.isWork) (.details.work.githubOrg) }}
+alias wdd="cd ${DEV_GH_WORK}"
+{{ end }}
+{{ if and (.usage.isWork) (.details.work.githubUsername) }}
+alias wudd="cd ${DEV_GH_WORK_USERNAME}"
+{{ end }}
+
+## ---- Applications ---- ##
+alias ls="eza --color=always --long --git --icons=always"
+alias cd="z"
+alias mkcd="take"
+
+alias v="nvim" # neovim
+alias sv="sudoedit"
+alias t="tmux"
+
+alias chezup="chezmoi update"
+alias brewup="brew bundle --file ~/Brewfile"
+
+alias rav="rsync -rav"

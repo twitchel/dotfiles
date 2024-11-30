@@ -162,21 +162,6 @@ packages_brew:
           comment: lazydocker - A lazy way to manage docker containers
           prefix: brew
           arguments: ""
-    dev_infra_kubernetes:
-      category: Development - Infrastructure Kubernetes
-      items:
-        k9s:
-          usage: personal
-          install: post-install
-          comment: k9s - kubernetes management UI
-          prefix: brew
-          arguments: ""
-        minikube:
-          usage: personal
-          install: post-install
-          comment: minikube - local kubernetes instance
-          prefix: brew
-          arguments: ""
     dev_runtimes:
       category: Development - Runtimes
       items:
@@ -324,7 +309,7 @@ packages_brew:
         nmap:
           usage: common
           install: post-install
-          comment: nmap - Personal VPN
+          comment: nmap - Network mapping tool
           prefix: brew
           arguments: ""
         tailscale:
@@ -411,15 +396,21 @@ packages_brew:
           comment: notion - personal wiki
           prefix: cask
           arguments: if OS.mac?
+        obsidian:
+          usage: common
+          install: post-install
+          comment: obsidian - markdown note-taking on steriods
+          prefix: cask
+          arguments: if OS.mac?
     shell:
       category: Shell
       items:
-        alacritty:
+        antidote:
           usage: common
-          install: post-install
-          comment: alacritty - Terminal Emulator
-          prefix: cask
-          arguments: if OS.mac?
+          install: initial
+          comment: antidote - zsh plugin manager
+          prefix: brew
+          arguments: ""
         bat:
           usage: common
           install: initial
@@ -468,24 +459,12 @@ packages_brew:
           comment: htop - A better top
           prefix: brew
           arguments: ""
-        iterm2:
-          usage: common
-          install: post-install
-          comment: iterm2 - The defacto terminal Emulator for Mac
-          prefix: cask
-          arguments: if OS.mac?
         jq:
           usage: common
           install: initial
           comment: jq - JSON CLI parser
           prefix: brew
           arguments: ""
-        kitty:
-          usage: common
-          install: post-install
-          comment: kitty - Preferred Terminal Emulator
-          prefix: cask
-          arguments: if OS.mac?
         neofetch:
           usage: common
           install: initial
@@ -528,12 +507,6 @@ packages_brew:
           comment: Directory tree tool
           prefix: brew
           arguments: ""
-        wezterm:
-          usage: common
-          install: initial
-          comment: wezterm - Fast terminal Emulator
-          prefix: cask
-          arguments: if OS.mac?
         wget:
           usage: common
           install: initial
@@ -558,3 +531,36 @@ packages_brew:
           comment: zoxide - a better cd
           prefix: brew
           arguments: ""
+        zsh:
+          usage: common
+          install: initial
+          comment: zsh - ZShell
+          prefix: brew
+          arguments: ""
+    terminal-emulators:
+      category: Terminal Emulators
+      items:
+        alacritty:
+          usage: common
+          install: post-install
+          comment: alacritty - Terminal Emulator
+          prefix: cask
+          arguments: if OS.mac?
+        iterm2:
+          usage: common
+          install: initial
+          comment: iterm2 - The defacto terminal Emulator for Mac
+          prefix: cask
+          arguments: if OS.mac?
+        kitty:
+          usage: common
+          install: post-install
+          comment: kitty - Preferred Terminal Emulator
+          prefix: cask
+          arguments: if OS.mac?
+        wezterm:
+          usage: common
+          install: post-install
+          comment: wezterm - Fast terminal Emulator
+          prefix: cask
+          arguments: if OS.mac?

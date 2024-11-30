@@ -1,0 +1,45 @@
+## ---- Take ---- ##
+take () {
+  if [[ $1 =~ ^(https?|ftp).*\.(tar\.(gz|bz2|xz)|tgz)$ ]]
+  then
+    takeurl "$1"
+  elif [[ $1 =~ ^(https?|ftp).*\.(zip)$ ]]
+  then
+    takezip "$1"
+  elif [[ $1 =~ ^([A-Za-z0-9]\+@|https?|git|ssh|ftps?|rsync).*\.git/?$ ]]
+  then
+    takegit "$1"
+  else
+    takedir "$@"
+  fi
+}
+
+takeurl () {
+  local data thedir
+  data="$(mktemp)"
+  curl -L "$1" > "$data"
+  tar xf "$data"
+  thedir="$(tar tf "$data" | head -n 1)"
+  rm "$data"
+  cd "$thedir" || exit
+}
+
+takezip () {
+  local data thedir
+  data="$(mktemp)"
+  curl -L "$1" > "$data"
+  unzip "$data" -d "./"
+  thedir="$(unzip -l "$data" | awk 'NR==4 {print $4}' | sed 's/\/.*//')"
+  rm "$data"
+  cd "$thedir" || exit
+}
+
+takegit () {
+  git clone "$1"
+  git_path=$(basename "${1%%.git}")
+  cd "$git_path" || exit
+}
+
+takedir () {
+  mkdir -p "$@" && cd "${@:$#}" || exit
+}
