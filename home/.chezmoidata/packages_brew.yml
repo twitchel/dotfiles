@@ -309,7 +309,7 @@ packages_brew:
         nmap:
           usage: common
           install: post-install
-          comment: nmap - Personal VPN
+          comment: nmap - Network mapping tool
           prefix: brew
           arguments: ""
         tailscale:
@@ -396,6 +396,12 @@ packages_brew:
           comment: notion - personal wiki
           prefix: cask
           arguments: if OS.mac?
+        obsidian:
+          usage: common
+          install: post-install
+          comment: obsidian - markdown note-taking on steriods
+          prefix: cask
+          arguments: if OS.mac?
     shell:
       category: Shell
       items:
@@ -455,7 +461,7 @@ packages_brew:
           arguments: ""
         iterm2:
           usage: common
-          install: post-install
+          install: initial
           comment: iterm2 - The defacto terminal Emulator for Mac
           prefix: cask
           arguments: if OS.mac?
@@ -515,7 +521,7 @@ packages_brew:
           arguments: ""
         wezterm:
           usage: common
-          install: initial
+          install: post-install
           comment: wezterm - Fast terminal Emulator
           prefix: cask
           arguments: if OS.mac?
