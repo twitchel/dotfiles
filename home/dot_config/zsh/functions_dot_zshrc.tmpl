@@ -1,5 +1,4 @@
-
-## ---- Brew ---- ##
+## ---- Take ---- ##
 take () {
   if [[ $1 =~ ^(https?|ftp).*\.(tar\.(gz|bz2|xz)|tgz)$ ]]
   then
@@ -37,9 +36,10 @@ takezip () {
 
 takegit () {
   git clone "$1"
-  cd "$(basename ${1%%.git})" || exit
+  git_path=$(basename "${1%%.git}")
+  cd "$git_path" || exit
 }
 
 takedir () {
-  mkdir -p $@ && cd ${@:$#} || exit
+  mkdir -p "$@" && cd "${@:$#}" || exit
 }
