@@ -1,7 +1,8 @@
 ## ---- OS Common ---- ##
 # Path
-export PATH="${BREW_BASE_PATH}/opt/postgresql@11/bin:$PATH" # PostgreSQL
-export PATH="${BREW_BASE_PATH}/opt/openjdk/bin:$PATH" # OpenJDL
+export PATH="${PATH}:${HOME}/.local/bin" # Local bin pathing
+export PATH="${PATH}:${BREW_BASE_PATH}/opt/postgresql@11/bin" # PostgreSQL
+export PATH="${PATH}:${BREW_BASE_PATH}/opt/openjdk/bin" # OpenJDL
 
 # Shell History
 export HISTSIZE=25000
