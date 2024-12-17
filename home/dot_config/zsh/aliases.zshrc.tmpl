@@ -21,3 +21,7 @@ alias chezup="chezmoi update"
 alias brewup="brew bundle --file ~/Brewfile"
 
 alias rav="rsync -rav"
+
+{{ if (.system.isUbuntuDesktop) }}
+alias idea="intellij-idea-ultimate"
+{{ end }}
