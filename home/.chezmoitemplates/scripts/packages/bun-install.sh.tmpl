@@ -1,0 +1,7 @@
+# Install bun if not already installed
+
+if command -v bun >&2; then
+  echo "bun installed already"
+else
+  curl -fsSL https://bun.sh/install | bash
+fi
