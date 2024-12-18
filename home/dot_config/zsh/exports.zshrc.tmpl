@@ -3,6 +3,7 @@
 export PATH="${PATH}:${HOME}/.local/bin" # Local bin pathing
 export PATH="${PATH}:${BREW_BASE_PATH}/opt/postgresql@11/bin" # PostgreSQL
 export PATH="${PATH}:${BREW_BASE_PATH}/opt/openjdk/bin" # OpenJDL
+[[ -d "${HOME}/.bun/bin" ]] && export PATH="${PATH}:${HOME}/.bun/bin" # Bun
 
 # Shell History
 export HISTSIZE=25000
