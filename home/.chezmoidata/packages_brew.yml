@@ -600,6 +600,12 @@ packages_brew:
           comment: alacritty - Terminal Emulator
           prefix: cask
           arguments: if OS.mac?
+        ghostty:
+          usage: common
+          install: initial
+          comment: ghostty - The fastest native terminal App
+          prefix: cask
+          arguments: if OS.mac?
         iterm2:
           usage: common
           install: initial
@@ -618,3 +624,4 @@ packages_brew:
           comment: wezterm - Fast terminal Emulator
           prefix: cask
           arguments: if OS.mac?
+
