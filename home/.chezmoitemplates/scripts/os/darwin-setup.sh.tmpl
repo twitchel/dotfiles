@@ -328,8 +328,8 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:iconSize 80" ~/Library/Preferences/com.apple.finder.plist
 
 # Use list view in all Finder windows by default
-# Four-letter codes for the other view modes: `icnv`, `clmv`, `glyv`
-#defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+# Four-letter codes for the other view modes: "icnv", "clmv", "glyv" "Nlsv"
+defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
 
 # Disable the warning before emptying the Trash
 #defaults write com.apple.finder WarnOnEmptyTrash -bool false
@@ -362,7 +362,7 @@ defaults write com.apple.finder FXInfoPanesExpanded -dict \
 #defaults write com.apple.dock mouse-over-hilite-stack -bool true
 
 # Set the icon size of Dock items to 36 pixels
-#defaults write com.apple.dock tilesize -int 36
+defaults write com.apple.dock tilesize -int 24
 
 # Change minimize/maximize window effect
 #defaults write com.apple.dock mineffect -string "scale"
