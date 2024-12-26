@@ -363,6 +363,12 @@ packages_brew:
           comment: raycast - A better spotlight
           prefix: cask
           arguments: if OS.mac?
+        rectangle:
+          usage: common
+          install: post-install
+          comment: rectangle - Window management
+          prefix: cask
+          arguments: if OS.mac?
         stats:
           usage: common
           install: post-install
