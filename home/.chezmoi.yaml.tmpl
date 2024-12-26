@@ -3,7 +3,7 @@
 {{- $usage := dict "isPersonal" false "isWork" false "type" "" }}
 {{- $personalDetails := dict "email" "" "githubUsername" "twitchel" "opVault" "" -}}
 {{- $workDetails := dict "domain" "" "email" "" "githubUsername" "" "githubOrg" "" "opVault" "" -}}
-{{- $system := dict "isMac" false "isMacARM" false "isUbuntu" false "isUbuntuServer" false "isUbuntuDesktop" false "isAndroid" false "shebang" "/usr/bin/env zsh" "brewPath" "/dev/null" -}}
+{{- $system := dict "isMac" false "isMacARM" false "isUbuntu" false "isUbuntuServer" false "isUbuntuDesktop" false "isAndroid" false "shebang" "/usr/bin/env zsh" "brewPath" "/dev/null" "systemName" "" -}}
 {{- $opServiceAccountToken := "" -}}
 {{- $opVaultPersonal := "" -}}
 {{- $opVaultWork := "" -}}
@@ -44,6 +44,7 @@
 
 {{/* If User Input is available, prompt for values */}}
 {{- if stdinIsATTY -}}
+{{-   $_ := set $system "systemName" (promptStringOnce . "systemName" "What is this computers name?") -}}
 {{-   $_ := set $usage "isPersonal" (promptBoolOnce . "isPersonal" "Is this machine personal?") -}}
 {{-   $_ := set $usage "isWork" (promptBoolOnce . "isWork" "Is this machine used for work?") -}}
 {{/* $opServiceAccountToken := (promptStringOnce . "opServiceAccountToken" "What is your 1Password Service Account Token?") */}}
@@ -71,6 +72,7 @@
   {{- $_ := set $usage "isPersonal" true -}}
   {{- $_ := set $usage "type" "personal" -}}
   {{- $_ := set $personalDetails "email" "contact@danieljones.net" -}}
+  {{- $_ := set $system "systemName" "ci-personal" }}
 {{- end -}}
 {{- if eq (env "CI_USAGE") "work" -}}
   {{- $_ := set $usage "isWork" true -}}
@@ -79,6 +81,7 @@
   {{- $_ := set $workDetails "email" "daniel@example.com" -}}
   {{- $_ := set $workDetails "githubUsername" "daniel_exampleco" -}}
   {{- $_ := set $workDetails "githubOrg" "exampleco" -}}
+  {{- $_ := set $system "systemName" "ci-work" }}
 {{- end -}}
 
 env:
