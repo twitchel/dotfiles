@@ -5,7 +5,8 @@ if [[ -z ${BREW_PATH} ]]; then
 fi
 
 if command -v brew; then
-  echo "Brew already installed"
+  echo "Brew already installed, updating currently installed version"
+  brew update
 else
   echo "Installing Homebrew"
   which brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
