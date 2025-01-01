@@ -513,6 +513,12 @@ packages_brew:
           comment: openssh - Updated version of openssh
           prefix: brew
           arguments: ""
+        rclone:
+          usage: common
+          install: post-install
+          comment: rclone - efficient CLI file copying
+          prefix: brew
+          arguments: ""
         ripgrep:
           usage: common
           install: initial
@@ -624,4 +630,3 @@ packages_brew:
           comment: wezterm - Fast terminal Emulator
           prefix: cask
           arguments: if OS.mac?
-
