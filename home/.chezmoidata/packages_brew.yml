@@ -147,6 +147,18 @@ packages_brew:
           comment: act - Local github actions runner
           prefix: brew
           arguments: ""
+        ansible:
+          usage: personal
+          install: post-install
+          comment: ansible - Workflow runner
+          prefix: brew
+          arguments: ""
+        opentofu:
+          usage: personal
+          install: post-install
+          comment: tofu - Terraform replacement
+          prefix: brew
+          arguments: ""
     dev_infra_docker:
       category: Development - Infrastructure Docker
       items:
