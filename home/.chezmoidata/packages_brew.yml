@@ -243,6 +243,12 @@ packages_brew:
     dev_utilities:
       category: Development - Utilities
       items:
+        bruno:
+          usage: common
+          install: post-install
+          comment: bruno - Free and open API client
+          prefix: cask
+          arguments: if OS.mac?
         cyberduck:
           usage: common
           install: post-install
