@@ -73,7 +73,7 @@ packages_brew:
       category: Development - GIT
       items:
         gh:
-          usage: personal
+          usage: common
           install: post-install
           comment: gh - Github CLI utility
           prefix: brew
