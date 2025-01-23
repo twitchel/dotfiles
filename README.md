@@ -15,7 +15,7 @@ on my OS's of choice.
 
 This has been tested on:
 
-- MacOS (Sonoma+)
+- MacOS (15.x Sequoia+)
 - Ubuntu Linux 24.04+
 - Windows 11 (WSL with Ubuntu 24.04)
 
