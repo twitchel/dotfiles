@@ -142,7 +142,7 @@ packages_brew:
       category: Development - Infrastructure CI/CD
       items:
         act:
-          usage: personal
+          usage: common
           install: post-install
           comment: act - Local github actions runner
           prefix: brew
@@ -313,7 +313,7 @@ packages_brew:
           prefix: cask
           arguments: if OS.mac?
         gimp:
-          usage: personal
+          usage: common
           install: post-install
           comment: gimp - Free + Open Source image editor
           prefix: cask
@@ -325,7 +325,7 @@ packages_brew:
           prefix: cask
           arguments: if OS.mac?
         vlc:
-          usage: personal
+          usage: common
           install: post-install
           comment: vlc - Free video player
           prefix: cask
@@ -424,7 +424,7 @@ packages_brew:
           prefix: cask
           arguments: if OS.mac?
         msty:
-          usage: personal
+          usage: common
           install: post-install
           comment: msty - Run LLM's locally
           prefix: cask
