@@ -331,7 +331,7 @@ packages_brew:
           prefix: cask
           arguments: if OS.mac?
         vlc:
-          usage: common
+          usage: personal
           install: post-install
           comment: vlc - Free video player
           prefix: cask
