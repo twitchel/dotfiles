@@ -163,7 +163,7 @@ packages_brew:
       category: Development - Infrastructure Docker
       items:
         docker:
-          usage: personal
+          usage: common
           install: post-install
           comment: docker - Docker community edition for Mac
           prefix: cask
@@ -174,12 +174,6 @@ packages_brew:
           comment: lazydocker - A lazy way to manage docker containers
           prefix: brew
           arguments: ""
-        podman-desktop:
-          usage: work
-          install: post-install
-          comment: podman - open source docker management on mac
-          prefix: cask
-          arguments: if OS.mac?
     dev_infra_kubernetes:
       category: Development - Infrastructure Kubernetes
       items:
