@@ -522,6 +522,12 @@ packages_brew:
           comment: htop - A better top
           prefix: brew
           arguments: ""
+        humanlog:
+          usage: common
+          install: post-install
+          comment: humanlog - Logs for humans
+          prefix: brew
+          arguments: ""
         jq:
           usage: common
           install: initial
