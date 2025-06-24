@@ -162,7 +162,7 @@ packages_brew:
     dev_infra_docker:
       category: Development - Infrastructure Docker
       items:
-        docker:
+        docker-desktop:
           usage: common
           install: post-install
           comment: docker - Docker community edition for Mac
@@ -345,7 +345,7 @@ packages_brew:
           comment: nmap - Network mapping tool
           prefix: brew
           arguments: ""
-        tailscale:
+        tailscale-app:
           usage: personal
           install: post-install
           comment: tailscale - Personal VPN
