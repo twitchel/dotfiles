@@ -28,6 +28,6 @@
   assert "$output" contains "name = $(chezmoi data | jq -r .details.work.name)"
 
   run cat ~/.gitconfig
-  assert "$output" contains "[includeIf \"gitdir:~/dev/src/github.com/${githubOrg}/\"]"
+  assert "$output" contains "[includeIf \"gitdir:~/dev/src/github.com/${githubOrg}/**\"]"
   assert "$output" contains "path = ~/dev/src/github.com/${githubOrg}/.gitconfig"
 }
