@@ -162,18 +162,18 @@ packages_brew:
     dev_infra_docker:
       category: Development - Infrastructure Docker
       items:
+        colima:
+          usage: common
+          install: post-install
+          comment: docker - Docker community edition for Mac
+          prefix: cask
+          arguments: if OS.mac?
         dive:
           usage: common
           install: post-install
           comment: dive - docker layer Explorer
           prefix: brew
           arguments: ""
-        docker-desktop:
-          usage: common
-          install: post-install
-          comment: docker - Docker community edition for Mac
-          prefix: cask
-          arguments: if OS.mac?
         lazydocker:
           usage: common
           install: post-install
