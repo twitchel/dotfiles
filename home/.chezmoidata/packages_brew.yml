@@ -163,7 +163,7 @@ packages_brew:
       category: Development - Infrastructure Docker
       items:
         colima:
-          usage: common
+          usage: personal
           install: post-install
           comment: docker - Docker community edition for Mac
           prefix: cask
