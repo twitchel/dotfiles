@@ -480,6 +480,12 @@ packages_brew:
           comment: coreutils - Updated core dependencies
           prefix: brew
           arguments: ""
+        direnv:
+          usage: common
+          install: initial
+          comment: direnv - manage env per directory
+          prefix: brew
+          arguemnts: ""
         eza:
           usage: common
           install: initial
