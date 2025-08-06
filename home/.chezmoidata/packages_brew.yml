@@ -485,7 +485,7 @@ packages_brew:
           install: initial
           comment: direnv - manage env per directory
           prefix: brew
-          arguemnts: ""
+          arguments: ""
         eza:
           usage: common
           install: initial
