@@ -21,6 +21,7 @@ jobs:
       matrix:
         macos-version:
           - macos-15
+          - macos-26
         usage:
           - personal
           - work
