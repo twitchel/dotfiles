@@ -48,7 +48,7 @@ jobs:
           path: tests/_output/output.txt
 
   build-ubuntu-desktop:
-    name: Build and Test Ubuntu Desktop 24.04
+    name: Build and Test Ubuntu Desktop ${{ matrix.ubuntu-version }}
     runs-on: ${{ matrix.ubuntu-version }}
     strategy:
       matrix:
