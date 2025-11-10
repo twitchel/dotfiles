@@ -21,6 +21,7 @@ jobs:
       matrix:
         macos-version:
           - macos-15
+          - macos-26
         usage:
           - personal
           - work
@@ -47,10 +48,12 @@ jobs:
           path: tests/_output/output.txt
 
   build-ubuntu-desktop:
-    name: Build and Test Ubuntu Desktop 24.04
-    runs-on: ubuntu-24.04
+    name: Build and Test Ubuntu Desktop ${{ matrix.ubuntu-version }}
+    runs-on: ${{ matrix.ubuntu-version }}
     strategy:
       matrix:
+        ubuntu-version:
+          - ubuntu-24.04
         usage:
           - personal
     steps:
