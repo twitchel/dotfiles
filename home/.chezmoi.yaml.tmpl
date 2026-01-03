@@ -1,0 +1,12 @@
+data:
+    name: {{ promptStringOnce . "name" "What is your name?" }}
+    email: {{ promptStringOnce . "email" "What is your email address?" }}
+    hostname: {{ .chezmoi.hostname }}
+    os: {{ .chezmoi.os }}
+    {{- if eq .chezmoi.os "linux" }}
+    distro: {{ .chezmoi.osRelease.id }}
+    {{- end }}
+    packageManager:
+        ubuntu: apt
+        darwin: brew
+        manjaro: pamac
