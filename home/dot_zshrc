@@ -1,0 +1,12 @@
+### ------ Load ZSH config from .config ------ ###
+export ZDOTDIR="$HOME/.config/zsh"
+source "$ZDOTDIR/.zshrc"
+
+### ----- Local Env Overrides ------ ###
+touch $HOME/.env
+eval export $(cat $HOME/.env | xargs) > /dev/null 2>&1
+
+# Marker to tell OS that ZSH is sourced successfully
+export ZSH_SOURCED=true
+
+# EOF

@@ -1,0 +1,14 @@
+## ---- Bootstrapping functions ---- ###
+source_file() {
+  [ -f "$1" ] && source "$1"
+}
+
+## ---- Antidote ---- ##
+source ${ZDOTDIR:-~}/.antidote/antidote.zsh
+antidote load
+
+## ---- Starship ---- ##
+if command -v starship > /dev/null; then
+  export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+  eval "$(starship init zsh)"
+fi

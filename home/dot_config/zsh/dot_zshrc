@@ -1,9 +1,6 @@
-## ---- Antidote ---- ##
-source /usr/share/zsh-antidote/antidote.zsh
-antidote load
+# Bootstrap first
+source "$ZDOTDIR/bootstrap.zshrc"
 
-## ---- Starship ---- ##
-if command -v starship > /dev/null; then
-  export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
-  eval "$(starship init zsh)"
-fi
+# Source components
+source_file "$ZDOTDIR/aliases.zshrc"
+
