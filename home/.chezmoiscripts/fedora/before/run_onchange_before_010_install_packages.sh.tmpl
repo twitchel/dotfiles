@@ -2,11 +2,11 @@
 #!/bin/bash
 # Fedora package installation script for {{ .chezmoi.hostname }}
 # Auto-generated from packages.json
-# packages.json hash: {{ include "packages.json" | sha256sum }}
+# packages.json hash: {{ include ".chezmoitemplates/packages.json" | sha256sum }}
 
 set -euo pipefail
 
-{{- $packages := fromJson (include "packages.json") }}
+{{- $packages := fromJson (include ".chezmoitemplates/packages.json") }}
 {{- $machineConfig := index .machines .chezmoi.hostname | default dict }}
 {{- $isPersonal := index $machineConfig "isPersonal" | default false }}
 {{- $isWorkstation := index $machineConfig "isWorkstation" | default false }}
@@ -55,11 +55,13 @@ echo "==> Installing DNF packages..."
 DNF_PACKAGES=(
 {{- range $packages.packages }}
 {{- $pkg := . }}
-{{- $dnfPkg := index .managers "dnf" }}
+{{- $managers := index . "managers" | default dict }}
+{{- $dnfPkg := index $managers "dnf" | default "" }}
+{{- $tags := index . "tags" | default list }}
 {{- if $dnfPkg }}
-{{- range .tags }}
+{{- range $tags }}
 {{- if eq . "base" }}
-    {{ $dnfPkg }}  # {{ $pkg.name }}: {{ $pkg.description }}
+    {{ $dnfPkg }}  # {{ $pkg.name }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -70,16 +72,18 @@ DNF_PACKAGES=(
 DNF_PACKAGES+=(
 {{- range $packages.packages }}
 {{- $pkg := . }}
-{{- $dnfPkg := index .managers "dnf" }}
+{{- $managers := index . "managers" | default dict }}
+{{- $dnfPkg := index $managers "dnf" | default "" }}
+{{- $tags := index . "tags" | default list }}
 {{- if $dnfPkg }}
 {{- $isDev := false }}
 {{- $isBase := false }}
-{{- range .tags }}
+{{- range $tags }}
 {{- if eq . "development" }}{{ $isDev = true }}{{ end }}
 {{- if eq . "base" }}{{ $isBase = true }}{{ end }}
 {{- end }}
 {{- if and $isDev (not $isBase) }}
-    {{ $dnfPkg }}  # {{ $pkg.name }}: {{ $pkg.description }}
+    {{ $dnfPkg }}  # {{ $pkg.name }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -90,14 +94,16 @@ DNF_PACKAGES+=(
 DNF_PACKAGES+=(
 {{- range $packages.packages }}
 {{- $pkg := . }}
-{{- $dnfPkg := index .managers "dnf" }}
+{{- $managers := index . "managers" | default dict }}
+{{- $dnfPkg := index $managers "dnf" | default "" }}
+{{- $tags := index . "tags" | default list }}
 {{- if $dnfPkg }}
-{{- $isWorkstation := false }}
-{{- range .tags }}
-{{- if eq . "workstation" }}{{ $isWorkstation = true }}{{ end }}
+{{- $isWS := false }}
+{{- range $tags }}
+{{- if eq . "workstation" }}{{ $isWS = true }}{{ end }}
 {{- end }}
-{{- if $isWorkstation }}
-    {{ $dnfPkg }}  # {{ $pkg.name }}: {{ $pkg.description }}
+{{- if $isWS }}
+    {{ $dnfPkg }}  # {{ $pkg.name }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -108,14 +114,16 @@ DNF_PACKAGES+=(
 DNF_PACKAGES+=(
 {{- range $packages.packages }}
 {{- $pkg := . }}
-{{- $dnfPkg := index .managers "dnf" }}
+{{- $managers := index . "managers" | default dict }}
+{{- $dnfPkg := index $managers "dnf" | default "" }}
+{{- $tags := index . "tags" | default list }}
 {{- if $dnfPkg }}
-{{- $isPersonal := false }}
-{{- range .tags }}
-{{- if eq . "personal" }}{{ $isPersonal = true }}{{ end }}
+{{- $isPers := false }}
+{{- range $tags }}
+{{- if eq . "personal" }}{{ $isPers = true }}{{ end }}
 {{- end }}
-{{- if $isPersonal }}
-    {{ $dnfPkg }}  # {{ $pkg.name }}: {{ $pkg.description }}
+{{- if $isPers }}
+    {{ $dnfPkg }}  # {{ $pkg.name }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -126,14 +134,16 @@ DNF_PACKAGES+=(
 DNF_PACKAGES+=(
 {{- range $packages.packages }}
 {{- $pkg := . }}
-{{- $dnfPkg := index .managers "dnf" }}
+{{- $managers := index . "managers" | default dict }}
+{{- $dnfPkg := index $managers "dnf" | default "" }}
+{{- $tags := index . "tags" | default list }}
 {{- if $dnfPkg }}
-{{- $isMultimedia := false }}
-{{- range .tags }}
-{{- if eq . "multimedia" }}{{ $isMultimedia = true }}{{ end }}
+{{- $isMM := false }}
+{{- range $tags }}
+{{- if eq . "multimedia" }}{{ $isMM = true }}{{ end }}
 {{- end }}
-{{- if $isMultimedia }}
-    {{ $dnfPkg }}  # {{ $pkg.name }}: {{ $pkg.description }}
+{{- if $isMM }}
+    {{ $dnfPkg }}  # {{ $pkg.name }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -144,14 +154,16 @@ DNF_PACKAGES+=(
 DNF_PACKAGES+=(
 {{- range $packages.packages }}
 {{- $pkg := . }}
-{{- $dnfPkg := index .managers "dnf" }}
+{{- $managers := index . "managers" | default dict }}
+{{- $dnfPkg := index $managers "dnf" | default "" }}
+{{- $tags := index . "tags" | default list }}
 {{- if $dnfPkg }}
-{{- $isGaming := false }}
-{{- range .tags }}
-{{- if eq . "gaming" }}{{ $isGaming = true }}{{ end }}
+{{- $isGame := false }}
+{{- range $tags }}
+{{- if eq . "gaming" }}{{ $isGame = true }}{{ end }}
 {{- end }}
-{{- if $isGaming }}
-    {{ $dnfPkg }}  # {{ $pkg.name }}: {{ $pkg.description }}
+{{- if $isGame }}
+    {{ $dnfPkg }}  # {{ $pkg.name }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -174,10 +186,12 @@ echo "==> Installing Flatpak packages..."
 FLATPAK_PACKAGES=(
 {{- range $packages.packages }}
 {{- $pkg := . }}
-{{- $flatpakPkg := index .managers "flatpak" }}
-{{- $dnfPkg := index .managers "dnf" }}
+{{- $managers := index . "managers" | default dict }}
+{{- $flatpakPkg := index $managers "flatpak" | default "" }}
+{{- $dnfPkg := index $managers "dnf" | default "" }}
+{{- $tags := index . "tags" | default list }}
 {{- if and $flatpakPkg (not $dnfPkg) }}
-{{- range .tags }}
+{{- range $tags }}
 {{- if eq . "base" }}
     {{ $flatpakPkg }}  # {{ $pkg.name }}
 {{- end }}
@@ -190,11 +204,13 @@ FLATPAK_PACKAGES=(
 FLATPAK_PACKAGES+=(
 {{- range $packages.packages }}
 {{- $pkg := . }}
-{{- $flatpakPkg := index .managers "flatpak" }}
-{{- $dnfPkg := index .managers "dnf" }}
+{{- $managers := index . "managers" | default dict }}
+{{- $flatpakPkg := index $managers "flatpak" | default "" }}
+{{- $dnfPkg := index $managers "dnf" | default "" }}
+{{- $tags := index . "tags" | default list }}
 {{- if and $flatpakPkg (not $dnfPkg) }}
 {{- $isDev := false }}
-{{- range .tags }}
+{{- range $tags }}
 {{- if eq . "development" }}{{ $isDev = true }}{{ end }}
 {{- end }}
 {{- if $isDev }}
@@ -209,11 +225,13 @@ FLATPAK_PACKAGES+=(
 FLATPAK_PACKAGES+=(
 {{- range $packages.packages }}
 {{- $pkg := . }}
-{{- $flatpakPkg := index .managers "flatpak" }}
-{{- $dnfPkg := index .managers "dnf" }}
+{{- $managers := index . "managers" | default dict }}
+{{- $flatpakPkg := index $managers "flatpak" | default "" }}
+{{- $dnfPkg := index $managers "dnf" | default "" }}
+{{- $tags := index . "tags" | default list }}
 {{- if and $flatpakPkg (not $dnfPkg) }}
 {{- $isWS := false }}
-{{- range .tags }}
+{{- range $tags }}
 {{- if eq . "workstation" }}{{ $isWS = true }}{{ end }}
 {{- end }}
 {{- if $isWS }}
@@ -228,11 +246,13 @@ FLATPAK_PACKAGES+=(
 FLATPAK_PACKAGES+=(
 {{- range $packages.packages }}
 {{- $pkg := . }}
-{{- $flatpakPkg := index .managers "flatpak" }}
-{{- $dnfPkg := index .managers "dnf" }}
+{{- $managers := index . "managers" | default dict }}
+{{- $flatpakPkg := index $managers "flatpak" | default "" }}
+{{- $dnfPkg := index $managers "dnf" | default "" }}
+{{- $tags := index . "tags" | default list }}
 {{- if and $flatpakPkg (not $dnfPkg) }}
 {{- $isPers := false }}
-{{- range .tags }}
+{{- range $tags }}
 {{- if eq . "personal" }}{{ $isPers = true }}{{ end }}
 {{- end }}
 {{- if $isPers }}
@@ -247,11 +267,13 @@ FLATPAK_PACKAGES+=(
 FLATPAK_PACKAGES+=(
 {{- range $packages.packages }}
 {{- $pkg := . }}
-{{- $flatpakPkg := index .managers "flatpak" }}
-{{- $dnfPkg := index .managers "dnf" }}
+{{- $managers := index . "managers" | default dict }}
+{{- $flatpakPkg := index $managers "flatpak" | default "" }}
+{{- $dnfPkg := index $managers "dnf" | default "" }}
+{{- $tags := index . "tags" | default list }}
 {{- if and $flatpakPkg (not $dnfPkg) }}
 {{- $isMM := false }}
-{{- range .tags }}
+{{- range $tags }}
 {{- if eq . "multimedia" }}{{ $isMM = true }}{{ end }}
 {{- end }}
 {{- if $isMM }}
@@ -266,11 +288,13 @@ FLATPAK_PACKAGES+=(
 FLATPAK_PACKAGES+=(
 {{- range $packages.packages }}
 {{- $pkg := . }}
-{{- $flatpakPkg := index .managers "flatpak" }}
-{{- $dnfPkg := index .managers "dnf" }}
+{{- $managers := index . "managers" | default dict }}
+{{- $flatpakPkg := index $managers "flatpak" | default "" }}
+{{- $dnfPkg := index $managers "dnf" | default "" }}
+{{- $tags := index . "tags" | default list }}
 {{- if and $flatpakPkg (not $dnfPkg) }}
 {{- $isGame := false }}
-{{- range .tags }}
+{{- range $tags }}
 {{- if eq . "gaming" }}{{ $isGame = true }}{{ end }}
 {{- end }}
 {{- if $isGame }}
@@ -297,15 +321,15 @@ fi
 echo "==> Running fallback installations..."
 
 {{- range $packages.packages }}
-{{- if .fallback }}
-{{- $dnfPkg := index .managers "dnf" }}
-{{- if not $dnfPkg }}
-# {{ .name }}: {{ .description }}
+{{- $fallback := index . "fallback" | default "" }}
+{{- $managers := index . "managers" | default dict }}
+{{- $dnfPkg := index $managers "dnf" | default "" }}
+{{- if and $fallback (not $dnfPkg) }}
+# {{ .name }}: {{ index . "description" | default "" }}
 if ! command -v {{ .name }} &> /dev/null; then
     echo "Installing {{ .name }} via fallback..."
-    {{ .fallback }} || true
+    {{ $fallback }} || true
 fi
-{{- end }}
 {{- end }}
 {{- end }}
 
@@ -318,21 +342,22 @@ FONT_DIR="${HOME}/.local/share/fonts"
 mkdir -p "$FONT_DIR"
 
 {{- range $packages.packages }}
+{{- $tags := index . "tags" | default list }}
+{{- $fallbackUrl := index . "fallback_url" | default "" }}
+{{- $managers := index . "managers" | default dict }}
+{{- $dnfPkg := index $managers "dnf" | default "" }}
 {{- $hasFont := false }}
-{{- range .tags }}
+{{- range $tags }}
 {{- if eq . "fonts" }}{{ $hasFont = true }}{{ end }}
 {{- end }}
-{{- if and $hasFont .fallback_url }}
-{{- $dnfPkg := index .managers "dnf" }}
-{{- if not $dnfPkg }}
+{{- if and $hasFont $fallbackUrl (not $dnfPkg) }}
 # {{ .name }}
 if ! fc-list | grep -qi "{{ .name }}"; then
     echo "Installing {{ .name }}..."
-    curl -fLo "/tmp/{{ .name }}.zip" "{{ .fallback_url }}"
+    curl -fLo "/tmp/{{ .name }}.zip" "{{ $fallbackUrl }}"
     unzip -o "/tmp/{{ .name }}.zip" -d "$FONT_DIR"
     rm -f "/tmp/{{ .name }}.zip"
 fi
-{{- end }}
 {{- end }}
 {{- end }}
 
