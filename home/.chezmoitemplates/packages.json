@@ -314,11 +314,7 @@
       "description": "VLC media player",
       "tags": ["workstation", "multimedia"],
       "managers": {
-        "dnf": "vlc",
-        "apt": "vlc",
         "brew_cask": "vlc",
-        "pacman": "vlc",
-        "pamac": "vlc",
         "flatpak": "org.videolan.VLC"
       }
     },
@@ -327,11 +323,7 @@
       "description": "Visual Studio Code editor",
       "tags": ["workstation", "development"],
       "managers": {
-        "dnf": null,
-        "apt": null,
         "brew_cask": "visual-studio-code",
-        "pacman": null,
-        "pamac": "visual-studio-code-bin",
         "flatpak": "com.visualstudio.code"
       }
     },
@@ -340,11 +332,7 @@
       "description": "Mozilla Firefox browser",
       "tags": ["workstation"],
       "managers": {
-        "dnf": "firefox",
-        "apt": "firefox",
         "brew_cask": "firefox",
-        "pacman": "firefox",
-        "pamac": "firefox",
         "flatpak": "org.mozilla.firefox"
       }
     },
@@ -389,11 +377,7 @@
       "description": "GNU Image Manipulation Program",
       "tags": ["workstation", "multimedia"],
       "managers": {
-        "dnf": "gimp",
-        "apt": "gimp",
         "brew_cask": "gimp",
-        "pacman": "gimp",
-        "pamac": "gimp",
         "flatpak": "org.gimp.GIMP"
       }
     },
@@ -402,25 +386,8 @@
       "description": "Email client",
       "tags": ["workstation", "personal"],
       "managers": {
-        "dnf": "thunderbird",
-        "apt": "thunderbird",
         "brew_cask": "thunderbird",
-        "pacman": "thunderbird",
-        "pamac": "thunderbird",
         "flatpak": "org.mozilla.Thunderbird"
-      }
-    },
-    {
-      "name": "keepassxc",
-      "description": "Password manager",
-      "tags": ["workstation", "personal"],
-      "managers": {
-        "dnf": "keepassxc",
-        "apt": "keepassxc",
-        "brew_cask": "keepassxc",
-        "pacman": "keepassxc",
-        "pamac": "keepassxc",
-        "flatpak": "org.keepassxc.KeePassXC"
       }
     },
     {
@@ -457,11 +424,7 @@
       "description": "Voice and text chat",
       "tags": ["personal", "gaming"],
       "managers": {
-        "dnf": null,
-        "apt": null,
         "brew_cask": "discord",
-        "pacman": "discord",
-        "pamac": "discord",
         "flatpak": "com.discordapp.Discord"
       }
     },
@@ -470,11 +433,7 @@
       "description": "Music streaming",
       "tags": ["personal", "multimedia"],
       "managers": {
-        "dnf": null,
-        "apt": null,
         "brew_cask": "spotify",
-        "pacman": null,
-        "pamac": null,
         "flatpak": "com.spotify.Client"
       }
     },
@@ -483,11 +442,7 @@
       "description": "Gaming platform",
       "tags": ["gaming"],
       "managers": {
-        "dnf": "steam",
-        "apt": "steam",
         "brew_cask": "steam",
-        "pacman": "steam",
-        "pamac": "steam",
         "flatpak": "com.valvesoftware.Steam"
       }
     },
@@ -496,11 +451,6 @@
       "description": "Gaming platform for Linux",
       "tags": ["gaming"],
       "managers": {
-        "dnf": "lutris",
-        "apt": "lutris",
-        "brew": null,
-        "pacman": "lutris",
-        "pamac": "lutris",
         "flatpak": "net.lutris.Lutris"
       }
     },
