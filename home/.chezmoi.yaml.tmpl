@@ -1,5 +1,5 @@
 data:
-    name: {{ promptStringOnce . "name" "What is your name?" }}
+    name: "Daniel K. Jones"
     email: {{ promptStringOnce . "email" "What is your email address?" }}
     hostname: {{ .chezmoi.hostname }}
     os: {{ .chezmoi.os }}
@@ -8,5 +8,28 @@ data:
     {{- end }}
     packageManager:
         ubuntu: apt
+        debian: apt
+        fedora: dnf
         darwin: brew
         manjaro: pamac
+        arch: pacman
+    # Machine-specific flags
+    machines:
+        coffee-sponge:
+            isPersonal: true
+            isWorkstation: true
+            installGaming: true
+            installDevTools: true
+            installMultimedia: true
+        grease-monkey:
+            isPersonal: true
+            isWorkstation: true
+            installGaming: true
+            installDevTools: true
+            installMultimedia: true
+        mac-4900:
+            isPersonal: false
+            isWorkstation: true
+            installGaming: false
+            installDevTools: true
+            installMultimedia: true
