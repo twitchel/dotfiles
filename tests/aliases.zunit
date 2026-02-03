@@ -1,0 +1,50 @@
+#!/usr/bin/env zunit
+
+@setup {
+  # Set up test environment
+  export TEST_ALIASES="$(pwd)/home/dot_config/zsh/aliases.zshrc"
+}
+
+@test 'Aliases file exists' {
+  assert "$TEST_ALIASES" is_file
+}
+
+@test 'mkcd alias defined' {
+  run grep 'alias mkcd="take"' "$TEST_ALIASES"
+  assert $status equals 0
+}
+
+@test 'neovim alias (v) defined' {
+  run grep 'alias v="nvim"' "$TEST_ALIASES"
+  assert $status equals 0
+}
+
+@test 'sudoedit alias (sv) defined' {
+  run grep 'alias sv="sudoedit"' "$TEST_ALIASES"
+  assert $status equals 0
+}
+
+@test 'tmux alias (t) defined' {
+  run grep 'alias t="tmux"' "$TEST_ALIASES"
+  assert $status equals 0
+}
+
+@test 'git alias (g) defined' {
+  run grep 'alias g="git"' "$TEST_ALIASES"
+  assert $status equals 0
+}
+
+@test 'lazygit alias (lg) defined' {
+  run grep 'alias lg="lazygit"' "$TEST_ALIASES"
+  assert $status equals 0
+}
+
+@test 'rsync alias (rav) defined' {
+  run grep 'alias rav="rsync -rav"' "$TEST_ALIASES"
+  assert $status equals 0
+}
+
+@test 'Aliases file contains application section header' {
+  run grep '## ---- Applications ---- ##' "$TEST_ALIASES"
+  assert $status equals 0
+}

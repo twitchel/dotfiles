@@ -1,0 +1,69 @@
+#!/usr/bin/env zunit
+
+@setup {
+  # Set up test environment
+  export TEST_ZDOTDIR="$(pwd)/home/dot_config/zsh"
+  export HOME_DIR="$(pwd)/home"
+}
+
+@test 'ZSH config directory structure exists' {
+  assert "$HOME_DIR/dot_config/zsh" is_dir
+  assert "$HOME_DIR/dot_config/zsh/dot_zshrc" is_file
+  assert "$HOME_DIR/dot_config/zsh/bootstrap.zshrc" is_file
+  assert "$HOME_DIR/dot_config/zsh/aliases.zshrc" is_file
+}
+
+@test 'Main zshrc file contains correct ZDOTDIR export' {
+  run grep 'export ZDOTDIR="\$HOME/.config/zsh"' "$HOME_DIR/dot_zshrc"
+  assert $status equals 0
+}
+
+@test 'Main zshrc sources ZDOTDIR config' {
+  run grep 'source "\$ZDOTDIR/.zshrc"' "$HOME_DIR/dot_zshrc"
+  assert $status equals 0
+}
+
+@test 'Main zshrc creates local env file' {
+  run grep 'touch \$HOME/.env' "$HOME_DIR/dot_zshrc"
+  assert $status equals 0
+}
+
+@test 'Main zshrc exports ZSH_SOURCED marker' {
+  run grep 'export ZSH_SOURCED=true' "$HOME_DIR/dot_zshrc"
+  assert $status equals 0
+}
+
+@test 'Bootstrap contains source_file function' {
+  run grep 'source_file()' "$TEST_ZDOTDIR/bootstrap.zshrc"
+  assert $status equals 0
+}
+
+@test 'Bootstrap sources antidote' {
+  run grep 'source \${ZDOTDIR:-~}/.antidote/antidote.zsh' "$TEST_ZDOTDIR/bootstrap.zshrc"
+  assert $status equals 0
+}
+
+@test 'Bootstrap loads antidote plugins' {
+  run grep 'antidote load' "$TEST_ZDOTDIR/bootstrap.zshrc"
+  assert $status equals 0
+}
+
+@test 'Bootstrap checks for starship command' {
+  run grep 'command -v starship' "$TEST_ZDOTDIR/bootstrap.zshrc"
+  assert $status equals 0
+}
+
+@test 'Bootstrap sets STARSHIP_CONFIG when starship exists' {
+  run grep 'export STARSHIP_CONFIG="\$HOME/.config/starship/starship.toml"' "$TEST_ZDOTDIR/bootstrap.zshrc"
+  assert $status equals 0
+}
+
+@test 'ZSH config sources bootstrap first' {
+  run head -n 2 "$TEST_ZDOTDIR/dot_zshrc"
+  assert "$output" contains 'bootstrap.zshrc'
+}
+
+@test 'ZSH config sources aliases' {
+  run grep 'source_file "\$ZDOTDIR/aliases.zshrc"' "$TEST_ZDOTDIR/dot_zshrc"
+  assert $status equals 0
+}

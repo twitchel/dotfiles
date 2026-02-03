@@ -1,0 +1,61 @@
+#!/usr/bin/env zunit
+
+@setup {
+  # Set up test environment
+  export TEST_TMUX_CONF="$(pwd)/home/dot_config/tmux/tmux.conf"
+}
+
+@test 'Tmux config file exists' {
+  assert "$TEST_TMUX_CONF" is_file
+}
+
+@test 'Tmux prefix is set to Ctrl-s' {
+  run grep 'set -g prefix C-s' "$TEST_TMUX_CONF"
+  assert $status equals 0
+}
+
+@test 'Tmux unbinds default prefix' {
+  run grep 'unbind C-b' "$TEST_TMUX_CONF"
+  assert $status equals 0
+}
+
+@test 'Tmux config reload binding exists' {
+  run grep "bind r source-file" "$TEST_TMUX_CONF"
+  assert $status equals 0
+}
+
+@test 'Tmux status position is at top' {
+  run grep 'set-option -g status-position top' "$TEST_TMUX_CONF"
+  assert $status equals 0
+}
+
+@test 'Tmux has mouse support enabled' {
+  run grep 'set -g mouse on' "$TEST_TMUX_CONF"
+  assert $status equals 0
+}
+
+@test 'Tmux uses vim-style pane selection' {
+  run grep 'bind-key h select-pane -L' "$TEST_TMUX_CONF"
+  assert $status equals 0
+  run grep 'bind-key j select-pane -D' "$TEST_TMUX_CONF"
+  assert $status equals 0
+  run grep 'bind-key k select-pane -U' "$TEST_TMUX_CONF"
+  assert $status equals 0
+  run grep 'bind-key l select-pane -R' "$TEST_TMUX_CONF"
+  assert $status equals 0
+}
+
+@test 'Tmux loads vim-tmux-navigator plugin' {
+  run grep "set -g @plugin 'christoomey/vim-tmux-navigator'" "$TEST_TMUX_CONF"
+  assert $status equals 0
+}
+
+@test 'Tmux loads TPM plugin manager' {
+  run grep "set -g @plugin 'tmux-plugins/tpm'" "$TEST_TMUX_CONF"
+  assert $status equals 0
+}
+
+@test 'Tmux uses 256 color terminal' {
+  run grep 'set -g default-terminal "tmux-256color"' "$TEST_TMUX_CONF"
+  assert $status equals 0
+}

@@ -1,0 +1,63 @@
+#!/usr/bin/env zunit
+
+@setup {
+  # Set up test environment
+  export TEST_STARSHIP_CONF="$(pwd)/home/dot_config/starship/starship.toml"
+}
+
+@test 'Starship config file exists' {
+  assert "$TEST_STARSHIP_CONF" is_file
+}
+
+@test 'Starship uses catppuccin_mocha palette' {
+  run grep "palette = 'catppuccin_mocha'" "$TEST_STARSHIP_CONF"
+  assert $status equals 0
+}
+
+@test 'Starship has OS module enabled' {
+  run grep 'disabled = false' "$TEST_STARSHIP_CONF"
+  assert $status equals 0
+}
+
+@test 'Starship format includes directory' {
+  run grep '\$directory' "$TEST_STARSHIP_CONF"
+  assert $status equals 0
+}
+
+@test 'Starship format includes git branch' {
+  run grep '\$git_branch' "$TEST_STARSHIP_CONF"
+  assert $status equals 0
+}
+
+@test 'Starship format includes git status' {
+  run grep '\$git_status' "$TEST_STARSHIP_CONF"
+  assert $status equals 0
+}
+
+@test 'Starship format includes time' {
+  run grep '\$time' "$TEST_STARSHIP_CONF"
+  assert $status equals 0
+}
+
+@test 'Starship format includes command duration' {
+  run grep '\$cmd_duration' "$TEST_STARSHIP_CONF"
+  assert $status equals 0
+}
+
+@test 'Starship format includes programming languages' {
+  run grep '\$nodejs' "$TEST_STARSHIP_CONF"
+  assert $status equals 0
+  run grep '\$python' "$TEST_STARSHIP_CONF"
+  assert $status equals 0
+  run grep '\$rust' "$TEST_STARSHIP_CONF"
+  assert $status equals 0
+}
+
+@test 'Starship has OS symbols configured' {
+  run grep 'Macos = "󰀵"' "$TEST_STARSHIP_CONF"
+  assert $status equals 0
+  run grep 'Ubuntu = "󰕈"' "$TEST_STARSHIP_CONF"
+  assert $status equals 0
+  run grep 'Manjaro = ""' "$TEST_STARSHIP_CONF"
+  assert $status equals 0
+}

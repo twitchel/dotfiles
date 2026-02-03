@@ -1,0 +1,35 @@
+#!/usr/bin/env zunit
+
+@setup {
+  # Set up test environment
+  export TEST_PLUGINS="$(pwd)/home/dot_config/zsh/dot_zsh_plugins.txt"
+}
+
+@test 'Plugins file exists' {
+  assert "$TEST_PLUGINS" is_file
+}
+
+@test 'zsh-autosuggestions plugin configured' {
+  run grep 'zsh-users/zsh-autosuggestions' "$TEST_PLUGINS"
+  assert $status equals 0
+}
+
+@test 'zsh-completions plugin configured' {
+  run grep 'zsh-users/zsh-completions' "$TEST_PLUGINS"
+  assert $status equals 0
+}
+
+@test 'zsh-syntax-highlighting plugin configured' {
+  run grep 'zsh-users/zsh-syntax-highlighting' "$TEST_PLUGINS"
+  assert $status equals 0
+}
+
+@test 'clipboard plugin configured' {
+  run grep 'zpm-zsh/clipboard' "$TEST_PLUGINS"
+  assert $status equals 0
+}
+
+@test 'Plugins file is not empty' {
+  run cat "$TEST_PLUGINS"
+  assert "$output" is_not_empty
+}

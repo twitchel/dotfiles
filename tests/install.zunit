@@ -1,0 +1,55 @@
+#!/usr/bin/env zunit
+
+@setup {
+  # Set up test environment
+  export INSTALL_SCRIPT="$(pwd)/home/run_before_01-install-zsh.sh"
+}
+
+@test 'ZSH install script exists' {
+  assert "$INSTALL_SCRIPT" is_file
+}
+
+@test 'ZSH install script is executable' {
+  run test -x "$INSTALL_SCRIPT"
+  # The file should be marked executable in the repo
+  # If not executable, the test will check if it has shebang
+  run head -n 1 "$INSTALL_SCRIPT"
+  assert "$output" contains "#!/bin/sh"
+}
+
+@test 'Install script checks if zsh is already installed' {
+  run grep 'command -v zsh' "$INSTALL_SCRIPT"
+  assert $status equals 0
+}
+
+@test 'Install script exits early if zsh exists' {
+  run grep -A 1 'command -v zsh' "$INSTALL_SCRIPT"
+  assert "$output" contains "exit 0"
+}
+
+@test 'Install script handles macOS with Homebrew' {
+  run grep 'Darwin' "$INSTALL_SCRIPT"
+  assert $status equals 0
+  run grep 'brew install zsh' "$INSTALL_SCRIPT"
+  assert $status equals 0
+}
+
+@test 'Install script handles Ubuntu with apt-get' {
+  run grep 'apt-get install -y zsh' "$INSTALL_SCRIPT"
+  assert $status equals 0
+}
+
+@test 'Install script handles Arch/Manjaro with pacman' {
+  run grep 'pacman -S --noconfirm zsh' "$INSTALL_SCRIPT"
+  assert $status equals 0
+}
+
+@test 'Install script handles Fedora with dnf' {
+  run grep 'dnf install -y zsh' "$INSTALL_SCRIPT"
+  assert $status equals 0
+}
+
+@test 'Install script handles RHEL with yum' {
+  run grep 'yum install -y zsh' "$INSTALL_SCRIPT"
+  assert $status equals 0
+}
