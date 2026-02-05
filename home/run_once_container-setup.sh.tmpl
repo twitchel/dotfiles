@@ -1,0 +1,54 @@
+#!/bin/bash
+# run_once_container-setup.sh.tmpl
+# Default installation script for containers, primarily Ubuntu
+# Hash: {{ .chezmoi.os }}-container
+
+set -e
+
+# Only run in containerized environments or on Ubuntu
+OS="{{ .chezmoi.os }}"
+{{- if eq .chezmoi.os "linux" }}
+DISTRO="{{ .chezmoi.osRelease.id }}"
+{{- end }}
+
+# Check if running in a container
+if [ ! -f /.dockerenv ] && [ ! -f /run/.containerenv ]; then
+    echo "Not in a container environment, skipping container setup"
+    exit 0
+fi
+
+echo "Running container setup..."
+
+{{- if eq .chezmoi.os "linux" }}
+{{- if or (eq .chezmoi.osRelease.id "ubuntu") (eq .chezmoi.osRelease.id "debian") }}
+
+# Update package lists
+echo "Updating package lists..."
+sudo apt-get update
+
+# Install essential packages
+echo "Installing essential packages..."
+sudo apt-get install -y \
+    curl \
+    git \
+    build-essential \
+    ca-certificates
+
+# Install common packages via apt
+{{- range .packages.common }}
+echo "Installing package: {{ . }}"
+sudo apt-get install -y {{ . }} || echo "Warning: Failed to install {{ . }}, may not be available via apt"
+{{- end }}
+
+# Clean up
+sudo apt-get clean
+sudo rm -rf /var/lib/apt/lists/*
+
+echo "Container setup complete for Ubuntu/Debian"
+
+{{- else }}
+echo "Container setup: Distro $DISTRO not fully supported, skipping package installation"
+{{- end }}
+{{- else }}
+echo "Container setup: OS $OS not supported for container setup"
+{{- end }}

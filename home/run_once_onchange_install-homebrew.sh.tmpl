@@ -1,0 +1,40 @@
+#!/bin/bash
+# run_once_onchange_install-homebrew.sh.tmpl
+# Installs Homebrew if not already installed
+# Hash: {{ .chezmoi.os }}-{{ .chezmoi.hostname }}
+
+set -e
+
+# Check if homebrew is already installed
+if command -v brew >/dev/null 2>&1; then
+    echo "Homebrew is already installed at $(which brew)"
+    exit 0
+fi
+
+# Only install on macOS or Linux
+OS="{{ .chezmoi.os }}"
+
+if [ "$OS" = "darwin" ]; then
+    echo "Installing Homebrew on macOS..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    
+    # Add to PATH for Apple Silicon Macs
+    if [ -d "/opt/homebrew/bin" ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
+    
+    echo "Homebrew installed successfully"
+elif [ "$OS" = "linux" ]; then
+    echo "Installing Homebrew on Linux..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    
+    # Add to PATH for Linux
+    if [ -d "/home/linuxbrew/.linuxbrew/bin" ]; then
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    fi
+    
+    echo "Homebrew installed successfully"
+else
+    echo "Homebrew installation not supported on this OS: $OS"
+    exit 0
+fi

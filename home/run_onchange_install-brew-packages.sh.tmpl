@@ -1,0 +1,41 @@
+#!/bin/bash
+# run_onchange_install-brew-packages.sh.tmpl
+# Installs packages via Homebrew based on hostname
+# Hash: {{ .chezmoi.hostname }}-{{ .packages | toJson }}
+
+set -e
+
+# Exit if brew is not available
+if ! command -v brew >/dev/null 2>&1; then
+    echo "Homebrew not found, skipping package installation"
+    exit 0
+fi
+
+# Only run on macOS or Linux with Homebrew
+OS="{{ .chezmoi.os }}"
+HOSTNAME="{{ .chezmoi.hostname }}"
+
+if [ "$OS" != "darwin" ] && [ "$OS" != "linux" ]; then
+    echo "Brew package installation only supported on macOS and Linux"
+    exit 0
+fi
+
+echo "Installing packages via Homebrew for hostname: $HOSTNAME"
+
+# Install common packages
+{{- range .packages.common }}
+echo "Installing common package: {{ . }}"
+brew install {{ . }} || echo "Warning: Failed to install {{ . }}"
+{{- end }}
+
+# Install hostname-specific packages
+{{- if hasKey .packages .chezmoi.hostname }}
+{{- range (index .packages .chezmoi.hostname) }}
+echo "Installing hostname-specific package: {{ . }}"
+brew install {{ . }} || echo "Warning: Failed to install {{ . }}"
+{{- end }}
+{{- else }}
+echo "No hostname-specific packages defined for: $HOSTNAME"
+{{- end }}
+
+echo "Package installation complete"

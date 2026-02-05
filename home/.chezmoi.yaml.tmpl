@@ -10,3 +10,20 @@ data:
         ubuntu: apt
         darwin: brew
         manjaro: pamac
+    # Machine-specific configurations
+    machines:
+        grease-monkey:
+            type: laptop
+            os: fedora
+            use: personal
+        MAC-4944:
+            type: laptop
+            os: darwin
+            use: work
+    # Packages to install on all machines
+    packages:
+        common:
+            - duckdb
+        # Hostname-specific packages
+        grease-monkey: []
+        MAC-4944: []
