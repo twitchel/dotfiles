@@ -5,7 +5,7 @@ Managed with [chezmoi](https://www.chezmoi.io/)
 ## Supported Machines
 
 - **grease-monkey** - Fedora Linux Laptop (Personal Use)
-- **MAC-4944** - MacOS Tahoe (Work Use)
+- **MAC-4944** - macOS Tahoe (Work Use)
 
 ## Features
 
@@ -16,7 +16,7 @@ Managed with [chezmoi](https://www.chezmoi.io/)
 
 ## Requirements
 
-### MacOS
+### macOS
 
 A running system with the following installed:
 - git (Homebrew will be installed automatically)

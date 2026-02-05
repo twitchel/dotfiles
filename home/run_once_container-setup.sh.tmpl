@@ -5,12 +5,6 @@
 
 set -e
 
-# Only run in containerized environments or on Ubuntu
-OS="{{ .chezmoi.os }}"
-{{- if eq .chezmoi.os "linux" }}
-DISTRO="{{ .chezmoi.osRelease.id }}"
-{{- end }}
-
 # Check if running in a container
 if [ ! -f /.dockerenv ] && [ ! -f /run/.containerenv ]; then
     echo "Not in a container environment, skipping container setup"
@@ -24,7 +18,10 @@ echo "Running container setup..."
 
 # Update package lists
 echo "Updating package lists..."
-sudo apt-get update
+if ! sudo apt-get update; then
+    echo "Error: Failed to update package lists"
+    exit 1
+fi
 
 # Install essential packages
 echo "Installing essential packages..."
@@ -47,8 +44,8 @@ sudo rm -rf /var/lib/apt/lists/*
 echo "Container setup complete for Ubuntu/Debian"
 
 {{- else }}
-echo "Container setup: Distro $DISTRO not fully supported, skipping package installation"
+echo "Container setup: Distro {{ .chezmoi.osRelease.id }} not fully supported, skipping package installation"
 {{- end }}
 {{- else }}
-echo "Container setup: OS $OS not supported for container setup"
+echo "Container setup: OS {{ .chezmoi.os }} not supported for container setup"
 {{- end }}
