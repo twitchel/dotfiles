@@ -1,18 +1,16 @@
+{{- $osid := .chezmoi.os -}}
+{{- if hasKey .chezmoi.osRelease "id" -}}
+{{-   $osid = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
+{{-   if hasKey .chezmoi.osRelease "variantId" -}}
+{{-     $osid = printf "%s-%s-%s" .chezmoi.os .chezmoi.osRelease.id .chezmoi.osRelease.variantId -}}
+{{-   end -}}
+{{- end -}}
+
 data:
     name: "Daniel K. Jones"
     email: {{ promptStringOnce . "email" "What is your email address?" }}
     hostname: {{ .chezmoi.hostname }}
-    os: {{ .chezmoi.os }}
-    {{- if eq .chezmoi.os "linux" }}
-    distro: {{ .chezmoi.osRelease.id }}
-    {{- end }}
-    packageManager:
-        ubuntu: apt
-        debian: apt
-        fedora: dnf
-        darwin: brew
-        manjaro: pamac
-        arch: pacman
+    osid: {{ $osid }}
     # Machine-specific flags
     machines:
         coffee-sponge:
