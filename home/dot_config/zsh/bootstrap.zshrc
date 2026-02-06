@@ -4,8 +4,8 @@ source_file() {
 }
 
 ## ---- Antidote ---- ##
-source ${ZDOTDIR:-~}/.antidote/antidote.zsh
-antidote load
+# source ${ZDOTDIR:-~}/.antidote/antidote.zsh
+# antidote load
 
 ## ---- Starship ---- ##
 if command -v starship > /dev/null; then

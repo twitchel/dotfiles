@@ -3,4 +3,3 @@ source "$ZDOTDIR/bootstrap.zshrc"
 
 # Source components
 source_file "$ZDOTDIR/aliases.zshrc"
-
