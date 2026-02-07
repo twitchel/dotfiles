@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 
-echo "⭐️ Running 999 post-run"
-
-# Source the .zshrc to ensure any new environment variables or configurations are loaded
-if [[ $SHELL == *"zsh" ]] && [[ -f "$HOME/.zshrc" ]]; then
-  source "$HOME/.zshrc"
-fi
+echo "⭐️ Running after 999 post-run"
 
 cat <<EOF
 ✅  Chezmoi complete!
@@ -14,6 +9,7 @@ cat <<EOF
   - If this is your first time running chezmoi:
     - Review the generated files in your home directory to ensure they are correct
     - Restart your terminal to apply any changes to your shell configuration
+  - Pull latest shell config using "source ~/.zshrc" or restart your terminal
   - Run 'brewup' install/update packages. This has been tailored to your system.
 
 ℹ️  Working with Chezmoi commands:
