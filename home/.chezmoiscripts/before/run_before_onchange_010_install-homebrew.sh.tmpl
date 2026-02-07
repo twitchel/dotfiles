@@ -13,7 +13,7 @@ if [ $OS != "darwin" ] && [ $OS != "linux" ]; then
 fi
 
 echo "Checking for Homebrew installation at $BREWPATH"
-if [ -x "$BREWPATH" ]; then
+if [ -x "$BREWBIN" ]; then
     echo "Homebrew is already installed at $BREWPATH, skipping installation"
     exit 0
 else 

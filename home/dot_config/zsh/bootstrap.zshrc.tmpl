@@ -1,7 +1,11 @@
+#!/usr/bin/env zsh
 ## ---- Bootstrapping functions ---- ###
 source_file() {
   [ -f "$1" ] && source "$1"
 }
+
+## ---- Homebrew PATH ---- ##
+eval "$({{.chezmoi.config.env.BREWBIN}} shellenv)"
 
 ## ---- Antidote ---- ##
 # source ${ZDOTDIR:-~}/.antidote/antidote.zsh

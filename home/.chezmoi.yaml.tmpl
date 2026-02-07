@@ -5,9 +5,9 @@
 
 {{- $brewpath := "" -}}
 {{- if eq .osid "darwin" -}}
-{{-   $brewpath = "/opt/homebrew/bin/brew" -}}
+{{-   $brewpath = "/opt/homebrew/bin" -}}
 {{- else if eq .osid "linux-fedora" -}}
-{{-   $brewpath = "/home/linuxbrew/.linuxbrew/bin/brew" -}}
+{{-   $brewpath = "/home/linuxbrew/.linuxbrew/bin" -}}
 {{- end -}}
 
 data:
@@ -42,3 +42,4 @@ env:
     OS_VARIANT: "{{ .chezmoi.osRelease.variantID }}"
     HOSTNAME: "{{ .chezmoi.hostname }}"
     BREWPATH: "{{ $brewpath }}"
+    BREWBIN: "{{ $brewpath }}/brew"
