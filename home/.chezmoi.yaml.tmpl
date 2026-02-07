@@ -18,12 +18,12 @@ data:
     # Machine-specific flags
     common:
         packages:
-            brew-taps:
-            brew-cask-taps:
+            brewTaps:
+            brewCaskTaps:
             brew:
                 - yazi
                 - zsh
-            brew-cask:
+            brewCask:
             flatpak:
     hosts:
         coffee-sponge:
@@ -33,9 +33,9 @@ data:
                 flatpak:
         mac-4900:
             packages:
-                brew-taps:
-                brew-cask-taps:
-                brew-cask:
+                brewTaps:
+                brewCaskTaps:
+                brewCask:
 env:
     OS: "{{ .chezmoi.os }}"
     OS_DISTRO: "{{ $osid }}"

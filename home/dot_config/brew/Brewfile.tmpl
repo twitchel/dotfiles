@@ -4,17 +4,28 @@
 
 ## Common packages
 {{- $commonConfig := .chezmoi.config.data.common }}
-{{- range $commonConfig.packages.brew-taps }}
+{{- if hasKey $commonConfig.packages "brewTaps" }}
+{{- range $commonConfig.packages.brewTaps }}
 tap "{{ . }}"
 {{- end }}
+{{- end }}
+{{- if hasKey $commonConfig.packages "brew" }}
 {{- range $commonConfig.packages.brew }}
 brew "{{ . }}"
+{{- end }}
 {{- end }}
 
 ## Machine Specific packages: {{- .chezmoi.config.data.hostname }}
 {{- $hostConfig := get .chezmoi.config.data.hosts .chezmoi.config.data.hostname }}
+{{- if hasKey $hostConfig.packages "brewTaps" }}
+{{- range $hostConfig.packages.brewTaps }}
+tap "{{ . }}"
+{{- end }}
+{{- end }}
+{{- if hasKey $hostConfig.packages "brew" }}
 {{- range $hostConfig.packages.brew }}
 brew "{{ . }}"
+{{- end }}
 {{- end }}
 {{ if eq .chezmoi.config.env.OS "darwin" }}
 file ~/.config/brew/casks.Brewfile
