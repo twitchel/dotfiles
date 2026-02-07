@@ -8,8 +8,13 @@ source_file() {
 eval "$({{.chezmoi.config.env.BREWBIN}} shellenv)"
 
 ## ---- Antidote ---- ##
-# source ${ZDOTDIR:-~}/.antidote/antidote.zsh
-# antidote load
+if [ -f "${ZDOTDIR:-~}/.antidote/antidote.zsh" ]; then
+  source "${ZDOTDIR:-~}/.antidote/antidote.zsh"
+  antidote load
+elif [ -f "$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh" ]; then
+  source "$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh"
+  antidote load
+fi
 
 ## ---- Starship ---- ##
 if command -v starship > /dev/null; then
