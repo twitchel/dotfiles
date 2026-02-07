@@ -2,31 +2,10 @@
 #
 # All brew packages available to be installed for this machine
 
-## Common packages
-{{- $commonConfig := .chezmoi.config.data.common }}
-{{- if hasKey $commonConfig.packages "brewTaps" }}
-{{- range $commonConfig.packages.brewTaps }}
-tap "{{ . }}"
-{{- end }}
-{{- end }}
-{{- if hasKey $commonConfig.packages "brew" }}
-{{- range $commonConfig.packages.brew }}
-brew "{{ . }}"
-{{- end }}
-{{- end }}
-
-## Machine Specific packages: {{- .chezmoi.config.data.hostname }}
-{{- $hostConfig := get .chezmoi.config.data.hosts .chezmoi.config.data.hostname }}
-{{- if hasKey $hostConfig.packages "brewTaps" }}
-{{- range $hostConfig.packages.brewTaps }}
-tap "{{ . }}"
-{{- end }}
-{{- end }}
-{{- if hasKey $hostConfig.packages "brew" }}
-{{- range $hostConfig.packages.brew }}
-brew "{{ . }}"
-{{- end }}
-{{- end }}
+{{ template "brew/base.brew.tmpl" . }}
 {{ if eq .chezmoi.config.env.OS "darwin" }}
-file ~/.config/brew/casks.Brewfile
+{{ template "brew/cask.brew.tmpl" . }}
+{{- end }}
+{{ if eq .chezmoi.config.env.OS "linux" }}
+{{ template "brew/flatpak.brew.tmpl" . }}
 {{- end }}
