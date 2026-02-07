@@ -3,6 +3,8 @@
 {{-   $osid = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
 {{- end -}}
 
+{{- $customHostname := promptStringOnce . "customHostname" "What is this computer's hostname? (will default to currently set)" -}}
+
 {{- $brewpath := "" -}}
 {{- if eq .osid "darwin" -}}
 {{-   $brewpath = "/opt/homebrew/bin" -}}
@@ -13,10 +15,11 @@
 data:
     name: "Daniel K. Jones"
     email: {{ promptStringOnce . "email" "What is your email address?" }}
-    hostname: {{ .chezmoi.hostname }}
+    hostname: {{ if $customHostname }}{{ $customHostname }}{{ else }}{{ .chezmoi.hostname }}{{ end }}
     osid: {{ $osid }}
     # Machine-specific flags
     common:
+        defaultShell: zsh
         packages:
             brewTaps:
                 - jesseduffield/lazygit

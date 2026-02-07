@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+echo "⭐️ Running after 900 set-default-shell"
+
+DEFAULT_SHELL={{ .chezmoi.config.data.common.defaultShell }}
+sudo chsh -s "$(which $DEFAULT_SHELL)" "$(whoami)" || echo "Failed to change default shell to $DEFAULT_SHELL. Please change it manually."
