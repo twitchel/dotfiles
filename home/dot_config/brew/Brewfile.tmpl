@@ -1,0 +1,21 @@
+# Brewfile
+#
+# All brew packages available to be installed for this machine
+
+## Common packages
+{{- $commonConfig := .chezmoi.config.data.common }}
+{{- range $commonConfig.packages.brew-taps }}
+tap "{{ . }}"
+{{- end }}
+{{- range $commonConfig.packages.brew }}
+brew "{{ . }}"
+{{- end }}
+
+## Machine Specific packages: {{- .chezmoi.config.data.hostname }}
+{{- $hostConfig := get .chezmoi.config.data.hosts .chezmoi.config.data.hostname }}
+{{- range $hostConfig.packages.brew }}
+brew "{{ . }}"
+{{- end }}
+{{ if eq .chezmoi.config.env.OS "darwin" }}
+file ~/.config/brew/casks.Brewfile
+{{- end }}
