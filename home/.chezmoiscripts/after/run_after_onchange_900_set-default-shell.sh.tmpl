@@ -2,4 +2,11 @@
 echo "⭐️ Running after 900 set-default-shell"
 
 DEFAULT_SHELL={{ .chezmoi.config.data.common.defaultShell }}
+
+SHELL_PATH="$(which $DEFAULT_SHELL)"
+if [[ $SHELL_PATH == $($BREWBIN --prefix)* ]] && ! [[ $(cat /etc/shells | grep -q "$SHELL_PATH") ]]; then
+    echo "Adding $SHELL_PATH to /etc/shells"
+    echo "$SHELL_PATH" | sudo tee -a /etc/shells > /dev/null
+fi
+
 sudo chsh -s "$(which $DEFAULT_SHELL)" "$(whoami)" || echo "Failed to change default shell to $DEFAULT_SHELL. Please change it manually."
