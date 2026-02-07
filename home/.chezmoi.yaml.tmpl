@@ -1,9 +1,13 @@
 {{- $osid := .chezmoi.os -}}
 {{- if hasKey .chezmoi.osRelease "id" -}}
 {{-   $osid = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
-{{-   if hasKey .chezmoi.osRelease "variantID" -}}
-{{-     $osid = printf "%s-%s-%s" .chezmoi.os .chezmoi.osRelease.id .chezmoi.osRelease.variantID -}}
-{{-   end -}}
+{{- end -}}
+
+{{- $brewpath := "" -}}
+{{- if eq .osid "darwin" -}}
+{{-   $brewpath = "/opt/homebrew/bin/brew" -}}
+{{- else if eq .osid "linux-fedora" -}}
+{{-   $brewpath = "/home/linuxbrew/.linuxbrew/bin/brew" -}}
 {{- end -}}
 
 data:
@@ -12,22 +16,29 @@ data:
     hostname: {{ .chezmoi.hostname }}
     osid: {{ $osid }}
     # Machine-specific flags
-    machines:
+    common:
+        packages:
+            brew-taps:
+            brew-cask-taps:
+            brew:
+                - yazi
+                - zsh
+            brew-cask:
+            flatpak:
+    hosts:
         coffee-sponge:
-            isPersonal: true
-            isWorkstation: true
-            installGaming: true
-            installDevTools: true
-            installMultimedia: true
         grease-monkey:
-            isPersonal: true
-            isWorkstation: true
-            installGaming: true
-            installDevTools: true
-            installMultimedia: true
+            packages:
+                brew:
+                flatpak:
         mac-4900:
-            isPersonal: false
-            isWorkstation: true
-            installGaming: false
-            installDevTools: true
-            installMultimedia: true
+            packages:
+                brew-taps:
+                brew-cask-taps:
+                brew-cask:
+env:
+    OS: "{{ .chezmoi.os }}"
+    OS_DISTRO: "{{ $osid }}"
+    OS_VARIANT: "{{ .chezmoi.osRelease.variantID }}"
+    HOSTNAME: "{{ .chezmoi.hostname }}"
+    BREWPATH: "{{ $brewpath }}"
