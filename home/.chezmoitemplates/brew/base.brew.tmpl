@@ -13,12 +13,12 @@ brew "{{ . }}"
 
 ## Machine Specific packages: {{- .chezmoi.config.data.hostname }}
 {{- $hostConfig := get .chezmoi.config.data.hosts .chezmoi.config.data.hostname }}
-{{- if hasKey $hostConfig.packages "brewTaps" }}
+{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewTaps")) }}
 {{- range $hostConfig.packages.brewTaps }}
 tap "{{ . }}"
 {{- end }}
 {{- end }}
-{{- if hasKey $hostConfig.packages "brew" }}
+{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brew")) }}
 {{- range $hostConfig.packages.brew }}
 brew "{{ . }}"
 {{- end }}

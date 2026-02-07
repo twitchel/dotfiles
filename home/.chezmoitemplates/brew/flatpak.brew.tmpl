@@ -9,7 +9,7 @@ flatpak "{{ . }}"
 
 ## Machine Specific flatpaks: {{- .chezmoi.config.data.hostname }}
 {{- $hostConfig := get .chezmoi.config.data.hosts .chezmoi.config.data.hostname }}
-{{- if hasKey $hostConfig.packages "flatpak" }}
+{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "flatpak")) }}
 {{- range $hostConfig.packages.flatpak }}
 flatpak "{{ . }}"
 {{- end }}
