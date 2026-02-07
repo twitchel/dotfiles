@@ -3,7 +3,11 @@
 {{-   $osid = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
 {{- end -}}
 
+{{- if stdinIsATTY -}}
 {{- $customHostname := promptStringOnce . "customHostname" "What is this computer's hostname? (will default to currently set)" -}}
+{{- else -}}
+{{- $customHostname := "ci" -}}
+{{- end -}}
 
 {{- $brewpath := "" -}}
 {{- if eq .osid "darwin" -}}
@@ -84,6 +88,10 @@ data:
                 - org.videolan.VLC
                 - us.zoom.Zoom
     hosts:
+        ci:
+            packages:
+                brew:
+                    - hello
         coffee-sponge:
         grease-monkey:
             packages:
