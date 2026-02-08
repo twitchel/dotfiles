@@ -3,22 +3,30 @@
 {{-   $osid = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
 {{- end -}}
 
+{{- $customHostname := "" -}}
 {{- if stdinIsATTY -}}
-{{- $customHostname := promptStringOnce . "customHostname" "What is this computer's hostname? (will default to currently set)" -}}
+{{- $customHostname = promptStringOnce . "customHostname" "What is this computer's hostname? (will default to currently set)" -}}
 {{- else -}}
-{{- $customHostname := "ci" -}}
+{{- $customHostname = "ci" -}}
 {{- end -}}
 
 {{- $brewpath := "" -}}
-{{- if eq .osid "darwin" -}}
+{{- if eq .chezmoi.os "darwin" -}}
 {{-   $brewpath = "/opt/homebrew/bin" -}}
-{{- else if eq .osid "linux-fedora" -}}
+{{- else if eq .chezmoi.os "linux" -}}
 {{-   $brewpath = "/home/linuxbrew/.linuxbrew/bin" -}}
+{{- end -}}
+
+{{- $email := "" -}}
+{{- if stdinIsATTY -}}
+{{- $email = promptStringOnce . "email" "What is your email address?" -}}
+{{- else -}}
+{{- $email = "ci@example.com" -}}
 {{- end -}}
 
 data:
     name: "Daniel K. Jones"
-    email: {{ promptStringOnce . "email" "What is your email address?" }}
+    email: {{ $email }}
     hostname: {{ if $customHostname }}{{ $customHostname }}{{ else }}{{ .chezmoi.hostname }}{{ end }}
     osid: {{ $osid }}
     # Machine-specific flags
@@ -27,6 +35,7 @@ data:
         packages:
             brewTaps:
                 - jesseduffield/lazygit
+                - zunit-zsh/zunit
             brewCaskTaps:
             brew:
                 - act

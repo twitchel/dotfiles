@@ -1,5 +1,5 @@
 ## Common packages
-{{- $commonConfig := .chezmoi.config.data.common }}
+{{- $commonConfig := .common }}
 {{- if hasKey $commonConfig.packages "brewTaps" }}
 {{- range $commonConfig.packages.brewTaps }}
 tap "{{ . }}"
@@ -11,8 +11,8 @@ brew "{{ . }}"
 {{- end }}
 {{- end }}
 
-## Machine Specific packages: {{- .chezmoi.config.data.hostname }}
-{{- $hostConfig := get .chezmoi.config.data.hosts .chezmoi.config.data.hostname }}
+## Machine Specific packages: {{- .hostname }}
+{{- $hostConfig := get .hosts .hostname }}
 {{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewTaps")) }}
 {{- range $hostConfig.packages.brewTaps }}
 tap "{{ . }}"
