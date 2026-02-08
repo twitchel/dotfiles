@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 echo "⭐️ Running after 900 set-default-shell"
-
+exit 0
+# shellcheck disable=SC1083
 DEFAULT_SHELL={{ .chezmoi.config.data.common.defaultShell }}
 
 SHELL_PATH="$(which $DEFAULT_SHELL)"
