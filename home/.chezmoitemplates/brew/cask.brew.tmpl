@@ -1,4 +1,4 @@
-{{ if eq .env.OS "darwin" }}
+{{ if eq .chezmoi.config.env.OS "darwin" }}
 ## Common casks
 {{- $commonConfig := .data.common }}
 {{- if hasKey $commonConfig.packages "brewCaskTaps" }}

@@ -4,10 +4,10 @@
 {{- end -}}
 
 {{- $customHostname := "" -}}
-{{- if stdinIsATTY -}}
-{{- $customHostname = promptStringOnce . "customHostname" "What is this computer's hostname? (will default to currently set)" -}}
-{{- else -}}
+{{- if eq (env "CI") "true" -}}
 {{- $customHostname = "ci" -}}
+{{- else -}}
+{{- $customHostname = promptStringOnce . "customHostname" "What is this computer's hostname? (will default to currently set)" -}}
 {{- end -}}
 
 {{- $brewpath := "" -}}
@@ -18,10 +18,10 @@
 {{- end -}}
 
 {{- $email := "" -}}
-{{- if stdinIsATTY -}}
-{{- $email = promptStringOnce . "email" "What is your email address?" -}}
-{{- else -}}
+{{- if eq (env "CI") "true" -}}
 {{- $email = "ci@example.com" -}}
+{{- else -}}
+{{- $email = promptStringOnce . "email" "What is your email address?" -}}
 {{- end -}}
 
 data:
@@ -132,7 +132,7 @@ data:
 env:
     OS: "{{ .chezmoi.os }}"
     OS_DISTRO: "{{ $osid }}"
-    OS_VARIANT: "{{ .chezmoi.osRelease.variantID }}"
+    OS_VARIANT: "{{ if hasKey .chezmoi.osRelease "variantID" }}{{ .chezmoi.osRelease.variantID }}{{ end }}"
     HOSTNAME: "{{ .chezmoi.hostname }}"
     BREWPATH: "{{ $brewpath }}"
     BREWBIN: "{{ $brewpath }}/brew"

@@ -1,4 +1,4 @@
-{{ if eq .env.OS "linux" }}
+{{ if eq .chezmoi.config.env.OS "linux" }}
 ## Common flatpaks
 {{- $commonConfig := .common }}
 {{- if hasKey $commonConfig.packages "flatpak" }}

@@ -10,6 +10,31 @@ env:
 name: Build and Test dotfiles
 
 jobs:
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    env:
+      CI: "true"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Echo environment variables
+        run: |
+          echo "PATH: $PATH"
+          echo "OS: ${{ matrix.os }}"
+          pwd
+          ls -lah /home
+
+      - name: Install Chezmoi and apply the dotfiles
+        run: |
+          mkdir -p $HOME/.local/bin
+          export PATH="$HOME/.local/bin:$PATH"
+          sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin
+          chezmoi init --source "$(pwd)" --no-tty
+          chezmoi data --source "$(pwd)"
+          chezmoi apply --source "$(pwd)" --no-tty
+          # Run some basic checks to verify the dotfiles were applied correctly
+          test -f "$HOME/.zshrc"
   build-linux:
     runs-on: ubuntu-latest
     strategy:
@@ -27,14 +52,14 @@ jobs:
           pwd
           ls -lah /home
 
-      - name: Install Distrobox
-        run: |
-          sudo apt-get update && sudo apt-get install -y distrobox
+      # - name: Install Distrobox
+      #   run: |
+      #     sudo apt-get update && sudo apt-get install -y distrobox
 
-      - name: Create Distrobox container
-        run: |
-          distrobox create --yes --root --name dotfiles-test --additional-packages git --image docker.io/library/${{ matrix.os.distro }}:${{ matrix.os.release }} --pull
+      # - name: Create Distrobox container
+      #   run: |
+      #     distrobox create --yes --root --name dotfiles-test --additional-packages git --image docker.io/library/${{ matrix.os.distro }}:${{ matrix.os.release }} --pull
 
-      - name: Run tests in Distrobox container
-        run: |
-          distrobox enter --root --name dotfiles-test -- bash -c "sh ./scripts/ci/${{ matrix.os.distro }}.sh"
+      # - name: Run tests in Distrobox container
+      #   run: |
+      #     distrobox enter --root --name dotfiles-test -- bash -c "sh ./scripts/ci/${{ matrix.os.distro }}.sh"

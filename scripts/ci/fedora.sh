@@ -4,4 +4,4 @@
 sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin
 
 # Apply the dotfiles
-chezmoi init --apply --source-path "$(pwd)"
+chezmoi init --apply --source "$(pwd)" --no-tty
