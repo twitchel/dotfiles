@@ -52,14 +52,14 @@ jobs:
           pwd
           ls -lah /home
 
-      # - name: Install Distrobox
-      #   run: |
-      #     sudo apt-get update && sudo apt-get install -y distrobox
+      - name: Install Distrobox
+        run: |
+          sudo apt-get update && sudo apt-get install -y distrobox
 
-      # - name: Create Distrobox container
-      #   run: |
-      #     distrobox create --yes --root --name dotfiles-test --additional-packages git --image docker.io/library/${{ matrix.os.distro }}:${{ matrix.os.release }} --pull
+      - name: Create Distrobox container
+        run: |
+          distrobox create --yes --root --name dotfiles-test --additional-packages git --image docker.io/library/${{ matrix.os.distro }}:${{ matrix.os.release }} --pull
 
-      # - name: Run tests in Distrobox container
-      #   run: |
-      #     distrobox enter --root --name dotfiles-test -- bash -c "sh ./scripts/ci/${{ matrix.os.distro }}.sh"
+      - name: Run tests in Distrobox container
+        run: |
+          distrobox enter --root --name dotfiles-test -- bash -c "sh ./scripts/ci/${{ matrix.os.distro }}.sh"
