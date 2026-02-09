@@ -1,0 +1,37 @@
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  DOTFILES_BRANCH: ${{ github.head_ref || github.ref_name || 'main' }}
+  DOTFILES_REPOSITORY: ${{ github.repository }}
+
+name: Build and Test dotfiles
+
+jobs:
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    env:
+      CI: "true"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Echo environment variables
+        run: |
+          echo "PATH: $PATH"
+          echo "OS: ${{ matrix.os }}"
+          pwd
+          ls -lah /home
+
+      - name: Install Chezmoi and apply the dotfiles
+        run: |
+          mkdir -p $HOME/.local/bin
+          export PATH="$HOME/.local/bin:$PATH"
+          sh -c "$(curl -fsLS get.chezmoi.io)" -- -b $HOME/.local/bin
+          chezmoi init --source "$(pwd)" --no-tty
+          chezmoi data --source "$(pwd)"
+          chezmoi apply --source "$(pwd)" --no-tty
+          # Run some basic checks to verify the dotfiles were applied correctly
+          test -f "$HOME/.zshrc"

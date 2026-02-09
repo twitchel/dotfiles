@@ -1,12 +1,138 @@
+{{- $osid := .chezmoi.os -}}
+{{- if hasKey .chezmoi.osRelease "id" -}}
+{{-   $osid = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
+{{- end -}}
+
+{{- $customHostname := "" -}}
+{{- if eq (env "CI") "true" -}}
+{{- $customHostname = "ci" -}}
+{{- else -}}
+{{- $customHostname = promptStringOnce . "customHostname" "What is this computer's hostname? (will default to currently set)" -}}
+{{- end -}}
+
+{{- $brewpath := "" -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{-   $brewpath = "/opt/homebrew/bin" -}}
+{{- else if eq .chezmoi.os "linux" -}}
+{{-   $brewpath = "/home/linuxbrew/.linuxbrew/bin" -}}
+{{- end -}}
+
+{{- $email := "" -}}
+{{- if eq (env "CI") "true" -}}
+{{- $email = "ci@example.com" -}}
+{{- else -}}
+{{- $email = promptStringOnce . "email" "What is your email address?" -}}
+{{- end -}}
+
 data:
-    name: {{ promptStringOnce . "name" "What is your name?" }}
-    email: {{ promptStringOnce . "email" "What is your email address?" }}
-    hostname: {{ .chezmoi.hostname }}
-    os: {{ .chezmoi.os }}
-    {{- if eq .chezmoi.os "linux" }}
-    distro: {{ .chezmoi.osRelease.id }}
-    {{- end }}
-    packageManager:
-        ubuntu: apt
-        darwin: brew
-        manjaro: pamac
+    name: "Daniel K. Jones"
+    email: {{ $email }}
+    hostname: {{ if $customHostname }}{{ $customHostname }}{{ else }}{{ .chezmoi.hostname }}{{ end }}
+    osid: {{ $osid }}
+    # Machine-specific flags
+    common:
+        defaultShell: zsh
+        packages:
+            brewTaps:
+                - jesseduffield/lazygit
+                - zunit-zsh/zunit
+            brewCaskTaps:
+            brew:
+                - act
+                - antidote
+                - bat
+                - cheat
+                - dive
+                - duckdb
+                - eza
+                - fd
+                - figlet
+                - fzf
+                - gh
+                - git-delta
+                - go
+                - grep
+                - htop
+                - humanlog
+                - jesseduffield/lazygit/lazygit
+                - jq
+                - lazydocker
+                - neovim
+                - nmap
+                - nvim
+                - rclone
+                - ripgrep
+                - screen
+                - starship
+                - tig
+                - tmux
+                - vim
+                - wget
+                - yazi
+                - yq
+                - zoxide
+                - zsh
+            brewCask:
+                - firefox
+                - gimp
+                - ghostty
+                - spotify
+                - visual-studio-code
+                - vlc
+            flatpak:
+                - com.brave.Browser
+                - com.discordapp.Discord
+                - com.google.Chrome
+                - com.jetbrains.IntelliJ-IDEA-Ultimate
+                - com.mattjakeman.ExtensionManager
+                - com.slack.Slack
+                - com.spotify.Client
+                - com.valvesoftware.Steam
+                - com.visualstudio.code
+                - md.obsidian.Obsidian
+                - org.gimp.GIMP
+                - org.localsend.localsend_app
+                - org.mozilla.firefox
+                - org.telegram.desktop
+                - org.videolan.VLC
+                - us.zoom.Zoom
+    hosts:
+        ci:
+            packages:
+                brew:
+                    - hello
+        coffee-sponge:
+        grease-monkey:
+            packages:
+                brew:
+                    - tailscale
+                flatpak:
+        mac-4900:
+            packages:
+                brew:
+                    - awscli
+                    - awscli-local
+                    - aws-sam-cli
+                    - trivy
+                brewTaps:
+                brewCaskTaps:
+                brewCask:
+                    - caffeine
+                    - gas-mask
+                    - jordanbaird-ice
+                    - m-cli
+                    - mas
+                    - microsoft-edge
+                    - obsidian
+                    - raycast
+                    - rectangle
+                    - slack
+                    - stats
+                    - visual-studio-code
+env:
+    OS: "{{ .chezmoi.os }}"
+    OS_DISTRO: "{{ $osid }}"
+    OS_VARIANT: "{{ if hasKey .chezmoi.osRelease "variantID" }}{{ .chezmoi.osRelease.variantID }}{{ end }}"
+    HOSTNAME: "{{ .chezmoi.hostname }}"
+    BREWPATH: "{{ $brewpath }}"
+    BREWBIN: "{{ $brewpath }}/brew"

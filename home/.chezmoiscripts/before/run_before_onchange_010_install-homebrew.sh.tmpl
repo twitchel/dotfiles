@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+echo "⭐️ Running before 010 install-homebrew"
+
+if [ $OS != "darwin" ] && [ $OS != "linux" ]; then
+    echo "Homebrew installation is only supported on macOS and Linux, skipping installation"
+    exit 0
+fi
+
+echo "Checking for Homebrew installation at $BREWPATH"
+if [ -x "$BREWBIN" ]; then
+    echo "Homebrew is already installed at $BREWPATH, skipping installation"
+    exit 0
+else 
+    echo "Homebrew not found at $BREWPATH, proceeding with installation"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+# EOF

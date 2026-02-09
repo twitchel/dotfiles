@@ -1,0 +1,30 @@
+#!/usr/bin/env zsh
+## ---- Bootstrapping functions ---- ###
+source_file() {
+  [ -f "$1" ] && source "$1"
+}
+
+## ---- Homebrew PATH ---- ##
+eval "$({{.chezmoi.config.env.BREWBIN}} shellenv)"
+
+## ---- Antidote ---- ##
+if [ -f "${ZDOTDIR:-~}/.antidote/antidote.zsh" ]; then
+  source "${ZDOTDIR:-~}/.antidote/antidote.zsh"
+  antidote load
+elif [ -f "$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh" ]; then
+  source "$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh"
+  antidote load
+fi
+
+## ---- Starship ---- ##
+if command -v starship > /dev/null; then
+  export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+  eval "$(starship init zsh)"
+fi
+
+## ---- NVM ---- ##
+export PATH="$HOME/.local/bin:$PATH"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

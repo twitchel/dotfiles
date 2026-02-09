@@ -1,0 +1,11 @@
+# Brewfile
+#
+# All brew packages available to be installed for this machine
+
+{{ template "brew/base.brew.tmpl" . }}
+{{ if eq .chezmoi.config.env.OS "darwin" }}
+{{ template "brew/cask.brew.tmpl" . }}
+{{- end }}
+{{ if eq .chezmoi.config.env.OS "linux" }}
+{{ template "brew/flatpak.brew.tmpl" . }}
+{{- end }}

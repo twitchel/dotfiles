@@ -1,0 +1,561 @@
+{
+  "packages": [
+    {
+      "name": "fzf",
+      "description": "Command-line fuzzy finder",
+      "tags": ["base"],
+      "managers": {
+        "dnf": "fzf",
+        "apt": "fzf",
+        "brew": "fzf",
+        "pacman": "fzf",
+        "pamac": "fzf"
+      }
+    },
+    {
+      "name": "fastfetch",
+      "description": "Fast system information tool",
+      "tags": ["base"],
+      "managers": {
+        "dnf": "fastfetch",
+        "apt": "fastfetch",
+        "brew": "fastfetch",
+        "pacman": "fastfetch",
+        "pamac": "fastfetch"
+      }
+    },
+    {
+      "name": "starship",
+      "description": "Cross-shell prompt",
+      "tags": ["base"],
+      "managers": {
+        "dnf": "starship",
+        "apt": null,
+        "brew": "starship",
+        "pacman": "starship",
+        "pamac": "starship",
+        "cargo": "starship"
+      },
+      "fallback": "curl -sS https://starship.rs/install.sh | sh -s -- -y"
+    },
+    {
+      "name": "ripgrep",
+      "description": "Fast recursive grep",
+      "tags": ["base"],
+      "managers": {
+        "dnf": "ripgrep",
+        "apt": "ripgrep",
+        "brew": "ripgrep",
+        "pacman": "ripgrep",
+        "pamac": "ripgrep"
+      }
+    },
+    {
+      "name": "bat",
+      "description": "Cat clone with syntax highlighting",
+      "tags": ["base"],
+      "managers": {
+        "dnf": "bat",
+        "apt": "bat",
+        "brew": "bat",
+        "pacman": "bat",
+        "pamac": "bat"
+      }
+    },
+    {
+      "name": "eza",
+      "description": "Modern ls replacement",
+      "tags": ["base"],
+      "managers": {
+        "dnf": "eza",
+        "apt": "eza",
+        "brew": "eza",
+        "pacman": "eza",
+        "pamac": "eza"
+      }
+    },
+    {
+      "name": "zoxide",
+      "description": "Smarter cd command",
+      "tags": ["base"],
+      "managers": {
+        "dnf": "zoxide",
+        "apt": "zoxide",
+        "brew": "zoxide",
+        "pacman": "zoxide",
+        "pamac": "zoxide"
+      }
+    },
+    {
+      "name": "tmux",
+      "description": "Terminal multiplexer",
+      "tags": ["base"],
+      "managers": {
+        "dnf": "tmux",
+        "apt": "tmux",
+        "brew": "tmux",
+        "pacman": "tmux",
+        "pamac": "tmux"
+      }
+    },
+    {
+      "name": "neovim",
+      "description": "Hyperextensible Vim-based text editor",
+      "tags": ["base", "development"],
+      "managers": {
+        "dnf": "neovim",
+        "apt": "neovim",
+        "brew": "neovim",
+        "pacman": "neovim",
+        "pamac": "neovim"
+      }
+    },
+    {
+      "name": "jq",
+      "description": "Command-line JSON processor",
+      "tags": ["base"],
+      "managers": {
+        "dnf": "jq",
+        "apt": "jq",
+        "brew": "jq",
+        "pacman": "jq",
+        "pamac": "jq"
+      }
+    },
+    {
+      "name": "htop",
+      "description": "Interactive process viewer",
+      "tags": ["base"],
+      "managers": {
+        "dnf": "htop",
+        "apt": "htop",
+        "brew": "htop",
+        "pacman": "htop",
+        "pamac": "htop"
+      }
+    },
+    {
+      "name": "git",
+      "description": "Version control system",
+      "tags": ["base", "development"],
+      "managers": {
+        "dnf": "git",
+        "apt": "git",
+        "brew": "git",
+        "pacman": "git",
+        "pamac": "git"
+      }
+    },
+    {
+      "name": "git-delta",
+      "description": "Syntax-highlighting pager for git",
+      "tags": ["development"],
+      "managers": {
+        "dnf": "git-delta",
+        "apt": "git-delta",
+        "brew": "git-delta",
+        "pacman": "git-delta",
+        "pamac": "git-delta"
+      }
+    },
+    {
+      "name": "docker",
+      "description": "Container runtime",
+      "tags": ["development"],
+      "managers": {
+        "dnf": "docker",
+        "apt": "docker.io",
+        "brew": "docker",
+        "pacman": "docker",
+        "pamac": "docker"
+      },
+      "postInstall": {
+        "linux": [
+          "sudo systemctl enable --now docker",
+          "sudo usermod -aG docker $USER"
+        ]
+      }
+    },
+    {
+      "name": "docker-compose",
+      "description": "Multi-container Docker applications",
+      "tags": ["development"],
+      "managers": {
+        "dnf": "docker-compose",
+        "apt": "docker-compose",
+        "brew": "docker-compose",
+        "pacman": "docker-compose",
+        "pamac": "docker-compose"
+      }
+    },
+    {
+      "name": "nodejs",
+      "description": "Node.js JavaScript runtime",
+      "tags": ["development"],
+      "managers": {
+        "dnf": "nodejs",
+        "apt": "nodejs",
+        "brew": "node",
+        "pacman": "nodejs",
+        "pamac": "nodejs"
+      }
+    },
+    {
+      "name": "npm",
+      "description": "Node.js package manager",
+      "tags": ["development"],
+      "managers": {
+        "dnf": "npm",
+        "apt": "npm",
+        "brew": null,
+        "pacman": "npm",
+        "pamac": "npm"
+      }
+    },
+    {
+      "name": "python",
+      "description": "Python programming language",
+      "tags": ["development"],
+      "managers": {
+        "dnf": "python3",
+        "apt": "python3",
+        "brew": "python",
+        "pacman": "python",
+        "pamac": "python"
+      }
+    },
+    {
+      "name": "python-pip",
+      "description": "Python package installer",
+      "tags": ["development"],
+      "managers": {
+        "dnf": "python3-pip",
+        "apt": "python3-pip",
+        "brew": null,
+        "pacman": "python-pip",
+        "pamac": "python-pip"
+      }
+    },
+    {
+      "name": "rust",
+      "description": "Rust programming language",
+      "tags": ["development"],
+      "managers": {
+        "dnf": "rust",
+        "apt": "rustc",
+        "brew": "rust",
+        "pacman": "rust",
+        "pamac": "rust"
+      },
+      "fallback": "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
+    },
+    {
+      "name": "cargo",
+      "description": "Rust package manager",
+      "tags": ["development"],
+      "managers": {
+        "dnf": "cargo",
+        "apt": "cargo",
+        "brew": null,
+        "pacman": "rust",
+        "pamac": "rust"
+      }
+    },
+    {
+      "name": "go",
+      "description": "Go programming language",
+      "tags": ["development"],
+      "managers": {
+        "dnf": "golang",
+        "apt": "golang",
+        "brew": "go",
+        "pacman": "go",
+        "pamac": "go"
+      }
+    },
+    {
+      "name": "gcc",
+      "description": "GNU C compiler",
+      "tags": ["development"],
+      "managers": {
+        "dnf": "gcc",
+        "apt": "gcc",
+        "brew": "gcc",
+        "pacman": "gcc",
+        "pamac": "gcc"
+      }
+    },
+    {
+      "name": "make",
+      "description": "Build automation tool",
+      "tags": ["development"],
+      "managers": {
+        "dnf": "make",
+        "apt": "make",
+        "brew": "make",
+        "pacman": "make",
+        "pamac": "make"
+      }
+    },
+    {
+      "name": "cmake",
+      "description": "Cross-platform build system",
+      "tags": ["development"],
+      "managers": {
+        "dnf": "cmake",
+        "apt": "cmake",
+        "brew": "cmake",
+        "pacman": "cmake",
+        "pamac": "cmake"
+      }
+    },
+    {
+      "name": "vlc",
+      "description": "VLC media player",
+      "tags": ["workstation", "multimedia"],
+      "managers": {
+        "brew_cask": "vlc",
+        "flatpak": "org.videolan.VLC"
+      }
+    },
+    {
+      "name": "vscode",
+      "description": "Visual Studio Code editor",
+      "tags": ["workstation", "development"],
+      "managers": {
+        "brew_cask": "visual-studio-code",
+        "flatpak": "com.visualstudio.code"
+      }
+    },
+    {
+      "name": "firefox",
+      "description": "Mozilla Firefox browser",
+      "tags": ["workstation"],
+      "managers": {
+        "brew_cask": "firefox",
+        "flatpak": "org.mozilla.firefox"
+      }
+    },
+    {
+      "name": "kitty",
+      "description": "GPU-accelerated terminal emulator",
+      "tags": ["workstation"],
+      "managers": {
+        "dnf": "kitty",
+        "apt": "kitty",
+        "brew_cask": "kitty",
+        "pacman": "kitty",
+        "pamac": "kitty"
+      }
+    },
+    {
+      "name": "alacritty",
+      "description": "GPU-accelerated terminal emulator",
+      "tags": ["workstation"],
+      "managers": {
+        "dnf": "alacritty",
+        "apt": "alacritty",
+        "brew_cask": "alacritty",
+        "pacman": "alacritty",
+        "pamac": "alacritty"
+      }
+    },
+    {
+      "name": "ffmpeg",
+      "description": "Multimedia framework",
+      "tags": ["multimedia"],
+      "managers": {
+        "dnf": "ffmpeg",
+        "apt": "ffmpeg",
+        "brew": "ffmpeg",
+        "pacman": "ffmpeg",
+        "pamac": "ffmpeg"
+      }
+    },
+    {
+      "name": "gimp",
+      "description": "GNU Image Manipulation Program",
+      "tags": ["workstation", "multimedia"],
+      "managers": {
+        "brew_cask": "gimp",
+        "flatpak": "org.gimp.GIMP"
+      }
+    },
+    {
+      "name": "thunderbird",
+      "description": "Email client",
+      "tags": ["workstation", "personal"],
+      "managers": {
+        "brew_cask": "thunderbird",
+        "flatpak": "org.mozilla.Thunderbird"
+      }
+    },
+    {
+      "name": "syncthing",
+      "description": "Continuous file synchronization",
+      "tags": ["personal"],
+      "managers": {
+        "dnf": "syncthing",
+        "apt": "syncthing",
+        "brew": "syncthing",
+        "pacman": "syncthing",
+        "pamac": "syncthing"
+      },
+      "postInstall": {
+        "linux": [
+          "systemctl --user enable --now syncthing.service"
+        ]
+      }
+    },
+    {
+      "name": "rclone",
+      "description": "Cloud storage sync tool",
+      "tags": ["personal"],
+      "managers": {
+        "dnf": "rclone",
+        "apt": "rclone",
+        "brew": "rclone",
+        "pacman": "rclone",
+        "pamac": "rclone"
+      }
+    },
+    {
+      "name": "discord",
+      "description": "Voice and text chat",
+      "tags": ["personal", "gaming"],
+      "managers": {
+        "brew_cask": "discord",
+        "flatpak": "com.discordapp.Discord"
+      }
+    },
+    {
+      "name": "spotify",
+      "description": "Music streaming",
+      "tags": ["personal", "multimedia"],
+      "managers": {
+        "brew_cask": "spotify",
+        "flatpak": "com.spotify.Client"
+      }
+    },
+    {
+      "name": "steam",
+      "description": "Gaming platform",
+      "tags": ["gaming"],
+      "managers": {
+        "brew_cask": "steam",
+        "flatpak": "com.valvesoftware.Steam"
+      }
+    },
+    {
+      "name": "lutris",
+      "description": "Gaming platform for Linux",
+      "tags": ["gaming"],
+      "managers": {
+        "flatpak": "net.lutris.Lutris"
+      }
+    },
+    {
+      "name": "gamemode",
+      "description": "Game performance optimizer",
+      "tags": ["gaming"],
+      "managers": {
+        "dnf": "gamemode",
+        "apt": "gamemode",
+        "brew": null,
+        "pacman": "gamemode",
+        "pamac": "gamemode"
+      }
+    },
+    {
+      "name": "mangohud",
+      "description": "Gaming performance overlay",
+      "tags": ["gaming"],
+      "managers": {
+        "dnf": "mangohud",
+        "apt": "mangohud",
+        "brew": null,
+        "pacman": "mangohud",
+        "pamac": "mangohud"
+      }
+    },
+    {
+      "name": "jetbrains-mono-nerd",
+      "description": "JetBrains Mono Nerd Font",
+      "tags": ["base", "fonts"],
+      "managers": {
+        "dnf": null,
+        "apt": null,
+        "brew": "font-jetbrains-mono-nerd-font",
+        "pacman": "ttf-jetbrains-mono-nerd",
+        "pamac": "ttf-jetbrains-mono-nerd"
+      },
+      "tap": "homebrew/cask-fonts",
+      "fallback_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/JetBrainsMono.zip"
+    },
+    {
+      "name": "fira-code-nerd",
+      "description": "Fira Code Nerd Font",
+      "tags": ["fonts"],
+      "managers": {
+        "dnf": null,
+        "apt": null,
+        "brew": "font-fira-code-nerd-font",
+        "pacman": "ttf-firacode-nerd",
+        "pamac": "ttf-firacode-nerd"
+      },
+      "tap": "homebrew/cask-fonts",
+      "fallback_url": "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/FiraCode.zip"
+    }
+  ],
+  "packageManagers": {
+    "dnf": {
+      "install": "sudo dnf install -y",
+      "update": "sudo dnf upgrade -y --refresh",
+      "search": "dnf search"
+    },
+    "apt": {
+      "install": "sudo apt install -y",
+      "update": "sudo apt update && sudo apt upgrade -y",
+      "search": "apt search"
+    },
+    "brew": {
+      "install": "brew install",
+      "update": "brew update && brew upgrade",
+      "search": "brew search"
+    },
+    "brew_cask": {
+      "install": "brew install --cask",
+      "update": "brew update && brew upgrade --cask",
+      "search": "brew search --cask"
+    },
+    "pacman": {
+      "install": "sudo pacman -S --noconfirm",
+      "update": "sudo pacman -Syu --noconfirm",
+      "search": "pacman -Ss"
+    },
+    "pamac": {
+      "install": "pamac install --no-confirm",
+      "update": "pamac upgrade -a --no-confirm",
+      "search": "pamac search"
+    },
+    "flatpak": {
+      "install": "flatpak install -y flathub",
+      "update": "flatpak update -y",
+      "search": "flatpak search"
+    },
+    "cargo": {
+      "install": "cargo install",
+      "update": "cargo install",
+      "search": "cargo search"
+    }
+  },
+  "tagDescriptions": {
+    "base": "Essential CLI tools installed on all machines",
+    "development": "Development tools and programming languages",
+    "workstation": "GUI applications for desktop environments",
+    "personal": "Personal/home machine applications",
+    "gaming": "Gaming platforms and utilities",
+    "multimedia": "Media players, editors, and codecs",
+    "fonts": "Fonts and typography"
+  }
+}
