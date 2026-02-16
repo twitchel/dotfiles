@@ -92,6 +92,12 @@ Tests run automatically on pull requests via GitHub Actions. The workflow:
 2. Installs chezmoi and applies dotfiles
 3. Installs zsh and zunit
 4. Runs all tests in the `tests/` directory
+5. **Generates test reports** with:
+   - Summary comment posted on the PR
+   - Test results in GitHub Actions job summary
+   - Downloadable test artifacts (TAP format, logs, reports)
+
+For more details on test reporting, see [docs/TEST-REPORTING.md](docs/TEST-REPORTING.md).
 
 ## Development
 
