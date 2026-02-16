@@ -13,6 +13,8 @@
   touch "${TEST_HOME}/.env"
   
   # Create a test .zshrc that simulates the real one
+  # Note: This test replicates the exact behavior from home/dot_zshrc
+  # including the eval command which is part of the original implementation
   cat > "${TEST_HOME}/.zshrc" << 'INNER_EOF'
 #!/usr/bin/env zsh
 export ZDOTDIR="$HOME/.config/zsh"
