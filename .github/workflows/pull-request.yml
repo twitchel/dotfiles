@@ -55,5 +55,5 @@ jobs:
         run: |
           # Add zunit and revolver to PATH
           export PATH="/tmp/zunit:/tmp/revolver:$PATH"
-          # Run all tests in the tests directory
-          zunit --verbose tests
+          # Run all tests in the tests directory (only .zunit files)
+          zunit --verbose tests/*.zunit
