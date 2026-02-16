@@ -35,3 +35,25 @@ jobs:
           chezmoi apply --source "$(pwd)" --no-tty
           # Run some basic checks to verify the dotfiles were applied correctly
           test -f "$HOME/.zshrc"
+
+      - name: Install ZSH and zsh-zunit
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zsh
+          # Install revolver (zunit dependency)
+          git clone https://github.com/molovo/revolver.git /tmp/revolver
+          export PATH="/tmp/revolver:$PATH"
+          # Install zunit
+          git clone https://github.com/zunit-zsh/zunit.git /tmp/zunit
+          cd /tmp/zunit && ./build.zsh
+          export PATH="/tmp/zunit:$PATH"
+          # Verify installation
+          which zunit
+          zunit --version
+
+      - name: Run tests with zsh-zunit
+        run: |
+          # Add zunit and revolver to PATH
+          export PATH="/tmp/zunit:/tmp/revolver:$PATH"
+          # Run all tests in the tests directory
+          zunit --verbose tests

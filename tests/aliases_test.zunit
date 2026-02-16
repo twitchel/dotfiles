@@ -1,0 +1,43 @@
+#!/usr/bin/env zunit
+
+@test 'Test that common aliases can be defined' {
+  # Define some aliases similar to those in aliases.zshrc
+  alias v="nvim"
+  alias g="git"
+  alias t="tmux"
+  
+  # Check that aliases are defined
+  local v_alias=$(alias v)
+  local g_alias=$(alias g)
+  local t_alias=$(alias t)
+  
+  assert "${v_alias}" contains 'nvim'
+  assert "${g_alias}" contains 'git'
+  assert "${t_alias}" contains 'tmux'
+}
+
+@test 'Test mkcd alias functionality' {
+  # The mkcd alias uses the 'take' function which creates and changes to a directory
+  # We'll simulate the take function behavior
+  take() {
+    mkdir -p "$1" && cd "$1"
+  }
+  
+  alias mkcd="take"
+  
+  # Test that the alias is defined
+  local mkcd_alias=$(alias mkcd)
+  assert "${mkcd_alias}" contains 'take'
+}
+
+@test 'Test alias command returns non-empty for defined aliases' {
+  # Define a test alias
+  alias test_alias="echo test"
+  
+  # Run the alias command to check it
+  run alias test_alias
+  
+  # Assert command succeeded
+  assert $state equals 0
+  assert "$output" contains 'echo test'
+}

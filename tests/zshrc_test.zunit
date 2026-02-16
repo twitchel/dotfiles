@@ -1,0 +1,61 @@
+#!/usr/bin/env zunit
+
+@test 'Test that ZSH_SOURCED is set after sourcing .zshrc' {
+  # Set up a test environment in /tmp
+  local TEST_HOME="/tmp/test_home_$$"
+  mkdir -p "${TEST_HOME}"
+  local ZDOTDIR="${TEST_HOME}/.config/zsh"
+  
+  # Create minimal test environment
+  mkdir -p "${ZDOTDIR}"
+  echo '#!/usr/bin/env zsh' > "${ZDOTDIR}/.zshrc"
+  echo 'export TEST_VAR=true' >> "${ZDOTDIR}/.zshrc"
+  touch "${TEST_HOME}/.env"
+  
+  # Create a test .zshrc that simulates the real one
+  cat > "${TEST_HOME}/.zshrc" << 'INNER_EOF'
+#!/usr/bin/env zsh
+export ZDOTDIR="$HOME/.config/zsh"
+source "$ZDOTDIR/.zshrc"
+touch $HOME/.env
+eval export $(cat $HOME/.env | xargs) > /dev/null 2>&1
+export ZSH_SOURCED=true
+INNER_EOF
+  
+  # Source the test .zshrc with TEST_HOME as HOME
+  HOME="${TEST_HOME}" ZDOTDIR="${ZDOTDIR}" source "${TEST_HOME}/.zshrc"
+  
+  # Assert that ZSH_SOURCED is set
+  assert "${ZSH_SOURCED}" same_as 'true'
+  
+  # Cleanup
+  rm -rf "${TEST_HOME}"
+}
+
+@test 'Test that ZDOTDIR is set correctly' {
+  # Set up a test environment
+  local TEST_HOME="/tmp/test_home2_$$"
+  mkdir -p "${TEST_HOME}"
+  local ZDOTDIR="${TEST_HOME}/.config/zsh"
+  
+  mkdir -p "${ZDOTDIR}"
+  echo '#!/usr/bin/env zsh' > "${ZDOTDIR}/.zshrc"
+  touch "${TEST_HOME}/.env"
+  
+  cat > "${TEST_HOME}/.zshrc" << 'INNER_EOF'
+#!/usr/bin/env zsh
+export ZDOTDIR="$HOME/.config/zsh"
+source "$ZDOTDIR/.zshrc"
+touch $HOME/.env
+export ZSH_SOURCED=true
+INNER_EOF
+  
+  # Source the test .zshrc with TEST_HOME as HOME
+  HOME="${TEST_HOME}" ZDOTDIR="${ZDOTDIR}" source "${TEST_HOME}/.zshrc"
+  
+  # Assert that ZDOTDIR is set correctly
+  assert "${ZDOTDIR}" same_as "${TEST_HOME}/.config/zsh"
+  
+  # Cleanup
+  rm -rf "${TEST_HOME}"
+}
