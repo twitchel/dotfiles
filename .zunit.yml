@@ -1,0 +1,4 @@
+tap: false
+verbose: false
+time-limit: 0
+fail-fast: false
