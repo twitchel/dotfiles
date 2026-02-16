@@ -52,8 +52,113 @@ jobs:
           zunit --version
 
       - name: Run tests with zsh-zunit
+        id: test
+        continue-on-error: true
         run: |
           # Add zunit and revolver to PATH
           export PATH="/tmp/zunit:/tmp/revolver:$PATH"
           # Run all tests in the tests directory (only .zunit files)
-          zunit --verbose tests/*.zunit
+          # Capture both verbose and TAP output
+          zunit --verbose tests/*.zunit | tee test-output.log
+          zunit --tap tests/*.zunit > test-results.tap
+          exit ${PIPESTATUS[0]}
+
+      - name: Generate test report
+        if: always()
+        run: |
+          echo "## Test Results" > test-report.md
+          echo "" >> test-report.md
+          
+          # Parse TAP output to get summary
+          if [ -f test-results.tap ]; then
+            total=$(grep -E "^(ok|not ok)" test-results.tap | wc -l)
+            passed=$(grep "^ok" test-results.tap | wc -l)
+            failed=$(grep "^not ok" test-results.tap | wc -l)
+            
+            echo "- **Total Tests:** $total" >> test-report.md
+            echo "- **Passed:** ✅ $passed" >> test-report.md
+            echo "- **Failed:** ❌ $failed" >> test-report.md
+            echo "" >> test-report.md
+            
+            if [ "$failed" -gt 0 ]; then
+              echo "### Failed Tests" >> test-report.md
+              echo '```' >> test-report.md
+              grep "^not ok" test-results.tap >> test-report.md || true
+              echo '```' >> test-report.md
+              echo "" >> test-report.md
+            fi
+            
+            echo "<details>" >> test-report.md
+            echo "<summary>View Detailed Test Output</summary>" >> test-report.md
+            echo "" >> test-report.md
+            echo '```' >> test-report.md
+            cat test-output.log >> test-report.md
+            echo '```' >> test-report.md
+            echo "</details>" >> test-report.md
+          else
+            echo "❌ Test results file not found" >> test-report.md
+          fi
+          
+          # Print report to console
+          cat test-report.md
+          
+          # Also add to GitHub Actions job summary
+          cat test-report.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: |
+            test-results.tap
+            test-output.log
+            test-report.md
+
+      - name: Comment PR with test results
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = 'test-report.md';
+            
+            if (fs.existsSync(reportPath)) {
+              const report = fs.readFileSync(reportPath, 'utf8');
+              
+              // Find existing comment
+              const { data: comments } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+              });
+              
+              const botComment = comments.find(comment => 
+                comment.user.type === 'Bot' && 
+                comment.body.includes('## Test Results')
+              );
+              
+              const commentBody = `${report}\n\n*Updated at: ${new Date().toISOString()}*`;
+              
+              if (botComment) {
+                // Update existing comment
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: botComment.id,
+                  body: commentBody
+                });
+              } else {
+                // Create new comment
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  body: commentBody
+                });
+              }
+            }
+
+      - name: Fail if tests failed
+        if: steps.test.outcome == 'failure'
+        run: exit 1
