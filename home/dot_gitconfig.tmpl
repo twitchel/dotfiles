@@ -1,0 +1,54 @@
+[user]
+	email = {{ .email }}
+	name = {{ .name }}
+
+[alias]
+    # Init
+    cl = clone
+
+    # Worktrees
+    wta = worktree add
+    wtb = worktree add -b
+    wtl = worktree list
+    wtd = worktree remove
+
+    # Branches
+    co = checkout
+
+    # Commit
+    cm = commit -m
+
+    # Staging
+    a = add
+    ap = add -p
+    st = status
+    ## Undo the last commit but keep all changes staged
+    z = reset --soft HEAD~1
+
+    # Diff
+    df = diff
+    dsc = diff --staged
+
+    # Log
+    lg = log --graph --oneline --all
+    logadog = log --graph --oneline --all --decorate
+
+[core]
+    editor = nvim
+    pager = delta
+
+[delta]
+    navigate = true
+    side-by-side = true
+
+[interactive]
+    diffFilter = delta --color-only
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+
+[rerere]
+    enabled = true # Resolve Reuse records, to help with merge conflicts. See https://git-scm.com/docs/git-rerere for more info.
