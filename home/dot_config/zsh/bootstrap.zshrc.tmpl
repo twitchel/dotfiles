@@ -22,6 +22,11 @@ if command -v starship > /dev/null; then
   eval "$(starship init zsh)"
 fi
 
+## ---- atuin - shell history ---- ##
+if command -v atuin > /dev/null; then
+  eval "$(atuin init zsh)"
+fi
+
 ## ---- NVM ---- ##
 export PATH="$HOME/.local/bin:$PATH"
 
