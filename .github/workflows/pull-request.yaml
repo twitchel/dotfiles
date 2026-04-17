@@ -25,6 +25,6 @@ jobs:
       - name: Init the repo based off the current branch
         run: chezmoi init -S .
       - name: Show the chezmoi data
-        run: chezmoi data
+        run: chezmoi data -S .
       - name: Run the chezmoi apply
-        run: chezmoi apply
+        run: chezmoi apply -S .
