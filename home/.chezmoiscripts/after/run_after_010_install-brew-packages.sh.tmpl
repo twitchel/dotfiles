@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
 echo "⭐️ Running after 010 install-brew-packages"
+# Install GCC First
+$BREWBIN install gcc --skip-post-install
+
+# Install deps from generated brew file
 $BREWBIN bundle --file=~/.config/brew/Brewfile
 
