@@ -14,7 +14,7 @@ jobs:
       image: ${{ matrix.os }}
       options: --ulimit nofile=1024:1024
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
       - name: Install dependencies dnf
         run: dnf install -y git curl >/dev/null 2>&1 || echo "no dnf"
       - name: Update apt cache
@@ -32,7 +32,7 @@ jobs:
   install-and-test-macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
       - name: Install chezmoi
         run: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /Users/runner/.local/bin
       - name: echo $PATH
