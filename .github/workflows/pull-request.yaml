@@ -28,3 +28,15 @@ jobs:
         run: chezmoi data -S .
       - name: Run the chezmoi apply
         run: chezmoi apply -S .
+  install-and-test-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install chezmoi
+        run: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/bin
+      - name: Init the repo based off the current branch
+        run: chezmoi init -S .
+      - name: Show the chezmoi data
+        run: chezmoi data -S .
+      - name: Run the chezmoi apply
+        run: chezmoi apply -S .
