@@ -12,14 +12,15 @@ jobs:
           - ubuntu:25.10
     container:
       image: ${{ matrix.os }}
+      options: --ulimit nofile=1024:1024
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies dnf
         run: dnf install -y git curl >/dev/null 2>&1 || echo "no dnf"
+      - name: Update apt cache
+        run: apt update >/dev/null 2>&1 || echo "no apt"
       - name: Install dependencies apt
-        run: >
-          apt update && apt install -y git curl >/dev/null 2>&1;
-          exit 0;
+        run: apt install -y git curl >/dev/null 2>&1 || echo "no apt"
       - name: Install chezmoi
         run: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/bin
       - name: Init the repo based off the current branch
