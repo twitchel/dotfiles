@@ -1,0 +1,98 @@
+common:
+    brewTaps:
+        - jesseduffield/lazygit
+        - zunit-zsh/zunit
+    brewCaskTaps:
+    brew:
+        - act
+        - antidote
+        - atuin
+        - bat
+        - btop
+        - cheat
+        - dive
+        - duckdb
+        - eza
+        - fastfetch
+        - fd
+        - figlet
+        - fzf
+        - gh
+        - git-delta
+        - go
+        - grep
+        - htop
+        - humanlog
+        - jesseduffield/lazygit/lazygit
+        - jq
+        - lazydocker
+        - neovim
+        - nmap
+        - nvim
+        - nvm
+        - rclone
+        - ripgrep
+        - screen
+        - starship
+        - tig
+        - tmux
+        - vim
+        - wget
+        - yazi
+        - yq
+        - zoxide
+        - zsh
+    brewCask:
+        - firefox
+        - gimp
+        - ghostty
+        - spotify
+        - visual-studio-code
+        - vlc
+    flatpak:
+        - com.brave.Browser
+        - com.discordapp.Discord
+        - com.google.Chrome
+        - com.mattjakeman.ExtensionManager
+        - com.slack.Slack
+        - com.spotify.Client
+        - com.visualstudio.code
+        - md.obsidian.Obsidian
+        - org.gimp.GIMP
+        - org.localsend.localsend_app
+        - org.mozilla.firefox
+        - org.telegram.desktop
+        - org.videolan.VLC
+        - us.zoom.Zoom
+hosts:
+    ci:
+        brew:
+            - hello
+    coffee-sponge:
+        flatpak:
+            - com.valvesoftware.Steam
+    grease-monkey:
+        brew:
+            - tailscale
+        flatpak:
+    mac-4981:
+        brew:
+            - awscli
+            - awscli-local
+            - aws-sam-cli
+            - trivy
+        brewTaps:
+        brewCaskTaps:
+        brewCask:
+            - caffeine
+            - gas-mask
+            - jordanbaird-ice
+            - m-cli
+            - mas
+            - microsoft-edge
+            - obsidian
+            - raycast
+            - rectangle
+            - slack
+            - stats
+            - visual-studio-code
