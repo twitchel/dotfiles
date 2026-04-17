@@ -15,10 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies dnf
-        run: dnf install -y git jq curl >/dev/null 2>&1 || echo "no dnf"
+        run: dnf install -y git curl >/dev/null 2>&1 || echo "no dnf"
       - name: Install dependencies apt
         run: >
-          apt update && apt install -y git jq curl >/dev/null 2>&1;
+          apt update && apt install -y git curl >/dev/null 2>&1;
           exit 0;
       - name: Install chezmoi
         run: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/bin
