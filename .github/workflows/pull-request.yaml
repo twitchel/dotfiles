@@ -14,6 +14,8 @@ jobs:
       image: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
+      - name: list the files
+        run: ls -al .
       - name: Install dependencies dnf
         run: dnf install -y git jq curl >/dev/null 2>&1 || echo "no dnf"
       - name: Install dependencies apt
