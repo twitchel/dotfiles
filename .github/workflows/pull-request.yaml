@@ -25,7 +25,7 @@ jobs:
       - name: Install chezmoi
         run: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/bin
       - name: Init the repo based off the current branch
-        run: chezmoi init ${{ github.workspace }}
+        run: chezmoi init .
       - name: Show the chezmoi data
         run: chezmoi data
       - name: Run the chezmoi apply
