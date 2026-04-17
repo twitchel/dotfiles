@@ -12,23 +12,36 @@ jobs:
           - ubuntu:25.10
     container:
       image: ${{ matrix.os }}
+      options: --ulimit nofile=1024:1024
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
       - name: Install dependencies dnf
-        run: dnf install -y git jq curl >/dev/null 2>&1 || echo "no dnf"
+        run: dnf install -y git curl >/dev/null 2>&1 || echo "no dnf"
+      - name: Update apt cache
+        run: apt update >/dev/null 2>&1 || echo "no apt"
       - name: Install dependencies apt
-        run: >
-          apt update && apt install -y git jq curl >/dev/null 2>&1;
-          exit 0;
-      - name: is curl installed
-        run: command -v curl >/dev/null 2>&1 || echo "no curl"
-      - name: PATH
-        run: echo "$PATH"
+        run: apt install -y git curl >/dev/null 2>&1 || echo "no apt"
       - name: Install chezmoi
         run: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/bin
       - name: Init the repo based off the current branch
-        run: chezmoi init $(pwd)
+        run: chezmoi init -S .
       - name: Show the chezmoi data
-        run: chezmoi data
+        run: chezmoi data -S .
       - name: Run the chezmoi apply
-        run: chezmoi apply
+        run: chezmoi apply -S .
+  install-and-test-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install chezmoi
+        run: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /Users/runner/.local/bin
+      - name: echo $PATH
+        run: echo $PATH
+      - name: which chezmoi
+        run: which chezmoi
+      - name: Init the repo based off the current branch
+        run: chezmoi init -S .
+      - name: Show the chezmoi data
+        run: chezmoi data -S .
+      - name: Run the chezmoi apply
+        run: chezmoi apply -S .
