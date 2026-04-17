@@ -33,9 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install chezmoi
-        run: sh -c "$(curl -fsLS get.chezmoi.io)"
-      - name: Add .local/bin to PATH
-        run: echo "$HOME/.bin" >> $GITHUB_PATH
+        run: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /Users/runner/.bin
       - name: Init the repo based off the current branch
         run: chezmoi init -S .
       - name: Show the chezmoi data
