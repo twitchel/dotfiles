@@ -1,0 +1,30 @@
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  install-and-test-linux-server:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os:
+          - fedora:43
+          - ubuntu:25.10
+    container:
+      image: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies dnf
+        run: dnf install -y git jq curl >/dev/null 2>&1 || echo "no dnf"
+      - name: Install dependencies apt
+        run: >
+          apt update && apt install -y git jq curl >/dev/null 2>&1;
+          exit 0;
+      - name: Install chezmoi
+        run: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/bin
+      - name: Init the repo based off the current branch
+        run: chezmoi init ${{ github.workspace }}
+      - name: Show the chezmoi data
+        run: chezmoi data
+      - name: Run the chezmoi apply
+        run: chezmoi apply
