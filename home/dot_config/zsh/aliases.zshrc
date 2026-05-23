@@ -1,6 +1,10 @@
 ## ---- Applications ---- ##
-# alias ls="eza --color=always --long --git --icons=always"
-# alias cd="z"
+if command -v eza > /dev/null; then
+  alias ls="eza --color=always --long --git --icons=always"
+fi
+if command -v z > /dev/null; then
+  alias cd="z"
+fi
 alias mkcd="take"
 
 alias v="nvim" # neovim
