@@ -1,0 +1,98 @@
+hostData:
+  default:
+    defaultShell: zsh
+    packages:
+      brewTaps:
+        - jesseduffield/lazygit
+        - zunit-zsh/zunit
+      brewCaskTaps:
+      brew:
+        - act
+        - antidote
+        - atuin
+        - bat
+        - btop
+        - cheat
+        - dive
+        - duckdb
+        - eza
+        - fastfetch
+        - fd
+        - figlet
+        - fzf
+        - gh
+        - git-delta
+        - go
+        - grep
+        - htop
+        - humanlog
+        - jesseduffield/lazygit/lazygit
+        - jq
+        - lazydocker
+        - neovim
+        - nmap
+        - nvim
+        - nvm
+        - rclone
+        - ripgrep
+        - screen
+        - starship
+        - tig
+        - tmux
+        - vim
+        - wget
+        - yazi
+        - yq
+        - zoxide
+        - zsh
+      brewCask:
+        - firefox
+        - gimp
+        - ghostty
+        - spotify
+        - visual-studio-code
+        - vlc
+      flatpak:
+        - com.discordapp.Discord
+        - com.google.Chrome
+        - com.mattjakeman.ExtensionManager
+        - com.slack.Slack
+        - com.spotify.Client
+        - com.visualstudio.code
+        - md.obsidian.Obsidian
+        - org.gimp.GIMP
+        - org.localsend.localsend_app
+        - org.mozilla.firefox
+        - org.telegram.desktop
+        - org.videolan.VLC
+        - us.zoom.Zoom
+  ci:
+    packages:
+      brew:
+      - hello
+  coffee-sponge:
+    packages:
+      flatpak:
+  grease-monkey:
+    packages:
+      brew:
+      - tailscale
+      flatpak:
+  mac-4981:
+    packages:
+      brew:
+      - awscli
+      - awscli-local
+      - aws-sam-cli
+      - trivy
+      brewCask:
+      - caffeine
+      - gas-mask
+      - jordanbaird-ice
+      - microsoft-edge
+      - obsidian
+      - raycast
+      - rectangle
+      - slack
+      - stats
+      - visual-studio-code

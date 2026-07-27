@@ -1,6 +1,6 @@
 [".config/nvim"]
     type = "git-repo"
-    url = "https://github.com/LazyVim/starter"
+    url = "https://github.com/LazyVim/starter.git"
 
 [".config/tmux/plugins/catppuccin"]
     type = "archive"

@@ -1,6 +1,6 @@
 {{ if eq .chezmoi.config.env.OS "linux" }}
 ## Common flatpaks
-{{- $commonConfig := .common }}
+{{- $commonConfig := .hostData.default }}
 {{- if hasKey $commonConfig.packages "flatpak" }}
 {{- range $commonConfig.packages.flatpak }}
 flatpak "{{ . }}"
@@ -8,7 +8,7 @@ flatpak "{{ . }}"
 {{- end }}
 
 ## Machine Specific flatpaks: {{- .hostname }}
-{{- $hostConfig := get .hosts .hostname }}
+{{- $hostConfig := get .hostData .hostname }}
 {{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "flatpak")) }}
 {{- range $hostConfig.packages.flatpak }}
 flatpak "{{ . }}"
