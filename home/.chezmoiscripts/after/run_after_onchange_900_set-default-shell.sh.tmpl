@@ -2,7 +2,7 @@
 echo "⭐️ Running after 900 set-default-shell"
 exit 0
 # shellcheck disable=SC1083
-DEFAULT_SHELL={{ .chezmoi.config.data.common.defaultShell }}
+DEFAULT_SHELL={{ .hostData.default.defaultShell }}
 
 SHELL_PATH="$(which $DEFAULT_SHELL)"
 if [[ $SHELL_PATH == $($BREWBIN --prefix)* ]] && ! [[ $(cat /etc/shells | grep -q "$SHELL_PATH") ]]; then
