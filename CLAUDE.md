@@ -33,13 +33,11 @@ chezmoi apply -S . --no-tty
 
 ### Template data flow
 
-All machine-specific config flows through `home/.chezmoi.yaml.tmpl`, which:
-1. Detects the OS and sets `osid` (e.g. `linux-fedora`, `darwin`)
-2. Prompts once for `customHostname` and `email` (cached in chezmoi state after first run; skipped in CI)
-3. Sets `BREWPATH`/`BREWBIN` env vars used by scripts
-4. Defines a two-level package structure: `common.packages` (all machines) merged with `hosts.<hostname>.packages` (machine-specific overrides)
+Machine-specific config comes from two sources:
+- `home/.chezmoi.yaml.tmpl` — detects OS (`osid`), prompts for `customHostname`/`email`, sets `BREWPATH`/`BREWBIN`, normalises hostname to lowercase
+- `home/.chezmoidata.yaml` — package/host data; two-level structure: `hostData.default` (all machines) merged with `hostData.<hostname>` (machine-specific overrides)
 
-Templates reference this data as `.common`, `.hosts`, `.hostname`, `.email`, etc.
+Templates reference this data as `.hostData.default`, `.hostData.<hostname>`, `.hostname`, `.email`, etc.
 
 ### Package management
 
@@ -48,7 +46,7 @@ Packages are managed through Homebrew on both macOS and Linux (via Linuxbrew). T
 - `home/.chezmoitemplates/brew/cask.brew.tmpl` — macOS GUI apps
 - `home/.chezmoitemplates/brew/flatpak.brew.tmpl` — Linux GUI apps via Flatpak
 
-To add a package: add it under the appropriate key in `home/.chezmoi.yaml.tmpl` (`common.packages.brew`, `common.packages.flatpak`, or a host-specific block). `packages.json` is a reference catalog only and is not used by chezmoi scripts.
+To add a package: add it under the appropriate key in `home/.chezmoidata.yaml` (`hostData.default.packages.brew`, `hostData.default.packages.flatpak`, or a host-specific block under `hostData.<hostname>`). `packages.json` is a reference catalog only and is not used by chezmoi scripts.
 
 ### Script execution order
 
