@@ -10,6 +10,13 @@
 {{- $customHostname = promptStringOnce . "customHostname" "What is this computer's hostname? (will default to currently set)" -}}
 {{- end -}}
 
+{{- $hostname := "" -}}
+{{- if ne $customHostname "" -}}
+{{-   $hostname = $customHostname -}}
+{{- else -}}
+{{-   $hostname = .chezmoi.hostname -}}
+{{- end -}}
+
 {{- $brewpath := "" -}}
 {{- if eq .chezmoi.os "darwin" -}}
 {{-   $brewpath = "/opt/homebrew/bin" -}}
@@ -27,7 +34,7 @@
 data:
     name: "Daniel K. Jones"
     email: {{ $email }}
-    hostname: {{ if $customHostname }}{{ $customHostname }}{{ else }}{{ .chezmoi.hostname }}{{ end }}
+    hostname: {{ $hostname | lower }}
     osid: {{ $osid }}
     # Machine-specific flags
     common:
@@ -136,6 +143,6 @@ env:
     OS: "{{ .chezmoi.os }}"
     OS_DISTRO: "{{ $osid }}"
     OS_VARIANT: "{{ if hasKey .chezmoi.osRelease "variantID" }}{{ .chezmoi.osRelease.variantID }}{{ end }}"
-    HOSTNAME: "{{ .chezmoi.hostname }}"
+    HOSTNAME: "{{ $hostname | lower }}"
     BREWPATH: "{{ $brewpath }}"
     BREWBIN: "{{ $brewpath }}/brew"
