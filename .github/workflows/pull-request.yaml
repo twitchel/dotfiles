@@ -8,8 +8,8 @@ jobs:
     strategy:
       matrix:
         os:
-          - fedora:43
-          - ubuntu:25.10
+          - fedora:44
+          - ubuntu:26.04
     container:
       image: ${{ matrix.os }}
       options: --ulimit nofile=1024:1024
