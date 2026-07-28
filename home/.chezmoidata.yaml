@@ -60,7 +60,7 @@ hostData:
   ci:
     packages:
       brew:
-      - hello
+        - hello
   coffee-sponge:
     packages:
       brew:
@@ -77,28 +77,28 @@ hostData:
   grease-monkey:
     packages:
       brew:
-      - tailscale
+        - tailscale
       flatpak:
   mac-4981:
     packages:
       brew:
-      - awscli
-      - awscli-local
-      - aws-sam-cli
-      - trivy
+        - awscli
+        - awscli-local
+        - aws-sam-cli
+        - trivy
       brewCask:
-      - caffeine
-      - firefox
-      - gas-mask
-      - ghostty
-      - gimp
-      - jordanbaird-ice
-      - microsoft-edge
-      - obsidian
-      - raycast
-      - rectangle
-      - slack
-      - spotify
-      - stats
-      - visual-studio-code
-      - vlc
+        - caffeine
+        - firefox
+        - gas-mask
+        - ghostty
+        - gimp
+        - jordanbaird-ice
+        - microsoft-edge
+        - obsidian
+        - raycast
+        - rectangle
+        - slack
+        - spotify
+        - stats
+        - visual-studio-code
+        - vlc
