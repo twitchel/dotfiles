@@ -63,16 +63,17 @@ hostData:
       - hello
   coffee-sponge:
     packages:
+      brew:
+        - 1password-cli
       brewCask:
         - 1password-gui-linux
-        - 1password-cli
         - jetbrains-toolbox-linux
       brewCaskTaps:
         - ublue-os/tap
       rpm-ostree:
         - ghostty
         - zsh
-      flatpak:
+      flatpak: []
   grease-monkey:
     packages:
       brew:

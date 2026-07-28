@@ -3,16 +3,24 @@
 echo "⭐️ Running after 040 rpm-ostree"
 
 # Only if rpm-ostree exists
-if ! command -v rpm-ostree; then
+if ! command -v rpm-ostree >/dev/null 2>&1; then
   echo "📝 No rpm-ostree on system, skipping"
   exit 0;
 fi
 
 # Ghostty
+if [ -r /etc/os-release ]; then
+  # shellcheck disable=SC1091
+  . /etc/os-release
+fi
 curl -fsSL "https://copr.fedorainfracloud.org/coprs/scottames/ghostty/repo/fedora-${VERSION_ID}/scottames-ghostty-fedora-${VERSION_ID}.repo" | sudo tee /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:scottames:ghostty.repo > /dev/null
 
 # Refresh ostree md
-rpm-ostree refresh-md
+sudo rpm-ostree refresh-md
 
-rpm-ostree install ghostty || true
-rpm-ostree install zsh || true
+{{- $hostConfig := get .hostData .hostname -}}
+{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "rpm-ostree")) -}}
+{{- range $hostConfig.packages.rpm-ostree }}
+sudo rpm-ostree install "{{ . }}" || true
+{{- end }}
+{{- end }}
