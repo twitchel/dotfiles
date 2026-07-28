@@ -19,8 +19,8 @@ curl -fsSL "https://copr.fedorainfracloud.org/coprs/scottames/ghostty/repo/fedor
 sudo rpm-ostree refresh-md
 
 {{- $hostConfig := get .hostData .hostname -}}
-{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "rpm-ostree")) -}}
-{{- range $hostConfig.packages.rpm-ostree }}
+{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "rpmOstree")) -}}
+{{- range (index $hostConfig.packages "rpmOstree") }}
 sudo rpm-ostree install "{{ . }}" || true
 {{- end }}
 {{- end }}

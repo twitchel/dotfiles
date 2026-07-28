@@ -70,7 +70,7 @@ hostData:
         - jetbrains-toolbox-linux
       brewCaskTaps:
         - ublue-os/tap
-      rpm-ostree:
+      rpmOstree:
         - ghostty
         - zsh
       flatpak: []
