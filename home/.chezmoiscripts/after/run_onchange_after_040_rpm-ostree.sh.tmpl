@@ -2,6 +2,12 @@
 
 echo "⭐️ Running after 040 rpm-ostree"
 
+# Only if rpm-ostree exists
+if ! command -v rpm-ostree; then
+  echo "📝 No rpm-ostree on system, skipping"
+  exit 0;
+fi
+
 # Ghostty
 curl -fsSL "https://copr.fedorainfracloud.org/coprs/scottames/ghostty/repo/fedora-${VERSION_ID}/scottames-ghostty-fedora-${VERSION_ID}.repo" | sudo tee /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:scottames:ghostty.repo > /dev/null
 
