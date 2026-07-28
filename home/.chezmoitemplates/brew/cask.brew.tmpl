@@ -1,11 +1,6 @@
 {{ if eq .chezmoi.config.env.OS "darwin" }}
 ## Common casks
 {{- $commonConfig := .hostData.default }}
-{{- if hasKey $commonConfig.packages "brewCaskTaps" }}
-{{- range $commonConfig.packages.brewCaskTaps }}
-tap "{{ . }}"
-{{- end }}
-{{- end }}
 {{- if hasKey $commonConfig.packages "brewCask" }}
 {{- range $commonConfig.packages.brewCask }}
 cask "{{ . }}"
@@ -14,11 +9,6 @@ cask "{{ . }}"
 
 ## Machine Specific casks: {{- .hostname }}
 {{- $hostConfig := get .hostData .hostname }}
-{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewCaskTaps")) }}
-{{- range $hostConfig.packages.brewCaskTaps }}
-tap "{{ . }}"
-{{- end }}
-{{- end }}
 {{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewCask")) }}
 {{- range $hostConfig.packages.brewCask }}
 cask "{{ . }}"

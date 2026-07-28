@@ -5,6 +5,34 @@ echo "⭐️ Running after 050 install-brew-packages"
 # Install GCC First
 $BREWBIN install gcc --skip-post-install
 
+# Tap all the taps
+{{- $commonConfig := .hostData.default }}
+{{- if hasKey $commonConfig.packages "brewTaps" }}
+{{- range $commonConfig.packages.brewTaps }}
+$BREWBIN tap "{{ . }}"
+$BREWBIN trust "{{ . }}"
+{{- end }}
+{{- end }}
+{{- if hasKey $commonConfig.packages "brewCaskTaps" }}
+{{- range $commonConfig.packages.brewCaskTaps }}
+$BREWBIN tap "{{ . }}"
+$BREWBIN trust "{{ . }}"
+{{- end }}
+{{- end }}
+
+{{- $hostConfig := get .hostData .hostname }}
+{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewTaps")) }}
+{{- range $hostConfig.packages.brewTaps }}
+tap "{{ . }}"
+{{- end }}
+{{- end }}
+{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewCaskTaps")) }}
+{{- range $hostConfig.packages.brewCaskTaps }}
+$BREWBIN tap "{{ . }}"
+$BREWBIN trust "{{ . }}"
+{{- end }}
+{{- end }}
+
 # Install deps from generated brew file
 $BREWBIN bundle --file=~/.config/brew/Brewfile
 
