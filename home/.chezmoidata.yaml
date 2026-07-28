@@ -64,6 +64,8 @@ hostData:
   coffee-sponge:
     packages:
       brewCask:
+        - 1password-gui-linux
+        - 1password-cli
         - jetbrains-toolbox-linux
       brewCaskTaps:
         - ublue-os/tap
