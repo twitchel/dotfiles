@@ -43,7 +43,6 @@ hostData:
         - yazi
         - yq
         - zoxide
-        - zsh
       flatpak:
         - com.discordapp.Discord
         - com.google.Chrome
