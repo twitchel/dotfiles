@@ -23,7 +23,7 @@ $BREWBIN trust "{{ . }}"
 {{- $hostConfig := get .hostData .hostname }}
 {{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewTaps")) }}
 {{- range $hostConfig.packages.brewTaps }}
-tap "{{ . }}"
+$BREWBIN tap "{{ . }}"
 {{- end }}
 {{- end }}
 {{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewCaskTaps")) }}
