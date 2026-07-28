@@ -5,7 +5,6 @@ hostData:
       brewTaps:
         - jesseduffield/lazygit
         - zunit-zsh/zunit
-      brewCaskTaps:
       brew:
         - act
         - antidote
@@ -45,13 +44,6 @@ hostData:
         - yq
         - zoxide
         - zsh
-      brewCask:
-        - firefox
-        - gimp
-        - ghostty
-        - spotify
-        - visual-studio-code
-        - vlc
       flatpak:
         - com.discordapp.Discord
         - com.google.Chrome
@@ -72,6 +64,13 @@ hostData:
       - hello
   coffee-sponge:
     packages:
+      brewCask:
+        - jetbrains-toolbox-linux
+      brewCaskTaps:
+        - ublue-os/tap
+      rpm-ostree:
+        - ghostty
+        - zsh
       flatpak:
   grease-monkey:
     packages:
@@ -87,12 +86,17 @@ hostData:
       - trivy
       brewCask:
       - caffeine
+      - firefox
       - gas-mask
+      - ghostty
+      - gimp
       - jordanbaird-ice
       - microsoft-edge
       - obsidian
       - raycast
       - rectangle
       - slack
+      - spotify
       - stats
       - visual-studio-code
+      - vlc
