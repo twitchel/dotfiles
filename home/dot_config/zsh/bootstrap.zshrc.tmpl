@@ -4,6 +4,9 @@ source_file() {
   [ -f "$1" ] && source "$1"
 }
 
+## ---- home bin path ---- ##
+export PATH="$HOME/.local/bin:$PATH"
+
 ## ---- Homebrew PATH ---- ##
 eval "$({{.chezmoi.config.env.BREWBIN}} shellenv)"
 

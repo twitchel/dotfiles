@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+echo "⭐️ Running after 010 silverblue postinstall"
+
+if command -v flatpak &> /dev/null; then
+  # Enable full-fat flathub repos
+  flatpak remote-delete flathub --force
+  flatpak remote-delete fedora --force
+  flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  flatpak update --appstream
+fi

@@ -5,7 +5,6 @@ hostData:
       brewTaps:
         - jesseduffield/lazygit
         - zunit-zsh/zunit
-      brewCaskTaps:
       brew:
         - act
         - antidote
@@ -44,14 +43,6 @@ hostData:
         - yazi
         - yq
         - zoxide
-        - zsh
-      brewCask:
-        - firefox
-        - gimp
-        - ghostty
-        - spotify
-        - visual-studio-code
-        - vlc
       flatpak:
         - com.discordapp.Discord
         - com.google.Chrome
@@ -69,30 +60,45 @@ hostData:
   ci:
     packages:
       brew:
-      - hello
+        - hello
   coffee-sponge:
     packages:
-      flatpak:
+      brew:
+        - 1password-cli
+      brewCask:
+        - 1password-gui-linux
+        - jetbrains-toolbox-linux
+      brewCaskTaps:
+        - ublue-os/tap
+      rpmOstree:
+        - ghostty
+        - zsh
+      flatpak: []
   grease-monkey:
     packages:
       brew:
-      - tailscale
+        - tailscale
       flatpak:
   mac-4981:
     packages:
       brew:
-      - awscli
-      - awscli-local
-      - aws-sam-cli
-      - trivy
+        - awscli
+        - awscli-local
+        - aws-sam-cli
+        - trivy
       brewCask:
-      - caffeine
-      - gas-mask
-      - jordanbaird-ice
-      - microsoft-edge
-      - obsidian
-      - raycast
-      - rectangle
-      - slack
-      - stats
-      - visual-studio-code
+        - caffeine
+        - firefox
+        - gas-mask
+        - ghostty
+        - gimp
+        - jordanbaird-ice
+        - microsoft-edge
+        - obsidian
+        - raycast
+        - rectangle
+        - slack
+        - spotify
+        - stats
+        - visual-studio-code
+        - vlc

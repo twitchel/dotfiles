@@ -1,10 +1,5 @@
 ## Common packages
 {{- $commonConfig := .hostData.default }}
-{{- if hasKey $commonConfig.packages "brewTaps" }}
-{{- range $commonConfig.packages.brewTaps }}
-tap "{{ . }}"
-{{- end }}
-{{- end }}
 {{- if hasKey $commonConfig.packages "brew" }}
 {{- range $commonConfig.packages.brew }}
 brew "{{ . }}"
@@ -13,11 +8,6 @@ brew "{{ . }}"
 
 ## Machine Specific packages: {{- .hostname }}
 {{- $hostConfig := get .hostData .hostname }}
-{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewTaps")) }}
-{{- range $hostConfig.packages.brewTaps }}
-tap "{{ . }}"
-{{- end }}
-{{- end }}
 {{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brew")) }}
 {{- range $hostConfig.packages.brew }}
 brew "{{ . }}"

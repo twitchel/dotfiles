@@ -10,4 +10,8 @@ if [[ $SHELL_PATH == $($BREWBIN --prefix)* ]] && ! [[ $(cat /etc/shells | grep -
     echo "$SHELL_PATH" | sudo tee -a /etc/shells > /dev/null
 fi
 
-sudo chsh -s "$(which $DEFAULT_SHELL)" "$(whoami)" || echo "Failed to change default shell to $DEFAULT_SHELL. Please change it manually."
+if [[ command -v chsh ]]; then
+  sudo chsh -s "$(which $DEFAULT_SHELL)" "$(whoami)" || echo "Failed to change default shell to $DEFAULT_SHELL. Please change it manually."
+else
+  sudo usermod -s /bin/zsh $(whoami)
+fi
