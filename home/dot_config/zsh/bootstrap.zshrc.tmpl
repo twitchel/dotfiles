@@ -4,6 +4,9 @@ source_file() {
   [ -f "$1" ] && source "$1"
 }
 
+## ---- Boot SSH Agent ---- ##
+command -v ssh-agent && eval ssh-agent
+
 ## ---- home bin path ---- ##
 export PATH="$HOME/.local/bin:$PATH"
 
