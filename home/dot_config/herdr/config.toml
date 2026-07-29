@@ -1,0 +1,13 @@
+[keys]
+prefix = "ctrl + s"
+new_tab = "prefix+c"
+next_tab = "prefix+n"
+previous_tab = "prefix+p"
+split_horizontal = "prefix+\""
+split_vertical = "prefix+%"
+
+[[keys.command]]
+key = "prefix+u"
+type = "shell"
+command = "herdr plugin pane open --plugin url.fzf-picker --entrypoint url-picker"
+description = "pick URL from panes"

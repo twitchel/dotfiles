@@ -23,6 +23,7 @@ hostData:
         - git-delta
         - go
         - grep
+        - herdr
         - htop
         - humanlog
         - jesseduffield/lazygit/lazygit
