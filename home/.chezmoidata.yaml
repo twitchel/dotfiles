@@ -65,8 +65,8 @@ hostData:
   coffee-sponge:
     packages:
       brew:
-        - 1password-cli
       brewCask:
+        - 1password-cli-linux
         - 1password-gui-linux
         - jetbrains-toolbox-linux
       brewCaskTaps:
