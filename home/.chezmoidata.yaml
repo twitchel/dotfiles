@@ -45,6 +45,7 @@ hostData:
         - yq
         - zoxide
       flatpak:
+        - com.brave.Browser
         - com.discordapp.Discord
         - com.google.Chrome
         - com.mattjakeman.ExtensionManager
