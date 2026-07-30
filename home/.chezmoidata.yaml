@@ -53,7 +53,9 @@ hostData:
         - com.spotify.Client
         - com.visualstudio.code
         - md.obsidian.Obsidian
+        - net.nokyan.Resources
         - org.gimp.GIMP
+        - org.gnome.PowerStats
         - org.localsend.localsend_app
         - org.mozilla.firefox
         - org.telegram.desktop
