@@ -28,6 +28,7 @@ hostData:
         - humanlog
         - jesseduffield/lazygit/lazygit
         - jq
+        - just
         - lazydocker
         - neovim
         - nmap
