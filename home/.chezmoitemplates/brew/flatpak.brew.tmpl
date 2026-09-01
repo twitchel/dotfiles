@@ -1,4 +1,3 @@
-{{ if eq .chezmoi.config.env.OS "linux" }}
 ## Common flatpaks
 {{- $commonConfig := .hostData.default }}
 {{- if hasKey $commonConfig.packages "flatpak" }}
@@ -13,7 +12,4 @@ flatpak "{{ . }}"
 {{- range $hostConfig.packages.flatpak }}
 flatpak "{{ . }}"
 {{- end }}
-{{- end }}
-{{- else }}
-# Flatpak is not available or not executable on this system, skipping flatpak packages.
 {{- end }}
