@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+echo "⭐️ Running after 010 flatpak postinstall"
+
+if [ "$MACHINE_TYPE" != "workstation" ]; then
+  echo "📝 Not a workstation, skipping flatpak setup"
+  exit 0
+fi
+
+if ! command -v flatpak > /dev/null 2>&1; then
+  echo "📝 flatpak not found, skipping"
+  exit 0
+fi
+
+# On atomic Fedora variants, replace the filtered/federated Flathub with full Flathub
+case "$OS_VARIANT" in
+  silverblue|kinoite|onyx|bazzite)
+    flatpak remote-delete flathub --force 2>/dev/null || true
+    flatpak remote-delete fedora --force 2>/dev/null || true
+    ;;
+esac
+
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak update --appstream

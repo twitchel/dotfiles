@@ -1,17 +1,26 @@
 #!/usr/bin/env bash
 echo "⭐️ Running after 900 set-default-shell"
-exit 0
-# shellcheck disable=SC1083
-DEFAULT_SHELL={{ .hostData.default.defaultShell }}
 
-SHELL_PATH="$(which $DEFAULT_SHELL)"
-if [[ $SHELL_PATH == $($BREWBIN --prefix)* ]] && ! [[ $(cat /etc/shells | grep -q "$SHELL_PATH") ]]; then
-    echo "Adding $SHELL_PATH to /etc/shells"
-    echo "$SHELL_PATH" | sudo tee -a /etc/shells > /dev/null
+DEFAULT_SHELL="{{ .hostData.default.defaultShell }}"
+SHELL_PATH="$($BREWBIN --prefix)/bin/${DEFAULT_SHELL}"
+
+if [ ! -x "$SHELL_PATH" ]; then
+  echo "Shell not found at $SHELL_PATH — skipping (is brew installed?)"
+  exit 0
 fi
 
-if [[ command -v chsh ]]; then
-  sudo chsh -s "$(which $DEFAULT_SHELL)" "$(whoami)" || echo "Failed to change default shell to $DEFAULT_SHELL. Please change it manually."
+# Add brew-managed shell to /etc/shells if not already listed
+if ! grep -qF "$SHELL_PATH" /etc/shells 2>/dev/null; then
+  echo "Adding $SHELL_PATH to /etc/shells"
+  echo "$SHELL_PATH" | sudo tee -a /etc/shells > /dev/null
+fi
+
+# Set default shell — chsh works on macOS and standard Linux
+# usermod is the fallback for atomic distros where chsh may be unavailable
+if command -v chsh > /dev/null 2>&1; then
+  sudo chsh -s "$SHELL_PATH" "$(whoami)" || echo "chsh failed — set shell manually: chsh -s $SHELL_PATH"
+elif command -v usermod > /dev/null 2>&1; then
+  sudo usermod -s "$SHELL_PATH" "$(whoami)" || echo "usermod failed — set shell manually"
 else
-  sudo usermod -s /bin/zsh $(whoami)
+  echo "Cannot set default shell — neither chsh nor usermod found. Run manually: chsh -s $SHELL_PATH"
 fi

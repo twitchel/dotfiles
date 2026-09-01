@@ -2,17 +2,19 @@
 # .chezmoidata.yaml hash: {{ include ".chezmoidata.yaml" | sha256sum }}
 
 echo "⭐️ Running after 050 install-brew-packages"
-# Install GCC First
+
+# Install GCC first (required build dependency on Linux)
 $BREWBIN install gcc --skip-post-install
 
-# Tap all the taps
+# Tap and trust default formula taps
 {{- $commonConfig := .hostData.default }}
 {{- if hasKey $commonConfig.packages "brewTaps" }}
 {{- range $commonConfig.packages.brewTaps }}
 $BREWBIN tap "{{ . }}"
-$BREWBIN trust "{{ . }}"
 {{- end }}
 {{- end }}
+
+# Tap and trust default cask taps (trust required on Linux for third-party casks)
 {{- if hasKey $commonConfig.packages "brewCaskTaps" }}
 {{- range $commonConfig.packages.brewCaskTaps }}
 $BREWBIN tap "{{ . }}"
@@ -20,12 +22,15 @@ $BREWBIN trust "{{ . }}"
 {{- end }}
 {{- end }}
 
+# Tap host-specific formula taps
 {{- $hostConfig := get .hostData .hostname }}
 {{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewTaps")) }}
 {{- range $hostConfig.packages.brewTaps }}
 $BREWBIN tap "{{ . }}"
 {{- end }}
 {{- end }}
+
+# Tap and trust host-specific cask taps
 {{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewCaskTaps")) }}
 {{- range $hostConfig.packages.brewCaskTaps }}
 $BREWBIN tap "{{ . }}"
@@ -33,6 +38,5 @@ $BREWBIN trust "{{ . }}"
 {{- end }}
 {{- end }}
 
-# Install deps from generated brew file
+# Install packages from generated Brewfile
 $BREWBIN bundle --file=~/.config/brew/Brewfile
-
