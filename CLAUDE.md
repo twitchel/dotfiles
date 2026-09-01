@@ -43,16 +43,20 @@ Templates reference this data as `.hostData.default`, `.hostData.<hostname>`, `.
 
 Packages are managed through Homebrew on both macOS and Linux (via Linuxbrew). The Brewfile at `home/dot_config/brew/Brewfile.tmpl` is generated from three partial templates:
 - `home/.chezmoitemplates/brew/base.brew.tmpl` — CLI tools (all machines)
-- `home/.chezmoitemplates/brew/cask.brew.tmpl` — macOS GUI apps
-- `home/.chezmoitemplates/brew/flatpak.brew.tmpl` — Linux GUI apps via Flatpak
+- `home/.chezmoitemplates/brew/cask.brew.tmpl` — GUI apps installed via `brew cask` (no longer macOS-only; Linux hosts like `coffee-sponge` use this too, e.g. for `1password-gui-linux`)
+- `home/.chezmoitemplates/brew/flatpak.brew.tmpl` — Linux GUI apps via Flatpak (skipped entirely when `.chezmoi.config.env.OS` isn't `linux`)
 
-To add a package: add it under the appropriate key in `home/.chezmoidata.yaml` (`hostData.default.packages.brew`, `hostData.default.packages.flatpak`, or a host-specific block under `hostData.<hostname>`). `packages.json` is a reference catalog only and is not used by chezmoi scripts.
+To add a package: add it under the appropriate key in `home/.chezmoidata.yaml` (`hostData.default.packages.brew`/`brewCask`/`flatpak`, or a host-specific block under `hostData.<hostname>`). `packages.json` is a reference catalog only and is not used by chezmoi scripts.
+
+Other package-related keys under `packages`:
+- `brewTaps` / `brewCaskTaps` — tapped (and trusted, for cask taps) before `brew bundle` runs, both at the `default` level and per-host (e.g. `coffee-sponge` taps `ublue-os/tap` for its Linux casks)
+- `rpmOstree` — host-specific packages layered onto atomic/immutable Fedora hosts (Silverblue) via `rpm-ostree install`, for things Homebrew can't provide system-wide (e.g. `coffee-sponge` layers `ghostty` and `zsh`)
 
 ### Script execution order
 
 chezmoi runs scripts in lexicographic order within each phase:
 - **before/**: `010_install-homebrew` — installs Homebrew if missing
-- **after/**: `010_install-brew-packages` → `900_set-default-shell` → `999_post-run`
+- **after/**: `010_silverblue-postinstall` (resets Flatpak remotes to full Flathub on Silverblue) → `040_rpm-ostree` (adds the Ghostty copr repo and layers any `rpmOstree` packages for the host) → `050_install-brew-packages` (taps/trusts `brewTaps`/`brewCaskTaps`, then `brew bundle`s the generated Brewfile — cachebusted via a sha256 hash of `.chezmoidata.yaml` in a comment so it reruns when packages change) → `900_set-default-shell` (uses `chsh` where available, falling back to `sudo usermod -s` on atomic distros where `chsh` doesn't work) → `999_post-run`
 
 Scripts use the `onchange_` prefix to re-run only when their content changes (hashed by chezmoi).
 
@@ -67,7 +71,7 @@ Scripts use the `onchange_` prefix to re-run only when their content changes (ha
 The ZSH setup is split across files sourced in order:
 1. `home/dot_zshrc` — sets `ZDOTDIR` to `~/.config/zsh`
 2. `home/dot_config/zsh/dot_zshrc` — main entry, sources the files below
-3. `home/dot_config/zsh/bootstrap.zshrc.tmpl` — Homebrew PATH, Antidote plugin manager, Starship, atuin, NVM, zoxide
+3. `home/dot_config/zsh/bootstrap.zshrc.tmpl` — SSH agent eval, `~/.local/bin` PATH, Homebrew PATH, Antidote plugin manager, Starship, atuin, NVM, zoxide
 4. `home/dot_config/zsh/aliases.zshrc` — shell aliases
 5. `home/dot_config/zsh/dot_zsh_plugins.txt` — Antidote plugin list (zsh-autosuggestions, zsh-completions, zsh-syntax-highlighting, zpm-zsh/clipboard)
 
@@ -75,4 +79,4 @@ The generated `.config/zsh/.zsh_plugins.zsh` is excluded via `.chezmoiignore`.
 
 ## CI
 
-GitHub Actions (`.github/workflows/pull-request.yaml`) runs `chezmoi init -S . && chezmoi apply -S .` in containers for `fedora:43`, `ubuntu:25.10`, and `macos-latest`. CI sets `CI=true` to bypass interactive prompts, using `ci` as the hostname and `ci@example.com` as the email.
+GitHub Actions (`.github/workflows/pull-request.yaml`) runs `chezmoi init -S . && chezmoi apply -S .` in containers for `fedora:44`, `ubuntu:26.04`, and `macos-latest`. CI sets `CI=true` to bypass interactive prompts, using `ci` as the hostname and `ci@example.com` as the email.

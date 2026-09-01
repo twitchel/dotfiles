@@ -23,11 +23,14 @@ hostData:
         - git-delta
         - go
         - grep
+        - herdr
         - htop
         - humanlog
         - jesseduffield/lazygit/lazygit
         - jq
+        - just
         - lazydocker
+        - make
         - neovim
         - nmap
         - nvim
@@ -44,6 +47,7 @@ hostData:
         - yq
         - zoxide
       flatpak:
+        - com.brave.Browser
         - com.discordapp.Discord
         - com.google.Chrome
         - com.mattjakeman.ExtensionManager
@@ -51,7 +55,9 @@ hostData:
         - com.spotify.Client
         - com.visualstudio.code
         - md.obsidian.Obsidian
+        - net.nokyan.Resources
         - org.gimp.GIMP
+        - org.gnome.PowerStats
         - org.localsend.localsend_app
         - org.mozilla.firefox
         - org.telegram.desktop
@@ -64,9 +70,10 @@ hostData:
   coffee-sponge:
     packages:
       brew:
-        - 1password-cli
       brewCask:
+        - 1password-cli-linux
         - 1password-gui-linux
+        - claude-code
         - jetbrains-toolbox-linux
       brewCaskTaps:
         - ublue-os/tap
