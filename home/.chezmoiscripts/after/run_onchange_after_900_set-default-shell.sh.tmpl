@@ -9,6 +9,19 @@ if [ ! -x "$SHELL_PATH" ]; then
   exit 0
 fi
 
+# Check if default shell is already correct — avoids unnecessary sudo prompts
+CURRENT_SHELL=""
+if command -v getent > /dev/null 2>&1; then
+  CURRENT_SHELL="$(getent passwd "$(whoami)" | cut -d: -f7)"
+elif command -v dscl > /dev/null 2>&1; then
+  CURRENT_SHELL="$(dscl . -read ~/ UserShell 2>/dev/null | awk '{print $2}')"
+fi
+
+if [ "$CURRENT_SHELL" = "$SHELL_PATH" ]; then
+  echo "Default shell already $SHELL_PATH, skipping"
+  exit 0
+fi
+
 # Add brew-managed shell to /etc/shells if not already listed
 if ! grep -qF "$SHELL_PATH" /etc/shells 2>/dev/null; then
   echo "Adding $SHELL_PATH to /etc/shells"

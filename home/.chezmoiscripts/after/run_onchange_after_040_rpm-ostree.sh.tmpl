@@ -24,13 +24,26 @@ if [ -r /etc/os-release ]; then
 fi
 
 {{- if has "ghostty" $rpmPackages }}
-# Add Ghostty COPR repo
-curl -fsSL "https://copr.fedorainfracloud.org/coprs/scottames/ghostty/repo/fedora-${VERSION_ID}/scottames-ghostty-fedora-${VERSION_ID}.repo" \
-  | sudo tee /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:scottames:ghostty.repo > /dev/null
+GHOSTTY_COPR="/etc/yum.repos.d/_copr:copr.fedorainfracloud.org:scottames:ghostty.repo"
+if [ ! -f "$GHOSTTY_COPR" ]; then
+  echo "Adding Ghostty COPR repo"
+  curl -fsSL "https://copr.fedorainfracloud.org/coprs/scottames/ghostty/repo/fedora-${VERSION_ID}/scottames-ghostty-fedora-${VERSION_ID}.repo" \
+    | sudo tee "$GHOSTTY_COPR" > /dev/null
+fi
 {{- end }}
 
-sudo rpm-ostree refresh-md
+# Only install packages not already layered — avoids creating an unnecessary pending deployment
+PACKAGES_TO_INSTALL=()
+{{- range $rpmPackages }}
+if ! rpm -q "{{ . }}" > /dev/null 2>&1; then
+  PACKAGES_TO_INSTALL+=("{{ . }}")
+fi
+{{- end }}
 
-# Install all packages in a single transaction
-sudo rpm-ostree install \
-  {{ range $rpmPackages }}"{{ . }}" {{ end }}
+if [ ${#PACKAGES_TO_INSTALL[@]} -eq 0 ]; then
+  echo "📝 All rpm-ostree packages already installed"
+  exit 0
+fi
+
+sudo rpm-ostree refresh-md
+sudo rpm-ostree install "${PACKAGES_TO_INSTALL[@]}"
