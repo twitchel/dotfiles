@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Editors
+*.swp
+*.swo
+*.orig
+.idea/
+.vscode/
+
+# chezmoi
+.chezmoi_state.boltdb

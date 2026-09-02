@@ -1,0 +1,4 @@
+theme = "Catppuccin Mocha"
+background-opacity = 0.9
+macos-icon = "official"
+macos-option-as-alt = "left"

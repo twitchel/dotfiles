@@ -2,25 +2,48 @@
 
 echo "⭐️ Running after 040 rpm-ostree"
 
-# Only if rpm-ostree exists
 if ! command -v rpm-ostree >/dev/null 2>&1; then
   echo "📝 No rpm-ostree on system, skipping"
-  exit 0;
+  exit 0
 fi
 
-# Ghostty
+{{- $hostConfig := get .hostData .hostname }}
+{{- $rpmPackages := list }}
+{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "rpmOstree")) }}
+{{-   $rpmPackages = index $hostConfig.packages "rpmOstree" }}
+{{- end }}
+
+{{- if not $rpmPackages }}
+echo "📝 No rpmOstree packages for {{ .hostname }}, skipping"
+exit 0
+{{- end }}
+
 if [ -r /etc/os-release ]; then
   # shellcheck disable=SC1091
   . /etc/os-release
 fi
-curl -fsSL "https://copr.fedorainfracloud.org/coprs/scottames/ghostty/repo/fedora-${VERSION_ID}/scottames-ghostty-fedora-${VERSION_ID}.repo" | sudo tee /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:scottames:ghostty.repo > /dev/null
 
-# Refresh ostree md
+{{- if has "ghostty" $rpmPackages }}
+GHOSTTY_COPR="/etc/yum.repos.d/_copr:copr.fedorainfracloud.org:scottames:ghostty.repo"
+if [ ! -f "$GHOSTTY_COPR" ]; then
+  echo "Adding Ghostty COPR repo"
+  curl -fsSL "https://copr.fedorainfracloud.org/coprs/scottames/ghostty/repo/fedora-${VERSION_ID}/scottames-ghostty-fedora-${VERSION_ID}.repo" \
+    | sudo tee "$GHOSTTY_COPR" > /dev/null
+fi
+{{- end }}
+
+# Only install packages not already layered — avoids creating an unnecessary pending deployment
+PACKAGES_TO_INSTALL=()
+{{- range $rpmPackages }}
+if ! rpm -q "{{ . }}" > /dev/null 2>&1; then
+  PACKAGES_TO_INSTALL+=("{{ . }}")
+fi
+{{- end }}
+
+if [ ${#PACKAGES_TO_INSTALL[@]} -eq 0 ]; then
+  echo "📝 All rpm-ostree packages already installed"
+  exit 0
+fi
+
 sudo rpm-ostree refresh-md
-
-{{- $hostConfig := get .hostData .hostname -}}
-{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "rpmOstree")) -}}
-{{- range (index $hostConfig.packages "rpmOstree") }}
-sudo rpm-ostree install "{{ . }}" || true
-{{- end }}
-{{- end }}
+sudo rpm-ostree install "${PACKAGES_TO_INSTALL[@]}"

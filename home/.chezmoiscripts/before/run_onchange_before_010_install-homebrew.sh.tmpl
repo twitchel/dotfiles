@@ -2,7 +2,7 @@
 
 echo "⭐️ Running before 010 install-homebrew"
 
-if [ $OS != "darwin" ] && [ $OS != "linux" ]; then
+if [ "$OS" != "darwin" ] && [ "$OS" != "linux" ]; then
     echo "Homebrew installation is only supported on macOS and Linux, skipping installation"
     exit 0
 fi

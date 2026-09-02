@@ -4,6 +4,6 @@
 
 {{ template "brew/base.brew.tmpl" . }}
 {{ template "brew/cask.brew.tmpl" . }}
-{{ if eq .chezmoi.config.env.OS "linux" }}
+{{ if and (eq .machineType "workstation") (lookPath "flatpak") }}
 {{ template "brew/flatpak.brew.tmpl" . }}
 {{- end }}

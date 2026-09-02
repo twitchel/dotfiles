@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-A [chezmoi](https://www.chezmoi.io/) dotfiles repo for managing shell configuration, packages, and tooling across macOS (Tahoe) and Fedora (Workstation and Silverblue). The chezmoi source root is the `home/` directory (set via `.chezmoiroot`).
+A [chezmoi](https://www.chezmoi.io/) dotfiles repo for managing shell configuration, packages, and tooling across macOS (Tahoe), Fedora Silverblue/Workstation/Bazzite, Fedora Server, and Ubuntu. The chezmoi source root is the `home/` directory (set via `.chezmoiroot`).
 
 ## Key commands
 
@@ -34,17 +34,19 @@ chezmoi apply -S . --no-tty
 ### Template data flow
 
 Machine-specific config comes from two sources:
-- `home/.chezmoi.yaml.tmpl` — detects OS (`osid`), prompts for `customHostname`/`email`, sets `BREWPATH`/`BREWBIN`, normalises hostname to lowercase
+- `home/.chezmoi.yaml.tmpl` — detects OS (`osid`), detects/prompts for `machineType` (`workstation`/`server`), prompts for `customHostname`/`email`, sets `BREWPATH`/`BREWBIN`, normalises hostname to lowercase
 - `home/.chezmoidata.yaml` — package/host data; two-level structure: `hostData.default` (all machines) merged with `hostData.<hostname>` (machine-specific overrides)
 
-Templates reference this data as `.hostData.default`, `.hostData.<hostname>`, `.hostname`, `.email`, etc.
+Templates reference this data as `.hostData.default`, `.hostData.<hostname>`, `.hostname`, `.email`, `.machineType`, etc.
+
+`machineType` is auto-detected from `variantID` in `/etc/os-release`: `silverblue`/`workstation`/`kinoite`/`onyx`/`bazzite` → `workstation`; `server` → `server`; CI → `server`; macOS → always `workstation`. Unknown Linux variants prompt the user.
 
 ### Package management
 
 Packages are managed through Homebrew on both macOS and Linux (via Linuxbrew). The Brewfile at `home/dot_config/brew/Brewfile.tmpl` is generated from three partial templates:
 - `home/.chezmoitemplates/brew/base.brew.tmpl` — CLI tools (all machines)
 - `home/.chezmoitemplates/brew/cask.brew.tmpl` — GUI apps installed via `brew cask` (no longer macOS-only; Linux hosts like `coffee-sponge` use this too, e.g. for `1password-gui-linux`)
-- `home/.chezmoitemplates/brew/flatpak.brew.tmpl` — Linux GUI apps via Flatpak (skipped entirely when `.chezmoi.config.env.OS` isn't `linux`)
+- `home/.chezmoitemplates/brew/flatpak.brew.tmpl` — GUI apps via Flatpak (only included when `machineType == "workstation"` AND `flatpak` binary is present)
 
 To add a package: add it under the appropriate key in `home/.chezmoidata.yaml` (`hostData.default.packages.brew`/`brewCask`/`flatpak`, or a host-specific block under `hostData.<hostname>`). `packages.json` is a reference catalog only and is not used by chezmoi scripts.
 

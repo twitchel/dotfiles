@@ -3,6 +3,11 @@
 {{-   $osid = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
 {{- end -}}
 
+{{- $variantID := "" -}}
+{{- if hasKey .chezmoi.osRelease "variantID" -}}
+{{-   $variantID = .chezmoi.osRelease.variantID -}}
+{{- end -}}
+
 {{- $customHostname := "" -}}
 {{- if eq (env "CI") "true" -}}
 {{- $customHostname = "ci" -}}
@@ -31,15 +36,31 @@
 {{- $email = promptStringOnce . "email" "What is your email address?" -}}
 {{- end -}}
 
+{{- /* machineType: workstation (GUI/desktop/laptop) or server (headless/VM/toolbox/CI) */}}
+{{- $machineType := "workstation" -}}
+{{- if eq .chezmoi.os "linux" -}}
+{{-   if eq (env "CI") "true" -}}
+{{-     $machineType = "server" -}}
+{{-   else if or (eq $variantID "silverblue") (eq $variantID "workstation") (eq $variantID "kinoite") (eq $variantID "onyx") (eq $variantID "bazzite") -}}
+{{-     $machineType = "workstation" -}}
+{{-   else if eq $variantID "server" -}}
+{{-     $machineType = "server" -}}
+{{-   else -}}
+{{-     $machineType = promptStringOnce . "machineType" "Machine type? (workstation/server)" -}}
+{{-   end -}}
+{{- end -}}
+
 data:
     name: "Daniel K. Jones"
     email: {{ $email }}
     hostname: {{ $hostname | lower }}
     osid: {{ $osid }}
+    machineType: {{ $machineType }}
 env:
     OS: "{{ .chezmoi.os }}"
     OS_DISTRO: "{{ $osid }}"
-    OS_VARIANT: "{{ if hasKey .chezmoi.osRelease "variantID" }}{{ .chezmoi.osRelease.variantID }}{{ end }}"
+    OS_VARIANT: "{{ $variantID }}"
     HOSTNAME: "{{ $hostname | lower }}"
+    MACHINE_TYPE: "{{ $machineType }}"
     BREWPATH: "{{ $brewpath }}"
     BREWBIN: "{{ $brewpath }}/brew"
