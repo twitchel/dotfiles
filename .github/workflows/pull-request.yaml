@@ -29,6 +29,10 @@ jobs:
         run: chezmoi data -S .
       - name: Run the chezmoi apply
         run: chezmoi apply -S .
+      - name: Run BATS test suite
+        run: |
+          export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+          bash tests/run.sh
   install-and-test-macos:
     runs-on: macos-latest
     steps:
@@ -45,3 +49,7 @@ jobs:
         run: chezmoi data -S .
       - name: Run the chezmoi apply
         run: chezmoi apply -S .
+      - name: Run BATS test suite
+        run: |
+          export PATH="/opt/homebrew/bin:$PATH"
+          bash tests/run.sh

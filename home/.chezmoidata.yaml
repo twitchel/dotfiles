@@ -66,6 +66,7 @@ hostData:
   ci:
     packages:
       brew:
+        - bats-core
         - hello
   coffee-sponge:
     packages:
