@@ -61,6 +61,13 @@ load '../helpers/common'
   [ "$output" = "[]" ]
 }
 
+@test "unknown hostname returns empty host-specific package lists (nil guard)" {
+  # Verifies the nil guard: get .hostData .hostname returns nil for unknown hosts;
+  # templates must not error when hostname is not in hostData.
+  run yq eval '.hostData | has("unknown-host-xyz")' "${CHEZMOIDATA}"
+  [ "$output" = "false" ]
+}
+
 @test "default brewTaps are all strings" {
   run yq eval '.hostData.default.packages.brewTaps[] | type' "${CHEZMOIDATA}"
   [ "$status" -eq 0 ]

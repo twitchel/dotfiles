@@ -44,7 +44,7 @@ fi
 {{- if hasKey $commonConfig.packages "gnomeExtensions" }}
 {{-   $extensions = concat $extensions $commonConfig.packages.gnomeExtensions }}
 {{- end }}
-{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "gnomeExtensions")) }}
+{{- if and $hostConfig (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "gnomeExtensions") }}
 {{-   $extensions = concat $extensions $hostConfig.packages.gnomeExtensions }}
 {{- end }}
 
