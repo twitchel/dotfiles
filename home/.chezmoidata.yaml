@@ -83,7 +83,6 @@ hostData:
         - Vitals@CoreCoding.com
       brew:
       brewCask:
-        - 1password-cli
         - 1password-gui-linux
         - claude-code
         - jetbrains-toolbox-linux
