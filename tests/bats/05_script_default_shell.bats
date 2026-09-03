@@ -120,8 +120,8 @@ SCRIPT
     echo 'fi'
   } > "$test_script"
 
-  # Exclude /usr/bin from PATH so the real chsh at /usr/bin/chsh is hidden
-  run env "PATH=${BATS_TEST_TMPDIR}/bin:/bin" /bin/bash "$test_script"
+  # Mock dir only — on Fedora /bin→/usr/bin so /bin/chsh exists; bash built-ins handle conditionals
+  run env "PATH=${BATS_TEST_TMPDIR}/bin" /bin/bash "$test_script"
   [ "$status" -eq 0 ]
   [[ "$output" == *"usermod_invoked"* ]]
   [[ "$output" != *"chsh_invoked"* ]]

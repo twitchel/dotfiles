@@ -20,7 +20,7 @@ mock() {
   local log="${BATS_TEST_TMPDIR}/mock_${name}.log"
   mkdir -p "${BATS_TEST_TMPDIR}/bin"
   cat > "${BATS_TEST_TMPDIR}/bin/${name}" <<SCRIPT
-#!/usr/bin/env bash
+#!/bin/bash
 echo "\$*" >> "${log}"
 ${stdout:+printf '%s\n' "${stdout}"}
 exit ${exit_code}
