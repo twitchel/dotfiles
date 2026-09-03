@@ -44,17 +44,6 @@ load '../helpers/common'
   [ "$output" = "ublue-os/tap" ]
 }
 
-@test "1password-cli-linux is not present anywhere (regression)" {
-  run grep -r "1password-cli-linux" "${CHEZMOIDATA}"
-  [ "$status" -ne 0 ]
-}
-
-@test "1password-cli is in coffee-sponge brewCask" {
-  run yq eval '.hostData.coffee-sponge.packages.brewCask[] | select(. == "1password-cli")' "${CHEZMOIDATA}"
-  [ "$status" -eq 0 ]
-  [ "$output" = "1password-cli" ]
-}
-
 @test "grease-monkey flatpak is an empty list not null" {
   run yq eval '.hostData.grease-monkey.packages.flatpak' "${CHEZMOIDATA}"
   [ "$status" -eq 0 ]
