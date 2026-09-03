@@ -46,6 +46,10 @@ hostData:
         - yazi
         - yq
         - zoxide
+      gnomeExtensions:
+        - appindicatorsupport@rgcjonas.gmail.com
+        - blur-my-shell@aunetx
+        - just-perfection-desktop@just-perfection
       flatpak:
         - com.brave.Browser
         - com.discordapp.Discord
@@ -70,6 +74,7 @@ hostData:
         - hello
   coffee-sponge:
     packages:
+      gnomeExtensions: []
       brew:
       brewCask:
         - 1password-cli
@@ -84,6 +89,7 @@ hostData:
       flatpak: []
   grease-monkey:
     packages:
+      gnomeExtensions: []
       brew:
         - tailscale
       flatpak: []
