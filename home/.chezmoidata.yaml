@@ -49,6 +49,8 @@ hostData:
       gnomeExtensions:
         - appindicatorsupport@rgcjonas.gmail.com
         - blur-my-shell@aunetx
+        - caffeine@patapon.info
+        - emoji-copy@felipeftn
         - just-perfection-desktop@just-perfection
       flatpak:
         - com.brave.Browser
@@ -74,7 +76,11 @@ hostData:
         - hello
   coffee-sponge:
     packages:
-      gnomeExtensions: []
+      gnomeExtensions:
+        - dash-to-dock@micxgx.gmail.com
+        - logomenu@aryan_k
+        - rectangle@acristoffers.me
+        - Vitals@CoreCoding.com
       brew:
       brewCask:
         - 1password-cli
