@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+echo "⭐️ Running after 020 gnome-extensions"
+
+if [ "$MACHINE_TYPE" != "workstation" ]; then
+  echo "📝 Not a workstation, skipping GNOME extensions"
+  exit 0
+fi
+
+if ! command -v gnome-extensions > /dev/null 2>&1; then
+  echo "📝 gnome-extensions not found (not a GNOME system?), skipping"
+  exit 0
+fi
+
+# gext requires a live GNOME Shell session to install extensions
+if [ -z "$DISPLAY" ] && [ -z "$WAYLAND_DISPLAY" ]; then
+  echo "📝 No display session found — run chezmoi apply inside a GNOME session to install extensions"
+  exit 0
+fi
+
+# Ensure gext (gnome-extensions-cli) is available
+if ! command -v gext > /dev/null 2>&1; then
+  echo "Installing gnome-extensions-cli (gext)..."
+  if command -v pipx > /dev/null 2>&1; then
+    pipx install gnome-extensions-cli
+  elif command -v pip3 > /dev/null 2>&1; then
+    pip3 install --user gnome-extensions-cli
+  else
+    echo "⚠️  Neither pipx nor pip3 found — cannot install gext. Skipping GNOME extensions."
+    exit 0
+  fi
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+
+if ! command -v gext > /dev/null 2>&1; then
+  echo "⚠️  gext still not found after install attempt. Skipping."
+  exit 0
+fi
+
+{{- $commonConfig := .hostData.default }}
+{{- $hostConfig := get .hostData .hostname }}
+
+{{- $extensions := list }}
+{{- if hasKey $commonConfig.packages "gnomeExtensions" }}
+{{-   $extensions = concat $extensions $commonConfig.packages.gnomeExtensions }}
+{{- end }}
+{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "gnomeExtensions")) }}
+{{-   $extensions = concat $extensions $hostConfig.packages.gnomeExtensions }}
+{{- end }}
+
+{{- if not $extensions }}
+echo "📝 No GNOME extensions configured for {{ .hostname }}"
+exit 0
+{{- end }}
+
+INSTALLED="$(gnome-extensions list)"
+
+{{- range $extensions }}
+if echo "$INSTALLED" | grep -qF "{{ . }}"; then
+  echo "✅ Already installed: {{ . }}"
+else
+  echo "Installing GNOME extension: {{ . }}"
+  gext install "{{ . }}" || echo "⚠️  Failed to install {{ . }}"
+fi
+{{- end }}
