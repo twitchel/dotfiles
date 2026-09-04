@@ -33,18 +33,6 @@ if command -v atuin > /dev/null; then
   eval "$(atuin init zsh)"
 fi
 
-## ---- NVM (lazy load) ---- ##
-export NVM_DIR="$HOME/.nvm"
-_nvm_load() {
-  unset -f nvm node npm npx
-  [ -s "$(brew --prefix nvm)/nvm.sh" ] && \. "$(brew --prefix nvm)/nvm.sh"
-  [ -s "$(brew --prefix nvm)/etc/bash_completion.d/nvm" ] && \. "$(brew --prefix nvm)/etc/bash_completion.d/nvm"
-}
-nvm()  { _nvm_load; nvm  "$@"; }
-node() { _nvm_load; node "$@"; }
-npm()  { _nvm_load; npm  "$@"; }
-npx()  { _nvm_load; npx  "$@"; }
-
 ## ---- Zoxide (better cd) ---- ##
 if command -v zoxide > /dev/null; then
   eval "$(zoxide init zsh)"

@@ -34,7 +34,6 @@ hostData:
         - neovim
         - nmap
         - nvim
-        - nvm
         - rclone
         - ripgrep
         - screen
