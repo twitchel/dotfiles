@@ -8,7 +8,7 @@ brew "{{ . }}"
 
 ## Machine Specific packages: {{- .hostname }}
 {{- $hostConfig := get .hostData .hostname }}
-{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brew")) }}
+{{- if and $hostConfig (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brew") }}
 {{- range $hostConfig.packages.brew }}
 brew "{{ . }}"
 {{- end }}

@@ -24,14 +24,14 @@ $BREWBIN trust "{{ . }}"
 
 # Tap host-specific formula taps
 {{- $hostConfig := get .hostData .hostname }}
-{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewTaps")) }}
+{{- if and $hostConfig (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewTaps") }}
 {{- range $hostConfig.packages.brewTaps }}
 $BREWBIN tap "{{ . }}"
 {{- end }}
 {{- end }}
 
 # Tap and trust host-specific cask taps
-{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewCaskTaps")) }}
+{{- if and $hostConfig (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewCaskTaps") }}
 {{- range $hostConfig.packages.brewCaskTaps }}
 $BREWBIN tap "{{ . }}"
 $BREWBIN trust "{{ . }}"

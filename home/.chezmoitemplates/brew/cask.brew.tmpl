@@ -8,7 +8,7 @@ cask "{{ . }}"
 
 ## Machine Specific casks: {{- .hostname }}
 {{- $hostConfig := get .hostData .hostname }}
-{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewCask")) }}
+{{- if and $hostConfig (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "brewCask") }}
 {{- range $hostConfig.packages.brewCask }}
 cask "{{ . }}"
 {{- end }}

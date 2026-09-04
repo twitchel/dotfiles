@@ -8,7 +8,7 @@ flatpak "{{ . }}"
 
 ## Machine Specific flatpaks: {{- .hostname }}
 {{- $hostConfig := get .hostData .hostname }}
-{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "flatpak")) }}
+{{- if and $hostConfig (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "flatpak") }}
 {{- range $hostConfig.packages.flatpak }}
 flatpak "{{ . }}"
 {{- end }}

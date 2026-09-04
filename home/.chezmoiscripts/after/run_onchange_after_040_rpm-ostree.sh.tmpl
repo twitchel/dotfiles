@@ -9,7 +9,7 @@ fi
 
 {{- $hostConfig := get .hostData .hostname }}
 {{- $rpmPackages := list }}
-{{- if (and (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "rpmOstree")) }}
+{{- if and $hostConfig (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "rpmOstree") }}
 {{-   $rpmPackages = index $hostConfig.packages "rpmOstree" }}
 {{- end }}
 
