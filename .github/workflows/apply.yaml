@@ -1,9 +1,13 @@
 on:
-  pull_request:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "0 3 * * 1"
   workflow_dispatch:
 
 jobs:
-  install-and-test-linux-server:
+  apply-linux:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -27,11 +31,9 @@ jobs:
         run: chezmoi init -S .
       - name: Show the chezmoi data
         run: chezmoi data -S .
-      - name: Run BATS test suite
-        run: |
-          export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-          bash tests/run.sh
-  install-and-test-macos:
+      - name: Run the chezmoi apply
+        run: chezmoi apply -S .
+  apply-macos:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v5
@@ -45,7 +47,5 @@ jobs:
         run: chezmoi init -S .
       - name: Show the chezmoi data
         run: chezmoi data -S .
-      - name: Run BATS test suite
-        run: |
-          export PATH="/opt/homebrew/bin:$PATH"
-          bash tests/run.sh
+      - name: Run the chezmoi apply
+        run: chezmoi apply -S .
