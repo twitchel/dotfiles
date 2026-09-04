@@ -33,6 +33,7 @@ hostData:
         - make
         - neovim
         - nmap
+        - node
         - nvim
         - rclone
         - ripgrep
