@@ -27,6 +27,10 @@ jobs:
         run: chezmoi init -S .
       - name: Show the chezmoi data
         run: chezmoi data -S .
+      # apply installs Homebrew and brew-bundles the Brewfile, which is what
+      # provides bats-core and yq for the test step below.
+      - name: Run the chezmoi apply
+        run: chezmoi apply -S .
       - name: Run BATS test suite
         run: |
           export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
@@ -36,15 +40,15 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Install chezmoi
-        run: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /Users/runner/.local/bin
-      - name: echo $PATH
-        run: echo $PATH
-      - name: which chezmoi
-        run: which chezmoi
+        run: |
+          sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /Users/runner/.local/bin
+          echo "/Users/runner/.local/bin" >> "$GITHUB_PATH"
       - name: Init the repo based off the current branch
         run: chezmoi init -S .
       - name: Show the chezmoi data
         run: chezmoi data -S .
+      - name: Run the chezmoi apply
+        run: chezmoi apply -S .
       - name: Run BATS test suite
         run: |
           export PATH="/opt/homebrew/bin:$PATH"
