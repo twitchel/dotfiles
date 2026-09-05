@@ -2,38 +2,123 @@
 echo "⭐️ Running after 900 set-default-shell"
 
 DEFAULT_SHELL="{{ .hostData.default.defaultShell }}"
-SHELL_PATH="$($BREWBIN --prefix)/bin/${DEFAULT_SHELL}"
+SHELLS_FILE="${SHELLS_FILE:-/etc/shells}"
+# System directories searched for the login shell, in order. Overridable so
+# the test suite can point it at a fixture directory.
+SHELL_SEARCH_PATH="${SHELL_SEARCH_PATH:-/usr/bin:/bin:/usr/local/bin}"
 
-if [ ! -x "$SHELL_PATH" ]; then
-  echo "Shell not found at $SHELL_PATH — skipping (is brew installed?)"
-  exit 0
+# Run privileged commands directly when already root (containers, CI, initial
+# provisioning); minimal images such as ubuntu:26.04 ship no sudo at all.
+SUDO=""
+if [ "$(id -u)" -ne 0 ]; then
+  SUDO="sudo"
 fi
 
-# Check if default shell is already correct — avoids unnecessary sudo prompts
-CURRENT_SHELL=""
-if command -v getent > /dev/null 2>&1; then
-  CURRENT_SHELL="$(getent passwd "$(whoami)" | cut -d: -f7)"
-elif command -v dscl > /dev/null 2>&1; then
-  CURRENT_SHELL="$(dscl . -read ~/ UserShell 2>/dev/null | awk '{print $2}')"
-fi
+# A login shell living under a home directory is a lockout risk. On SELinux
+# distros (Fedora Server) files under /home are labelled user_home_t, which is
+# not a valid entrypoint for sshd's domain transition, so sshd cannot exec the
+# shell and every login dies with "<path>: Permission denied". A noexec /home
+# mount fails the same way. Homebrew's Linux prefix is /home/linuxbrew/.linuxbrew
+# and zsh arrives there transitively (antidote depends on it), so brew's zsh is
+# never a safe login shell on Linux. macOS is unaffected: /opt/homebrew is not a
+# home directory, so brew's zsh stays the preferred choice there.
+is_home_path() {
+  local path="$1"
+  case "$path" in
+    /home/* | /var/home/* | /Users/*) return 0 ;;
+  esac
+  if [ -n "${HOME:-}" ]; then
+    case "$path" in
+      "${HOME}"/*) return 0 ;;
+    esac
+  fi
+  return 1
+}
 
-if [ "$CURRENT_SHELL" = "$SHELL_PATH" ]; then
-  echo "Default shell already $SHELL_PATH, skipping"
-  exit 0
-fi
+# Echo the first candidate that is an executable shell outside any home
+# directory. Symlinks are resolved first so a system-looking path that points
+# into a home directory is still rejected.
+resolve_login_shell() {
+  local candidate resolved
+  for candidate in "$@"; do
+    [ -n "$candidate" ] || continue
+    [ -x "$candidate" ] || continue
 
-# Add brew-managed shell to /etc/shells if not already listed
-if ! grep -qF "$SHELL_PATH" /etc/shells 2>/dev/null; then
-  echo "Adding $SHELL_PATH to /etc/shells"
-  echo "$SHELL_PATH" | sudo tee -a /etc/shells > /dev/null
-fi
+    resolved="$(readlink -f "$candidate" 2> /dev/null)" || resolved=""
+    [ -n "$resolved" ] || resolved="$candidate"
 
-# Set default shell — chsh works on macOS and standard Linux
-# usermod is the fallback for atomic distros where chsh may be unavailable
-if command -v chsh > /dev/null 2>&1; then
-  sudo chsh -s "$SHELL_PATH" "$(whoami)" || echo "chsh failed — set shell manually: chsh -s $SHELL_PATH"
-elif command -v usermod > /dev/null 2>&1; then
-  sudo usermod -s "$SHELL_PATH" "$(whoami)" || echo "usermod failed — set shell manually"
-else
-  echo "Cannot set default shell — neither chsh nor usermod found. Run manually: chsh -s $SHELL_PATH"
+    if is_home_path "$candidate" || is_home_path "$resolved"; then
+      echo "Rejecting $candidate — a shell under a home directory cannot be exec'd by sshd" >&2
+      continue
+    fi
+
+    # Catches a noexec mount, which -x cannot see.
+    if ! "$resolved" -c 'exit 0' > /dev/null 2>&1; then
+      echo "Rejecting $candidate — present but not executable as a shell" >&2
+      continue
+    fi
+
+    echo "$resolved"
+    return 0
+  done
+  return 1
+}
+
+main() {
+  local brew_prefix="" brew_candidate="" shell_path current_shell=""
+
+  if [ -n "${BREWBIN:-}" ] && [ -x "${BREWBIN}" ]; then
+    brew_prefix="$("$BREWBIN" --prefix 2> /dev/null)"
+    [ -n "$brew_prefix" ] && brew_candidate="${brew_prefix}/bin/${DEFAULT_SHELL}"
+  fi
+
+  local candidates=() dir saved_ifs="$IFS"
+  [ -n "$brew_candidate" ] && candidates+=("$brew_candidate")
+  IFS=:
+  # shellcheck disable=SC2206 # deliberate word-splitting on the : separator
+  local search_dirs=($SHELL_SEARCH_PATH)
+  IFS="$saved_ifs"
+  for dir in "${search_dirs[@]}"; do
+    candidates+=("${dir}/${DEFAULT_SHELL}")
+  done
+
+  if ! shell_path="$(resolve_login_shell "${candidates[@]}")"; then
+    echo "No usable system ${DEFAULT_SHELL} found — leaving the login shell unchanged."
+    echo "Install one from the distro (e.g. sudo dnf install ${DEFAULT_SHELL}) and re-apply."
+    return 0
+  fi
+
+  echo "Selected login shell: $shell_path"
+
+  # Check the current shell first — avoids an unnecessary sudo prompt
+  if command -v getent > /dev/null 2>&1; then
+    current_shell="$(getent passwd "$(whoami)" | cut -d: -f7)"
+  elif command -v dscl > /dev/null 2>&1; then
+    current_shell="$(dscl . -read ~/ UserShell 2> /dev/null | awk '{print $2}')"
+  fi
+
+  if [ "$current_shell" = "$shell_path" ]; then
+    echo "Default shell already $shell_path, skipping"
+    return 0
+  fi
+
+  if ! grep -qF "$shell_path" "$SHELLS_FILE" 2> /dev/null; then
+    echo "Adding $shell_path to $SHELLS_FILE"
+    echo "$shell_path" | $SUDO tee -a "$SHELLS_FILE" > /dev/null
+  fi
+
+  # chsh works on macOS and standard Linux; usermod is the fallback for atomic
+  # distros where chsh cannot write to the passwd database.
+  if command -v chsh > /dev/null 2>&1; then
+    $SUDO chsh -s "$shell_path" "$(whoami)" || echo "chsh failed — set shell manually: chsh -s $shell_path"
+  elif command -v usermod > /dev/null 2>&1; then
+    $SUDO usermod -s "$shell_path" "$(whoami)" || echo "usermod failed — set shell manually"
+  else
+    echo "Cannot set default shell — neither chsh nor usermod found. Run manually: chsh -s $shell_path"
+  fi
+}
+
+# Sourced by the BATS suite with this set to 1 to test the functions directly.
+if [ "${CHEZMOI_SET_DEFAULT_SHELL_LIB:-}" != "1" ]; then
+  main
 fi
