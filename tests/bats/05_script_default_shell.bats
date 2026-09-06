@@ -1,128 +1,278 @@
 #!/usr/bin/env bats
 # Tests for run_onchange_after_900_set-default-shell.sh.tmpl
-# DEFAULT_SHELL is template-rendered ({{ .hostData.default.defaultShell }} → "zsh").
-# Tests exercise the bash logic inline with DEFAULT_SHELL="zsh".
+#
+# These source the REAL script (rendered from the template, with
+# CHEZMOI_SET_DEFAULT_SHELL_LIB=1 so main() does not auto-run) rather than
+# re-implementing its logic inline, so the assertions track the shipped code.
+#
+# The behaviour under test exists because of a real lockout: the script used to
+# chsh to $(brew --prefix)/bin/zsh, which on Linux is
+# /home/linuxbrew/.linuxbrew/bin/zsh. sshd cannot exec a shell under /home on an
+# SELinux distro, so every login failed with "Permission denied".
 
 load '../helpers/common'
 
+TMPL="run_onchange_after_900_set-default-shell.sh.tmpl"
+
 setup() {
   setup_mocks
+  FIXTURE_BIN="${BATS_TEST_TMPDIR}/fixture-bin"
+  FAKE_HOME="${BATS_TEST_TMPDIR}/fakehome"
+  mkdir -p "$FIXTURE_BIN" "$FAKE_HOME"
+
+  local script
+  script="$(render_script_tmpl "${SCRIPTS_AFTER}/${TMPL}")"
+  export CHEZMOI_SET_DEFAULT_SHELL_LIB=1
+  # shellcheck source=/dev/null
+  source "$script"
 }
 
-@test "skips when shell binary does not exist at SHELL_PATH" {
-  run bash <<'SCRIPT'
-DEFAULT_SHELL="zsh"
-SHELL_PATH="/nonexistent/bin/zsh"
-if [ ! -x "$SHELL_PATH" ]; then
-  echo "Shell not found at $SHELL_PATH — skipping"
-  exit 0
-fi
-echo "shell found"
-SCRIPT
+# sudo passthrough so `sudo chsh` / `sudo tee` reach the mocks and real binaries
+mock_sudo_passthrough() {
+  cat > "${BATS_TEST_TMPDIR}/bin/sudo" <<'SUDO'
+#!/bin/bash
+exec "$@"
+SUDO
+  chmod +x "${BATS_TEST_TMPDIR}/bin/sudo"
+}
+
+## ---- is_home_path: the guard that prevents the lockout ----
+
+@test "is_home_path rejects the Homebrew Linux prefix" {
+  run is_home_path "/home/linuxbrew/.linuxbrew/bin/zsh"
+  [ "$status" -eq 0 ]
+}
+
+@test "is_home_path rejects other home roots (/var/home, /Users)" {
+  run is_home_path "/var/home/danieljones/.linuxbrew/bin/zsh"
+  [ "$status" -eq 0 ]
+  run is_home_path "/Users/danieljones/bin/zsh"
+  [ "$status" -eq 0 ]
+}
+
+@test "is_home_path rejects a path under \$HOME" {
+  HOME="$FAKE_HOME" run is_home_path "${FAKE_HOME}/bin/zsh"
+  [ "$status" -eq 0 ]
+}
+
+@test "is_home_path accepts system and macOS Homebrew locations" {
+  run is_home_path "/usr/bin/zsh"
+  [ "$status" -ne 0 ]
+  run is_home_path "/bin/zsh"
+  [ "$status" -ne 0 ]
+  run is_home_path "/opt/homebrew/bin/zsh"
+  [ "$status" -ne 0 ]
+}
+
+## ---- resolve_login_shell ----
+
+@test "resolve_login_shell skips a home-dir shell for a system one" {
+  make_fake_shell "${FAKE_HOME}/.linuxbrew/bin/zsh"
+  make_fake_shell "${FIXTURE_BIN}/zsh"
+
+  HOME="$FAKE_HOME" run resolve_login_shell "${FAKE_HOME}/.linuxbrew/bin/zsh" "${FIXTURE_BIN}/zsh"
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"Rejecting ${FAKE_HOME}/.linuxbrew/bin/zsh"* ]]
+  [[ "$output" == *"${FIXTURE_BIN}/zsh"* ]]
+}
+
+@test "resolve_login_shell rejects a system path symlinked into a home dir" {
+  make_fake_shell "${FAKE_HOME}/.linuxbrew/bin/zsh"
+  ln -s "${FAKE_HOME}/.linuxbrew/bin/zsh" "${FIXTURE_BIN}/zsh"
+
+  HOME="$FAKE_HOME" run resolve_login_shell "${FIXTURE_BIN}/zsh"
+  [ "$status" -ne 0 ]
+  [[ "$output" == *"Rejecting ${FIXTURE_BIN}/zsh"* ]]
+}
+
+@test "resolve_login_shell fails when every candidate is under a home dir" {
+  make_fake_shell "${FAKE_HOME}/.linuxbrew/bin/zsh"
+
+  HOME="$FAKE_HOME" run resolve_login_shell "${FAKE_HOME}/.linuxbrew/bin/zsh"
+  [ "$status" -ne 0 ]
+}
+
+@test "resolve_login_shell skips candidates that do not exist" {
+  make_fake_shell "${FIXTURE_BIN}/zsh"
+
+  run resolve_login_shell "/nonexistent/bin/zsh" "${FIXTURE_BIN}/zsh"
+  [ "$status" -eq 0 ]
+  [ "$output" = "${FIXTURE_BIN}/zsh" ]
+}
+
+@test "resolve_login_shell rejects an executable that is not a working shell" {
+  printf '#!/bin/sh\nexit 1\n' > "${FIXTURE_BIN}/zsh"
+  chmod +x "${FIXTURE_BIN}/zsh"
+
+  run resolve_login_shell "${FIXTURE_BIN}/zsh"
+  [ "$status" -ne 0 ]
+  [[ "$output" == *"not executable as a shell"* ]]
+}
+
+## ---- main(): end-to-end selection ----
+
+@test "main never chsh's to a Homebrew shell under a home directory" {
+  # Reproduces the lockout: brew --prefix points inside HOME, system zsh exists.
+  make_fake_shell "${FAKE_HOME}/.linuxbrew/bin/zsh"
+  make_fake_shell "${FIXTURE_BIN}/zsh"
+  cat > "${BATS_TEST_TMPDIR}/bin/brew" <<BREW
+#!/bin/sh
+echo "${FAKE_HOME}/.linuxbrew"
+BREW
+  chmod +x "${BATS_TEST_TMPDIR}/bin/brew"
+  mock getent 0 "testuser:x:1000:1000::/home/testuser:/bin/bash"
+  mock chsh 0 "chsh_invoked"
+  mock_sudo_passthrough
+
+  HOME="$FAKE_HOME" \
+    BREWBIN="${BATS_TEST_TMPDIR}/bin/brew" \
+    SHELL_SEARCH_PATH="$FIXTURE_BIN" \
+    SHELLS_FILE="${BATS_TEST_TMPDIR}/shells" \
+    run main
 
   [ "$status" -eq 0 ]
-  [[ "$output" == *"Shell not found"* ]]
+  [[ "$output" == *"Selected login shell: ${FIXTURE_BIN}/zsh"* ]]
+  assert_mock_called_with chsh "${FIXTURE_BIN}/zsh"
+  run grep -F "${FAKE_HOME}" "${BATS_TEST_TMPDIR}/mock_chsh.log"
+  [ "$status" -ne 0 ]
 }
 
-@test "skips chsh when shell is already the default (getent path)" {
-  mock getent 0 "testuser:x:1000:1000::/home/testuser:/usr/local/bin/zsh"
+@test "main leaves the shell unchanged when only a home-dir shell exists" {
+  make_fake_shell "${FAKE_HOME}/.linuxbrew/bin/zsh"
+  cat > "${BATS_TEST_TMPDIR}/bin/brew" <<BREW
+#!/bin/sh
+echo "${FAKE_HOME}/.linuxbrew"
+BREW
+  chmod +x "${BATS_TEST_TMPDIR}/bin/brew"
+  mock getent 0 "testuser:x:1000:1000::/home/testuser:/bin/bash"
+  mock chsh 0 "chsh_invoked"
+  mock usermod 0 "usermod_invoked"
+  mock_sudo_passthrough
+
+  HOME="$FAKE_HOME" \
+    BREWBIN="${BATS_TEST_TMPDIR}/bin/brew" \
+    SHELL_SEARCH_PATH="${BATS_TEST_TMPDIR}/empty" \
+    SHELLS_FILE="${BATS_TEST_TMPDIR}/shells" \
+    run main
+
+  [ "$status" -eq 0 ]
+  [[ "$output" == *"No usable system zsh found"* ]]
+  assert_mock_not_called chsh
+  assert_mock_not_called usermod
+}
+
+@test "main never writes a home-dir path into /etc/shells" {
+  make_fake_shell "${FAKE_HOME}/.linuxbrew/bin/zsh"
+  make_fake_shell "${FIXTURE_BIN}/zsh"
+  cat > "${BATS_TEST_TMPDIR}/bin/brew" <<BREW
+#!/bin/sh
+echo "${FAKE_HOME}/.linuxbrew"
+BREW
+  chmod +x "${BATS_TEST_TMPDIR}/bin/brew"
+  local shells="${BATS_TEST_TMPDIR}/shells"
+  echo "/bin/bash" > "$shells"
+  mock getent 0 "testuser:x:1000:1000::/home/testuser:/bin/bash"
   mock chsh 0
+  mock_sudo_passthrough
 
-  run bash <<SCRIPT
-DEFAULT_SHELL="zsh"
-SHELL_PATH="/usr/local/bin/zsh"
+  HOME="$FAKE_HOME" BREWBIN="${BATS_TEST_TMPDIR}/bin/brew" \
+    SHELL_SEARCH_PATH="$FIXTURE_BIN" SHELLS_FILE="$shells" main
 
-CURRENT_SHELL="\$(getent passwd "\$(whoami)" | cut -d: -f7)"
-if [ "\$CURRENT_SHELL" = "\$SHELL_PATH" ]; then
-  echo "Default shell already \$SHELL_PATH, skipping"
-  exit 0
-fi
-chsh -s "\$SHELL_PATH"
-SCRIPT
+  grep -qF "${FIXTURE_BIN}/zsh" "$shells"
+  run grep -F "$FAKE_HOME" "$shells"
+  [ "$status" -ne 0 ]
+}
+
+@test "main does not duplicate an entry already in /etc/shells" {
+  make_fake_shell "${FIXTURE_BIN}/zsh"
+  local shells="${BATS_TEST_TMPDIR}/shells"
+  echo "${FIXTURE_BIN}/zsh" > "$shells"
+  mock getent 0 "testuser:x:1000:1000::/home/testuser:/bin/bash"
+  mock chsh 0
+  mock_sudo_passthrough
+
+  SHELL_SEARCH_PATH="$FIXTURE_BIN" SHELLS_FILE="$shells" main
+
+  [ "$(grep -cF "${FIXTURE_BIN}/zsh" "$shells")" -eq 1 ]
+}
+
+@test "main skips chsh when the shell is already the default" {
+  make_fake_shell "${FIXTURE_BIN}/zsh"
+  mock getent 0 "testuser:x:1000:1000::/home/testuser:${FIXTURE_BIN}/zsh"
+  mock chsh 0 "chsh_invoked"
+  mock_sudo_passthrough
+
+  SHELL_SEARCH_PATH="$FIXTURE_BIN" SHELLS_FILE="${BATS_TEST_TMPDIR}/shells" run main
 
   [ "$status" -eq 0 ]
   [[ "$output" == *"already"* ]]
   assert_mock_not_called chsh
 }
 
-@test "runs chsh when shell is not yet the default" {
-  # Mock outputs a marker so we can check via $output (more reliable than log files)
+@test "main falls back to usermod when chsh is unavailable" {
+  make_fake_shell "${FIXTURE_BIN}/zsh"
+  mock getent 0 "testuser:x:1000:1000::/home/testuser:/bin/bash"
   mock chsh 0 "chsh_invoked"
-  local fake_shell="${BATS_TEST_TMPDIR}/bin/zsh"
-  touch "$fake_shell" && chmod +x "$fake_shell"
-
-  local test_script="${BATS_TEST_TMPDIR}/test_chsh.sh"
-  {
-    echo '#!/usr/bin/env bash'
-    echo 'CURRENT_SHELL="/bin/bash"'
-    printf 'SHELL_PATH="%s"\n' "$fake_shell"
-    echo '[ "$CURRENT_SHELL" = "$SHELL_PATH" ] && { echo "already set"; exit 0; }'
-    echo 'command -v chsh > /dev/null 2>&1 && chsh -s "$SHELL_PATH" "testuser"'
-  } > "$test_script"
-
-  run env "PATH=${BATS_TEST_TMPDIR}/bin:/bin:/usr/bin" /bin/bash "$test_script"
-  [ "$status" -eq 0 ]
-  [[ "$output" == *"chsh_invoked"* ]]
-}
-
-@test "adds shell to /etc/shells when missing" {
-  local fake_shells="${BATS_TEST_TMPDIR}/shells"
-  echo "/bin/bash" > "$fake_shells"
-  local fake_shell="${BATS_TEST_TMPDIR}/bin/zsh"
-  touch "$fake_shell" && chmod +x "$fake_shell"
-
-  run bash <<SCRIPT
-SHELL_PATH="${fake_shell}"
-SHELLS_FILE="${fake_shells}"
-if ! grep -qF "\$SHELL_PATH" "\$SHELLS_FILE" 2>/dev/null; then
-  echo "adding to shells"
-  echo "\$SHELL_PATH" >> "\$SHELLS_FILE"
-fi
-SCRIPT
-
-  [ "$status" -eq 0 ]
-  [[ "$output" == *"adding to shells"* ]]
-  grep -q "$fake_shell" "$fake_shells"
-}
-
-@test "does not duplicate shell in /etc/shells" {
-  local fake_shells="${BATS_TEST_TMPDIR}/shells"
-  local fake_shell="${BATS_TEST_TMPDIR}/bin/zsh"
-  echo "$fake_shell" > "$fake_shells"
-
-  run bash <<SCRIPT
-SHELL_PATH="${fake_shell}"
-SHELLS_FILE="${fake_shells}"
-if ! grep -qF "\$SHELL_PATH" "\$SHELLS_FILE" 2>/dev/null; then
-  echo "\$SHELL_PATH" >> "\$SHELLS_FILE"
-fi
-SCRIPT
-
-  [ "$status" -eq 0 ]
-  [ "$(grep -c "$fake_shell" "$fake_shells")" -eq 1 ]
-}
-
-@test "falls back to usermod when chsh is unavailable" {
   mock usermod 0 "usermod_invoked"
-  local fake_shell="${BATS_TEST_TMPDIR}/bin/zsh"
-  touch "$fake_shell" && chmod +x "$fake_shell"
+  mock_sudo_passthrough
 
-  local test_script="${BATS_TEST_TMPDIR}/test_usermod.sh"
-  {
-    echo '#!/usr/bin/env bash'
-    echo 'CURRENT_SHELL="/bin/bash"'
-    printf 'SHELL_PATH="%s"\n' "$fake_shell"
-    echo '[ "$CURRENT_SHELL" = "$SHELL_PATH" ] && exit 0'
-    echo 'if command -v chsh > /dev/null 2>&1; then'
-    echo '  chsh -s "$SHELL_PATH" "testuser"'
-    echo 'elif command -v usermod > /dev/null 2>&1; then'
-    echo '  usermod -s "$SHELL_PATH" "testuser"'
-    echo 'fi'
-  } > "$test_script"
+  # Shadow the `command` builtin so `command -v chsh` reports chsh as missing,
+  # without having to strip the real /usr/bin off PATH (the script needs grep,
+  # awk, readlink and friends from there).
+  command() {
+    if [ "$1" = "-v" ] && [ "$2" = "chsh" ]; then return 1; fi
+    builtin command "$@"
+  }
 
-  # Mock dir only — on Fedora /bin→/usr/bin so /bin/chsh exists; bash built-ins handle conditionals
-  run env "PATH=${BATS_TEST_TMPDIR}/bin" /bin/bash "$test_script"
+  SHELL_SEARCH_PATH="$FIXTURE_BIN" SHELLS_FILE="${BATS_TEST_TMPDIR}/shells" run main
+
   [ "$status" -eq 0 ]
-  [[ "$output" == *"usermod_invoked"* ]]
-  [[ "$output" != *"chsh_invoked"* ]]
+  assert_mock_called_with usermod "${FIXTURE_BIN}/zsh"
+  assert_mock_not_called chsh
+}
+
+@test "resolve_login_shell returns the stable path, not the symlink target" {
+  # /opt/homebrew/bin/zsh points into ../Cellar/zsh/<version>/bin/zsh. Setting
+  # the Cellar path as the login shell breaks on the next brew upgrade.
+  make_fake_shell "${FIXTURE_BIN}/Cellar/zsh/5.9/bin/zsh"
+  ln -s "${FIXTURE_BIN}/Cellar/zsh/5.9/bin/zsh" "${FIXTURE_BIN}/zsh"
+
+  run resolve_login_shell "${FIXTURE_BIN}/zsh"
+  [ "$status" -eq 0 ]
+  [ "$output" = "${FIXTURE_BIN}/zsh" ]
+}
+
+@test "is_home_path rejects a resolved path when \$HOME itself is a symlink" {
+  # The macOS condition: /var is a symlink to /private/var, so readlink -f gives
+  # a path that shares no prefix with an unresolved $HOME.
+  #
+  # The shell must actually exist: BSD readlink -f fails on a non-existent path
+  # where GNU canonicalises it, so a bare mkdir would make this pass on Linux
+  # and fail on macOS. is_home_path only ever sees paths that passed -x anyway.
+  make_fake_shell "${BATS_TEST_TMPDIR}/real_home/bin/zsh"
+  ln -s "${BATS_TEST_TMPDIR}/real_home" "${BATS_TEST_TMPDIR}/link_home"
+
+  HOME="${BATS_TEST_TMPDIR}/link_home" run is_home_path "${BATS_TEST_TMPDIR}/real_home/bin/zsh"
+  [ "$status" -eq 0 ]
+}
+
+@test "resolve_login_shell rejects a shell reached through a symlinked \$HOME" {
+  mkdir -p "${BATS_TEST_TMPDIR}/real_home"
+  ln -s "${BATS_TEST_TMPDIR}/real_home" "${BATS_TEST_TMPDIR}/link_home"
+  make_fake_shell "${BATS_TEST_TMPDIR}/link_home/.linuxbrew/bin/zsh"
+
+  HOME="${BATS_TEST_TMPDIR}/link_home" run resolve_login_shell "${BATS_TEST_TMPDIR}/link_home/.linuxbrew/bin/zsh"
+  [ "$status" -ne 0 ]
+}
+
+@test "is_home_path rejects a home shell reached via a symlinked parent (macOS /var topology)" {
+  # macOS: BATS_TEST_TMPDIR sits under /var, which is a symlink to /private/var,
+  # so the path handed in and $HOME can resolve through different prefixes.
+  local real="${BATS_TEST_TMPDIR}/base_real" link="${BATS_TEST_TMPDIR}/base_link"
+  make_fake_shell "${real}/real_home/bin/zsh" # must exist: BSD readlink -f needs it
+  ln -s "${real}/real_home" "${real}/link_home"
+  ln -s "$real" "$link"
+
+  HOME="${link}/link_home" run is_home_path "${link}/real_home/bin/zsh"
+  [ "$status" -eq 0 ]
 }

@@ -2,6 +2,15 @@ hostData:
   default:
     defaultShell: zsh
     packages:
+      # System packages installed by the before/005 + before/006 scripts, which
+      # run ahead of the Homebrew installer. Keyed per package manager because
+      # package names diverge between Fedora and Debian.
+      dnf:
+        - zsh
+        - git
+      apt:
+        - zsh
+        - git
       brewTaps:
         - jesseduffield/lazygit
         - zunit-zsh/zunit

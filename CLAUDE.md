@@ -53,12 +53,13 @@ To add a package: add it under the appropriate key in `home/.chezmoidata.yaml` (
 Other package-related keys under `packages`:
 - `brewTaps` / `brewCaskTaps` — tapped (and trusted, for cask taps) before `brew bundle` runs, both at the `default` level and per-host (e.g. `coffee-sponge` taps `ublue-os/tap` for its Linux casks)
 - `rpmOstree` — host-specific packages layered onto atomic/immutable Fedora hosts (Silverblue) via `rpm-ostree install`, for things Homebrew can't provide system-wide (e.g. `coffee-sponge` layers `ghostty` and `zsh`)
+- `dnf` / `apt` — system packages installed by the `before/` scripts ahead of Homebrew, currently `zsh` and `git`. Keyed per package manager because names diverge between Fedora and Debian. `default` level only for now — these scripts do not read host-specific blocks
 
 ### Script execution order
 
 chezmoi runs scripts in lexicographic order within each phase:
-- **before/**: `010_install-homebrew` — installs Homebrew if missing
-- **after/**: `010_silverblue-postinstall` (resets Flatpak remotes to full Flathub on Silverblue) → `040_rpm-ostree` (adds the Ghostty copr repo and layers any `rpmOstree` packages for the host) → `050_install-brew-packages` (taps/trusts `brewTaps`/`brewCaskTaps`, then `brew bundle`s the generated Brewfile — cachebusted via a sha256 hash of `.chezmoidata.yaml` in a comment so it reruns when packages change) → `900_set-default-shell` (uses `chsh` where available, falling back to `sudo usermod -s` on atomic distros where `chsh` doesn't work) → `999_post-run`
+- **before/**: `005_dnf-packages` (installs `packages.dnf` via `sudo dnf install`; skips when `dnf` is absent, and skips atomic hosts where `rpm-ostree` is present since `040_rpm-ostree` owns layering there) → `006_apt-packages` (installs `packages.apt`, running `apt-get update` only when something is actually missing) → `010_install-homebrew` — installs Homebrew if missing. Both package scripts filter to not-yet-installed packages first, so a no-op apply never prompts for sudo
+- **after/**: `010_silverblue-postinstall` (resets Flatpak remotes to full Flathub on Silverblue) → `040_rpm-ostree` (adds the Ghostty copr repo and layers any `rpmOstree` packages for the host) → `050_install-brew-packages` (taps/trusts `brewTaps`/`brewCaskTaps`, then `brew bundle`s the generated Brewfile — cachebusted via a sha256 hash of `.chezmoidata.yaml` in a comment so it reruns when packages change) → `900_set-default-shell` (picks the first executable shell outside any home directory — brew's prefix first, so macOS keeps `/opt/homebrew/bin/zsh`, then `/usr/bin`, `/bin`, `/usr/local/bin`; then `chsh`, falling back to `sudo usermod -s` on atomic distros. **Never selects a shell under `/home`, `/var/home`, `/Users` or `$HOME`**: sshd cannot exec a `user_home_t`-labelled binary on SELinux distros, so setting Linuxbrew's zsh as the login shell locks you out of SSH entirely) → `999_post-run`
 
 Scripts use the `onchange_` prefix to re-run only when their content changes (hashed by chezmoi).
 
@@ -81,4 +82,20 @@ The generated `.config/zsh/.zsh_plugins.zsh` is excluded via `.chezmoiignore`.
 
 ## CI
 
-GitHub Actions (`.github/workflows/pull-request.yaml`) runs `chezmoi init -S . && chezmoi apply -S .` in containers for `fedora:44`, `ubuntu:26.04`, and `macos-latest`. CI sets `CI=true` to bypass interactive prompts, using `ci` as the hostname and `ci@example.com` as the email.
+GitHub Actions (`.github/workflows/pull-request.yaml`) runs `chezmoi init -S . && chezmoi apply -S . && bash tests/run.sh` in containers for `fedora:44`, `ubuntu:26.04`, and `macos-latest`. CI sets `CI=true` to bypass interactive prompts, using `ci` as the hostname and `ci@example.com` as the email. The `apply` step is what installs Homebrew and brew-bundles the Brewfile, which is where `bats` and `yq` come from — without it the test step fails with `Missing: bats`.
+
+## Tests
+
+Three tiers under `tests/` (see `tests/README.md`):
+
+| Tier | Path | What it checks | Default |
+|---|---|---|---|
+| unit | `tests/bats/` | script bash logic against mocked binaries | yes |
+| render | `tests/render/` | what chezmoi actually renders | yes |
+| apply | `tests/apply/` | a real `chezmoi apply` into an isolated HOME | no |
+
+`bash tests/run.sh` runs the unit and render tiers and is what CI invokes; it needs `bats`, `yq` and `chezmoi` on PATH. The repo-root `Makefile` reproduces all of it in containers (`make test`, `make ci`, `make test-apply`); `make vendor` fetches bats into the gitignored `tests/vendor/`.
+
+Suites assert in plain bash, not bats-assert, so the only test dependency is bats itself. Helpers live in `tests/helpers/common.bash`: `mock`/`assert_mock_*` for the unit tier, and `chez_init`/`chez_cat`/`chez_template` (which seed an isolated chezmoi config to bypass `promptStringOnce`) for the render tier.
+
+When changing a script, prefer sourcing or rendering the real thing over re-implementing its logic inline in the test — an earlier inline-heredoc suite passed against the code that caused an SSH lockout.

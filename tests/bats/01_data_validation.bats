@@ -64,3 +64,8 @@ load '../helpers/common'
     [ "$line" = "!!str" ]
   done <<< "$output"
 }
+
+@test "node is in default brew packages" {
+  run yq eval '.hostData.default.packages.brew[] | select(. == "node")' "${CHEZMOIDATA}"
+  [ "$output" = "node" ]
+}

@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+echo "⭐️ Running before 005 dnf-packages"
+
+# Run privileged commands directly when already root (containers, CI, initial
+# provisioning); minimal images such as ubuntu:26.04 ship no sudo at all.
+SUDO=""
+if [ "$(id -u)" -ne 0 ]; then
+  SUDO="sudo"
+fi
+
+if ! command -v dnf > /dev/null 2>&1; then
+  echo "📝 No dnf on system, skipping"
+  exit 0
+fi
+
+# Image-based Fedora hosts may still ship dnf5, but installing with it either
+# fails outright or writes to a transient overlay that is lost on reboot.
+# Layering on those hosts belongs to run_onchange_after_040_rpm-ostree.
+if command -v rpm-ostree > /dev/null 2>&1; then
+  echo "📝 Atomic host — package layering is handled by 040_rpm-ostree, skipping"
+  exit 0
+fi
+
+{{- $packages := list }}
+{{- if hasKey .hostData.default.packages "dnf" }}
+{{-   $packages = .hostData.default.packages.dnf }}
+{{- end }}
+
+{{- if not $packages }}
+echo "📝 No dnf packages defined, skipping"
+exit 0
+{{- end }}
+
+# Only install what is missing — a no-op apply must never prompt for sudo
+PACKAGES_TO_INSTALL=()
+{{- range $packages }}
+if ! rpm -q "{{ . }}" > /dev/null 2>&1; then
+  PACKAGES_TO_INSTALL+=("{{ . }}")
+fi
+{{- end }}
+
+if [ ${#PACKAGES_TO_INSTALL[@]} -eq 0 ]; then
+  echo "📝 All dnf packages already installed"
+  exit 0
+fi
+
+echo "Installing: ${PACKAGES_TO_INSTALL[*]}"
+$SUDO dnf install -y "${PACKAGES_TO_INSTALL[@]}"
