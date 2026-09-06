@@ -245,7 +245,11 @@ BREW
 @test "is_home_path rejects a resolved path when \$HOME itself is a symlink" {
   # The macOS condition: /var is a symlink to /private/var, so readlink -f gives
   # a path that shares no prefix with an unresolved $HOME.
-  mkdir -p "${BATS_TEST_TMPDIR}/real_home/bin"
+  #
+  # The shell must actually exist: BSD readlink -f fails on a non-existent path
+  # where GNU canonicalises it, so a bare mkdir would make this pass on Linux
+  # and fail on macOS. is_home_path only ever sees paths that passed -x anyway.
+  make_fake_shell "${BATS_TEST_TMPDIR}/real_home/bin/zsh"
   ln -s "${BATS_TEST_TMPDIR}/real_home" "${BATS_TEST_TMPDIR}/link_home"
 
   HOME="${BATS_TEST_TMPDIR}/link_home" run is_home_path "${BATS_TEST_TMPDIR}/real_home/bin/zsh"
@@ -265,7 +269,7 @@ BREW
   # macOS: BATS_TEST_TMPDIR sits under /var, which is a symlink to /private/var,
   # so the path handed in and $HOME can resolve through different prefixes.
   local real="${BATS_TEST_TMPDIR}/base_real" link="${BATS_TEST_TMPDIR}/base_link"
-  mkdir -p "${real}/real_home/bin"
+  make_fake_shell "${real}/real_home/bin/zsh" # must exist: BSD readlink -f needs it
   ln -s "${real}/real_home" "${real}/link_home"
   ln -s "$real" "$link"
 

@@ -7,8 +7,13 @@ load '../helpers/common'
   chez_init ci
   run chez_cat .config/zsh/bootstrap.zshrc
   [ "$status" -eq 0 ]
-  # On a Linux host BREWBIN resolves to the linuxbrew path.
-  assert_line_in_output 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'
+  # BREWBIN is set per-OS in .chezmoi.yaml.tmpl, so assert the path for the host
+  # actually running the suite — this runs on both Linux containers and macOS.
+  if [ "$(uname -s)" = "Darwin" ]; then
+    assert_line_in_output 'eval "$(/opt/homebrew/bin/brew shellenv)"'
+  else
+    assert_line_in_output 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'
+  fi
 }
 
 @test "bootstrap.zshrc: prepends ~/.local/bin to PATH" {
