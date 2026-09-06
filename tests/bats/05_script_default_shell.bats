@@ -260,3 +260,15 @@ BREW
   HOME="${BATS_TEST_TMPDIR}/link_home" run resolve_login_shell "${BATS_TEST_TMPDIR}/link_home/.linuxbrew/bin/zsh"
   [ "$status" -ne 0 ]
 }
+
+@test "is_home_path rejects a home shell reached via a symlinked parent (macOS /var topology)" {
+  # macOS: BATS_TEST_TMPDIR sits under /var, which is a symlink to /private/var,
+  # so the path handed in and $HOME can resolve through different prefixes.
+  local real="${BATS_TEST_TMPDIR}/base_real" link="${BATS_TEST_TMPDIR}/base_link"
+  mkdir -p "${real}/real_home/bin"
+  ln -s "${real}/real_home" "${real}/link_home"
+  ln -s "$real" "$link"
+
+  HOME="${link}/link_home" run is_home_path "${link}/real_home/bin/zsh"
+  [ "$status" -eq 0 ]
+}

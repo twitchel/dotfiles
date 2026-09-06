@@ -23,45 +23,51 @@ fi
 # never a safe login shell on Linux. macOS is unaffected: /opt/homebrew is not a
 # home directory, so brew's zsh stays the preferred choice there.
 is_home_path() {
-  local path="$1" home_real
-  case "$path" in
-    /home/* | /var/home/* | /Users/*) return 0 ;;
-  esac
+  local path="$1" path_real home_real form home_form
+
+  # Check both the given and the resolved form of the path against both the
+  # given and resolved form of $HOME. Any single pairing can miss: on macOS /var
+  # is a symlink to /private/var, so a resolved path shares no prefix with an
+  # unresolved $HOME, and vice versa.
+  path_real="$(readlink -f "$path" 2> /dev/null)" || path_real=""
+  [ -n "$path_real" ] || path_real="$path"
+
+  home_real=""
   if [ -n "${HOME:-}" ]; then
-    case "$path" in
-      "${HOME}"/*) return 0 ;;
-    esac
-    # Compare against the resolved HOME as well: on macOS /var is a symlink to
-    # /private/var, so a resolved path never matches an unresolved $HOME prefix.
     home_real="$(readlink -f "$HOME" 2> /dev/null)" || home_real=""
-    if [ -n "$home_real" ]; then
-      case "$path" in
-        "${home_real}"/*) return 0 ;;
-      esac
-    fi
   fi
+
+  for form in "$path" "$path_real"; do
+    case "$form" in
+      /home/* | /var/home/* | /Users/*) return 0 ;;
+    esac
+    for home_form in "${HOME:-}" "$home_real"; do
+      [ -n "$home_form" ] || continue
+      case "$form" in
+        "${home_form}"/*) return 0 ;;
+      esac
+    done
+  done
   return 1
 }
 
 # Echo the first candidate that is an executable shell outside any home
-# directory. Symlinks are resolved first so a system-looking path that points
-# into a home directory is still rejected.
+# directory.
 resolve_login_shell() {
-  local candidate resolved
+  local candidate
   for candidate in "$@"; do
     [ -n "$candidate" ] || continue
     [ -x "$candidate" ] || continue
 
-    resolved="$(readlink -f "$candidate" 2> /dev/null)" || resolved=""
-    [ -n "$resolved" ] || resolved="$candidate"
-
-    if is_home_path "$candidate" || is_home_path "$resolved"; then
+    # is_home_path resolves symlinks itself, so a system-looking path pointing
+    # into a home directory is still rejected.
+    if is_home_path "$candidate"; then
       echo "Rejecting $candidate — a shell under a home directory cannot be exec'd by sshd" >&2
       continue
     fi
 
     # Catches a noexec mount, which -x cannot see.
-    if ! "$resolved" -c 'exit 0' > /dev/null 2>&1; then
+    if ! "$candidate" -c 'exit 0' > /dev/null 2>&1; then
       echo "Rejecting $candidate — present but not executable as a shell" >&2
       continue
     fi
