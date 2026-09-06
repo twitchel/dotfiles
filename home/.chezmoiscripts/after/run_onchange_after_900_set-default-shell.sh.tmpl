@@ -23,7 +23,7 @@ fi
 # never a safe login shell on Linux. macOS is unaffected: /opt/homebrew is not a
 # home directory, so brew's zsh stays the preferred choice there.
 is_home_path() {
-  local path="$1"
+  local path="$1" home_real
   case "$path" in
     /home/* | /var/home/* | /Users/*) return 0 ;;
   esac
@@ -31,6 +31,14 @@ is_home_path() {
     case "$path" in
       "${HOME}"/*) return 0 ;;
     esac
+    # Compare against the resolved HOME as well: on macOS /var is a symlink to
+    # /private/var, so a resolved path never matches an unresolved $HOME prefix.
+    home_real="$(readlink -f "$HOME" 2> /dev/null)" || home_real=""
+    if [ -n "$home_real" ]; then
+      case "$path" in
+        "${home_real}"/*) return 0 ;;
+      esac
+    fi
   fi
   return 1
 }
@@ -58,7 +66,10 @@ resolve_login_shell() {
       continue
     fi
 
-    echo "$resolved"
+    # Emit the candidate, never $resolved: /opt/homebrew/bin/zsh resolves into a
+    # version-pinned Cellar path that would break on the next brew upgrade. The
+    # resolved form is only ever used for the home-directory check above.
+    echo "$candidate"
     return 0
   done
   return 1

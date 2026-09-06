@@ -230,3 +230,33 @@ BREW
   assert_mock_called_with usermod "${FIXTURE_BIN}/zsh"
   assert_mock_not_called chsh
 }
+
+@test "resolve_login_shell returns the stable path, not the symlink target" {
+  # /opt/homebrew/bin/zsh points into ../Cellar/zsh/<version>/bin/zsh. Setting
+  # the Cellar path as the login shell breaks on the next brew upgrade.
+  make_fake_shell "${FIXTURE_BIN}/Cellar/zsh/5.9/bin/zsh"
+  ln -s "${FIXTURE_BIN}/Cellar/zsh/5.9/bin/zsh" "${FIXTURE_BIN}/zsh"
+
+  run resolve_login_shell "${FIXTURE_BIN}/zsh"
+  [ "$status" -eq 0 ]
+  [ "$output" = "${FIXTURE_BIN}/zsh" ]
+}
+
+@test "is_home_path rejects a resolved path when \$HOME itself is a symlink" {
+  # The macOS condition: /var is a symlink to /private/var, so readlink -f gives
+  # a path that shares no prefix with an unresolved $HOME.
+  mkdir -p "${BATS_TEST_TMPDIR}/real_home/bin"
+  ln -s "${BATS_TEST_TMPDIR}/real_home" "${BATS_TEST_TMPDIR}/link_home"
+
+  HOME="${BATS_TEST_TMPDIR}/link_home" run is_home_path "${BATS_TEST_TMPDIR}/real_home/bin/zsh"
+  [ "$status" -eq 0 ]
+}
+
+@test "resolve_login_shell rejects a shell reached through a symlinked \$HOME" {
+  mkdir -p "${BATS_TEST_TMPDIR}/real_home"
+  ln -s "${BATS_TEST_TMPDIR}/real_home" "${BATS_TEST_TMPDIR}/link_home"
+  make_fake_shell "${BATS_TEST_TMPDIR}/link_home/.linuxbrew/bin/zsh"
+
+  HOME="${BATS_TEST_TMPDIR}/link_home" run resolve_login_shell "${BATS_TEST_TMPDIR}/link_home/.linuxbrew/bin/zsh"
+  [ "$status" -ne 0 ]
+}
