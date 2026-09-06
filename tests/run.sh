@@ -15,4 +15,4 @@ check_dep bats bats-core
 check_dep chezmoi chezmoi
 check_dep yq yq
 
-exec bats --recursive "${REPO_ROOT}/tests/bats" "$@"
+exec bats --recursive "${REPO_ROOT}/tests/bats" "${REPO_ROOT}/tests/render" "$@"

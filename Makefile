@@ -3,7 +3,7 @@
 # Everything runs in containers so it matches GitHub Actions. Requires docker;
 # on a podman host pass CONTAINER_RUNTIME=podman.
 #
-#   make test          # fast render-tier BATS suite (fedora + ubuntu)
+#   make test          # fast unit+render BATS suites (fedora + ubuntu)
 #   make ci            # reproduce the GitHub chezmoi init/data/apply build
 #   make test-apply    # slower apply-tier BATS suite (real chezmoi apply)
 #
@@ -19,18 +19,16 @@ REPO              := $(CURDIR)
 TEST_IMG_FEDORA := chezmoi-test:fedora
 TEST_IMG_UBUNTU := chezmoi-test:ubuntu
 
-BATS          := test/vendor/bats-core/bin/bats
-RENDER_SUITES := test/render.bats test/scripts.bats test/zsh.bats
-APPLY_SUITES  := test/apply.bats
+BATS          := tests/vendor/bats-core/bin/bats
+TEST_SUITES   := tests/bats tests/render
+APPLY_SUITES  := tests/apply
 
 # Pinned BATS versions (override to bump).
 BATS_CORE_REF    ?= v1.11.0
-BATS_SUPPORT_REF ?= v0.3.0
-BATS_ASSERT_REF  ?= v2.1.0
 
 # docker run against a RAW base image (repo mounted read-only), running the CI
 # bootstrap script. $(1) = image.
-raw_run = $(CONTAINER_RUNTIME) run --rm -v "$(REPO)":/repo:ro -w /repo -e CI=true $(1) sh /repo/test/ci-bootstrap.sh
+raw_run = $(CONTAINER_RUNTIME) run --rm -v "$(REPO)":/repo:ro -w /repo -e CI=true $(1) sh /repo/tests/ci-bootstrap.sh
 
 .DEFAULT_GOAL := help
 
@@ -42,16 +40,12 @@ help: ## Show this help
 ## ---- BATS vendoring ----
 
 .PHONY: vendor
-vendor: test/vendor/bats-core test/vendor/bats-support test/vendor/bats-assert ## Download pinned BATS into test/vendor/
+vendor: tests/vendor/bats-core ## Download pinned BATS into tests/vendor/
 
-test/vendor/bats-core:
+tests/vendor/bats-core:
 	git clone --depth 1 --branch $(BATS_CORE_REF) https://github.com/bats-core/bats-core.git $@
 
-test/vendor/bats-support:
-	git clone --depth 1 --branch $(BATS_SUPPORT_REF) https://github.com/bats-core/bats-support.git $@
 
-test/vendor/bats-assert:
-	git clone --depth 1 --branch $(BATS_ASSERT_REF) https://github.com/bats-core/bats-assert.git $@
 
 ## ---- Test images ----
 
@@ -59,15 +53,15 @@ test/vendor/bats-assert:
 build: build-fedora build-ubuntu ## Build both test images
 
 build-fedora:
-	$(CONTAINER_RUNTIME) build -f test/Dockerfile --build-arg BASE_IMAGE=$(IMAGE_FEDORA) -t $(TEST_IMG_FEDORA) .
+	$(CONTAINER_RUNTIME) build -f tests/Dockerfile --build-arg BASE_IMAGE=$(IMAGE_FEDORA) -t $(TEST_IMG_FEDORA) .
 
 build-ubuntu:
-	$(CONTAINER_RUNTIME) build -f test/Dockerfile --build-arg BASE_IMAGE=$(IMAGE_UBUNTU) -t $(TEST_IMG_UBUNTU) .
+	$(CONTAINER_RUNTIME) build -f tests/Dockerfile --build-arg BASE_IMAGE=$(IMAGE_UBUNTU) -t $(TEST_IMG_UBUNTU) .
 
-## ---- Render-tier tests (fast, no Homebrew) ----
+## ---- Unit + render tiers (fast, no Homebrew) ----
 
 .PHONY: test test-fedora test-ubuntu test-native
-test: test-fedora test-ubuntu ## Run the render-tier suite in both distros
+test: test-fedora test-ubuntu ## Run the unit + render suites in both distros
 
 test-fedora: vendor build-fedora
 	$(CONTAINER_RUNTIME) run --rm -v "$(REPO)":/repo:ro -w /repo $(TEST_IMG_FEDORA) make test-native
@@ -75,8 +69,8 @@ test-fedora: vendor build-fedora
 test-ubuntu: vendor build-ubuntu
 	$(CONTAINER_RUNTIME) run --rm -v "$(REPO)":/repo:ro -w /repo $(TEST_IMG_UBUNTU) make test-native
 
-test-native: ## Run the render-tier BATS suite in the current environment
-	$(BATS) $(RENDER_SUITES)
+test-native: ## Run the unit + render BATS suites in the current environment
+	$(BATS) --recursive $(TEST_SUITES)
 
 ## ---- Apply-tier tests (slower; real chezmoi apply as non-root) ----
 
@@ -90,7 +84,7 @@ test-apply-ubuntu: vendor build-ubuntu
 	$(CONTAINER_RUNTIME) run --rm -v "$(REPO)":/repo:ro -w /repo --user tester $(TEST_IMG_UBUNTU) make test-apply-native
 
 test-apply-native: ## Run the apply-tier BATS suite in the current environment
-	$(BATS) $(APPLY_SUITES)
+	$(BATS) --recursive $(APPLY_SUITES)
 
 ## ---- CI reproduction (chezmoi init/data/apply, mirrors the workflow) ----
 
@@ -118,5 +112,5 @@ shell-ubuntu: build-ubuntu ## Interactive shell in the Ubuntu test image
 	$(CONTAINER_RUNTIME) run --rm -it -v "$(REPO)":/repo:ro -w /repo $(TEST_IMG_UBUNTU) bash
 
 clean: ## Remove vendored BATS and built test images
-	rm -rf test/vendor
+	rm -rf tests/vendor
 	-$(CONTAINER_RUNTIME) rmi $(TEST_IMG_FEDORA) $(TEST_IMG_UBUNTU) 2>/dev/null || true

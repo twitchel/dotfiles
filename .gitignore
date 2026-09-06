@@ -21,4 +21,4 @@ Desktop.ini
 .chezmoi_state.boltdb
 
 # vendored BATS (recreated by `make vendor`)
-test/vendor/
+tests/vendor/

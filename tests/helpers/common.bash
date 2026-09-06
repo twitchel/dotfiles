@@ -49,34 +49,80 @@ assert_mock_called_with() {
   grep -qF "$2" "$log"
 }
 
-# Isolated chezmoi HOME seeded with the prompt answers, so template rendering in
-# the tests never depends on the developer's own chezmoi state. Initialised once
-# per test.
-_chez_test_home() {
-  if [ -z "${CHEZ_TEST_HOME:-}" ]; then
-    CHEZ_TEST_HOME="${BATS_TEST_TMPDIR}/chezmoi-home"
-    mkdir -p "${CHEZ_TEST_HOME}/.config/chezmoi"
-    cat > "${CHEZ_TEST_HOME}/.config/chezmoi/chezmoi.yaml" <<EOF
+# ---------------------------------------------------------------------------
+# chezmoi rendering
+#
+# The config template uses promptStringOnce for customHostname/email, which
+# opens /dev/tty directly and cannot be driven by --promptString. Instead we
+# pre-seed an isolated chezmoi config so promptStringOnce finds its answers and
+# skips the prompt, then run a normal init to materialise the resolved data
+# (hostname lowercasing, osid, BREWBIN, ...). machineType is seeded too: a bare
+# container has no VARIANT_ID, which would otherwise prompt.
+# ---------------------------------------------------------------------------
+
+# chez_init <hostname> [email]
+# Sets up an isolated chezmoi HOME under the per-test tmpdir and inits it.
+# Exports CHEZ_HOME for the helpers below. CI is unset so a CI=true environment
+# does not pin the hostname to "ci".
+chez_init() {
+  local host="$1" email="${2:-test@example.com}"
+  CHEZ_HOME="${BATS_TEST_TMPDIR}/home-${host}"
+  mkdir -p "${CHEZ_HOME}/.config/chezmoi"
+  cat > "${CHEZ_HOME}/.config/chezmoi/chezmoi.yaml" <<EOF
 data:
-  customHostname: test-host
-  email: test@example.com
+  customHostname: ${host}
+  email: ${email}
   machineType: server
 EOF
-    env -u CI HOME="${CHEZ_TEST_HOME}" chezmoi init -S "${REPO_ROOT}" --no-tty > /dev/null
-  fi
-  echo "$CHEZ_TEST_HOME"
+  env -u CI HOME="${CHEZ_HOME}" chezmoi init -S "${REPO_ROOT}" --no-tty > /dev/null
 }
 
-# Render a .chezmoiscripts template into a runnable bash script via a real
-# chezmoi render, so package lists and data under test are the actual values
-# from .chezmoidata.yaml. Echoes the path of the rendered script.
+# chez <args...> — run a chezmoi subcommand against the isolated HOME.
+chez() {
+  env -u CI HOME="${CHEZ_HOME}" chezmoi "$@" -S "${REPO_ROOT}" --no-tty
+}
+
+# chez_cat <target-relpath> — render a managed target file, e.g. .config/brew/Brewfile
+chez_cat() {
+  chez cat "${CHEZ_HOME}/$1"
+}
+
+# chez_template <source-relpath> — render a source template (e.g. a script)
+chez_template() {
+  env -u CI HOME="${CHEZ_HOME}" chezmoi execute-template -S "${REPO_ROOT}" --no-tty < "${REPO_ROOT}/$1"
+}
+
+# Render a .chezmoiscripts template into a runnable bash script, so the package
+# lists under test are the actual values from .chezmoidata.yaml. Echoes the path.
 render_script_tmpl() {
-  local src="$1" home out
+  local src="$1" out
   out="${BATS_TEST_TMPDIR}/$(basename "$src" .tmpl)"
-  home="$(_chez_test_home)"
-  env -u CI HOME="$home" chezmoi execute-template -S "${REPO_ROOT}" --no-tty < "$src" > "$out"
+  [ -n "${CHEZ_HOME:-}" ] || chez_init test-host
+  env -u CI HOME="${CHEZ_HOME}" chezmoi execute-template -S "${REPO_ROOT}" --no-tty < "$src" > "$out"
   chmod +x "$out"
   echo "$out"
+}
+
+# ---------------------------------------------------------------------------
+# Output assertions
+#
+# Deliberately plain bash rather than bats-assert: the suite then has no
+# vendored dependency and CI can run it with nothing but bats itself.
+# ---------------------------------------------------------------------------
+
+# True if $output contains the given line, matched whole
+assert_line_in_output() {
+  printf '%s\n' "$output" | grep -qxF "$1"
+}
+
+# True if $output contains a line matching the given ERE
+assert_line_matches() {
+  printf '%s\n' "$output" | grep -qE "$1"
+}
+
+# True if $output does NOT contain the given substring
+refute_output_contains() {
+  ! printf '%s\n' "$output" | grep -qF "$1"
 }
 
 # Create a fake but genuinely executable shell at the given path. It accepts

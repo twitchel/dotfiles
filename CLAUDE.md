@@ -82,4 +82,20 @@ The generated `.config/zsh/.zsh_plugins.zsh` is excluded via `.chezmoiignore`.
 
 ## CI
 
-GitHub Actions (`.github/workflows/pull-request.yaml`) runs `chezmoi init -S . && chezmoi apply -S .` in containers for `fedora:44`, `ubuntu:26.04`, and `macos-latest`. CI sets `CI=true` to bypass interactive prompts, using `ci` as the hostname and `ci@example.com` as the email.
+GitHub Actions (`.github/workflows/pull-request.yaml`) runs `chezmoi init -S . && chezmoi apply -S . && bash tests/run.sh` in containers for `fedora:44`, `ubuntu:26.04`, and `macos-latest`. CI sets `CI=true` to bypass interactive prompts, using `ci` as the hostname and `ci@example.com` as the email. The `apply` step is what installs Homebrew and brew-bundles the Brewfile, which is where `bats` and `yq` come from — without it the test step fails with `Missing: bats`.
+
+## Tests
+
+Three tiers under `tests/` (see `tests/README.md`):
+
+| Tier | Path | What it checks | Default |
+|---|---|---|---|
+| unit | `tests/bats/` | script bash logic against mocked binaries | yes |
+| render | `tests/render/` | what chezmoi actually renders | yes |
+| apply | `tests/apply/` | a real `chezmoi apply` into an isolated HOME | no |
+
+`bash tests/run.sh` runs the unit and render tiers and is what CI invokes; it needs `bats`, `yq` and `chezmoi` on PATH. The repo-root `Makefile` reproduces all of it in containers (`make test`, `make ci`, `make test-apply`); `make vendor` fetches bats into the gitignored `tests/vendor/`.
+
+Suites assert in plain bash, not bats-assert, so the only test dependency is bats itself. Helpers live in `tests/helpers/common.bash`: `mock`/`assert_mock_*` for the unit tier, and `chez_init`/`chez_cat`/`chez_template` (which seed an isolated chezmoi config to bypass `promptStringOnce`) for the render tier.
+
+When changing a script, prefer sourcing or rendering the real thing over re-implementing its logic inline in the test — an earlier inline-heredoc suite passed against the code that caused an SSH lockout.

@@ -4,11 +4,25 @@ BATS tests that validate the chezmoi templates and generated dotfiles, plus a
 local reproduction of the GitHub Actions build. Everything is driven from the
 repo-root `Makefile`.
 
+## Layout
+
+Three tiers, in increasing cost:
+
+| Tier | Path | What it checks | Runs by default |
+|---|---|---|---|
+| unit | `tests/bats/` | script bash logic, against mocked binaries | yes |
+| render | `tests/render/` | what chezmoi actually renders (Brewfile, scripts, zshrc) | yes |
+| apply | `tests/apply/` | a real `chezmoi apply` into an isolated HOME | no — `make test-apply` |
+
+`tests/run.sh` runs the unit and render tiers; that is what CI invokes. The
+suites assert in plain bash rather than bats-assert, so the only dependency is
+bats itself.
+
 ## Quick start
 
 ```bash
-make vendor        # download pinned bats-core + bats-support + bats-assert into test/vendor/
-make test          # render-tier suite in fedora:44 and ubuntu:26.04 containers (fast)
+make vendor        # download pinned bats-core into tests/vendor/
+make test          # unit + render tiers in fedora:44 and ubuntu:26.04 containers (fast)
 make test-fedora   # just Fedora
 make ci            # reproduce the GitHub CI build locally (chezmoi init/data/apply)
 make test-apply    # apply-tier suite: real `chezmoi apply` (slower, opt-in)
