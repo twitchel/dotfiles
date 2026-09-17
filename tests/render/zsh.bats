@@ -29,3 +29,27 @@ load '../helpers/common'
   [ "$status" -eq 0 ]
   assert_line_in_output 'command -v ssh-agent > /dev/null && eval "$(ssh-agent)" > /dev/null'
 }
+
+@test ".zshrc: sources functions.zshrc" {
+  chez_init ci
+  run chez_cat .config/zsh/.zshrc
+  [ "$status" -eq 0 ]
+  assert_line_in_output 'source_file "$ZDOTDIR/functions.zshrc"'
+}
+
+@test "functions.zshrc: serve mounts \$PWD read-only at the nginx webroot" {
+  chez_init ci
+  run chez_cat .config/zsh/functions.zshrc
+  [ "$status" -eq 0 ]
+  assert_line_matches '\-\-volume "\$PWD:/usr/share/nginx/html:ro"'
+  # Relabelling the served directory (:z) would outlive the container.
+  assert_line_matches '\-\-security-opt label=disable'
+}
+
+@test "functions.zshrc: serve publishes to localhost unless -a is given" {
+  chez_init ci
+  run chez_cat .config/zsh/functions.zshrc
+  [ "$status" -eq 0 ]
+  assert_line_in_output '  local publish="127.0.0.1:$port:80"'
+  assert_line_in_output '  (( all )) && publish="$port:80"'
+}
