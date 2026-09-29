@@ -10,10 +10,17 @@ jobs:
         os:
           - fedora:44
           - ubuntu:26.04
+          # Immutable/atomic Fedora — exercises the rpm-ostree code paths
+          - quay.io/fedora/fedora-coreos:stable
     container:
       image: ${{ matrix.os }}
       options: --ulimit nofile=1024:1024
     steps:
+      # Atomic/immutable images symlink /home -> var/home, but /var/home is
+      # only created by systemd-tmpfiles at boot, so it is missing in a
+      # container and Homebrew cannot create /home/linuxbrew.
+      - name: Create /var/home on atomic images
+        run: "[ -L /home ] && mkdir -p /var/home || true"
       - uses: actions/checkout@v5
       - name: Install dependencies dnf
         run: dnf install -y git curl >/dev/null 2>&1 || echo "no dnf"
