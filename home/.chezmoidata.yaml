@@ -117,10 +117,8 @@ hostData:
       brewCask:
         - caffeine
         - firefox
-        - gas-mask
         - ghostty
         - gimp
-        - jordanbaird-ice
         - microsoft-edge
         - obsidian
         - raycast
