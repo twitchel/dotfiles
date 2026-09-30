@@ -1,3 +1,4 @@
+onboarding = false
 [keys]
 prefix = "ctrl + s"
 new_tab = "prefix+c"
