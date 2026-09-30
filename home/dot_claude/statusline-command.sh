@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Claude Code status line.
-# Segments (left to right): model | directory | git branch (+dirty marker) | context usage.
+# Segments (left to right): model | context usage | directory | git branch (+dirty marker).
 # Colours are the Catppuccin Mocha palette from ~/.config/starship/starship.toml, so the
 # status line reads as a companion to (not a duplicate of) the starship prompt above it.
 
@@ -26,10 +26,20 @@ segments=()
 # 1. model, robot glyph
 segments+=("$(fg "$mauve")$(printf '\xf0\x9f\xa4\x96') ${model}${reset}")
 
-# 2. directory (basename only), folder glyph
+# 2. context window usage, gauge glyph, colour scales green -> yellow -> red
+pct=$(printf '%s' "$input" | jq -r '.context_window.used_percentage // empty')
+if [ -n "$pct" ]; then
+  pct_r=$(printf '%.0f' "$pct")
+  colour="$green"
+  [ "$pct_r" -ge 50 ] && colour="$yellow"
+  [ "$pct_r" -ge 80 ] && colour="$red"
+  segments+=("$(fg "$colour")$(printf '\xef\x83\xa4') ${pct_r}%${reset}")
+fi
+
+# 3. directory (basename only), folder glyph
 segments+=("$(fg "$peach")$(printf '\xef\x81\xbb') ${dir}${reset}")
 
-# 3. git branch + dirty marker; silently omitted outside a git repo
+# 4. git branch + dirty marker; silently omitted outside a git repo
 if [ -n "$cwd" ] && git -C "$cwd" --no-optional-locks rev-parse --is-inside-work-tree > /dev/null 2>&1; then
   branch=$(git -C "$cwd" --no-optional-locks branch --show-current 2>/dev/null)
   [ -z "$branch" ] && branch=$(git -C "$cwd" --no-optional-locks rev-parse --short HEAD 2>/dev/null)
@@ -40,16 +50,6 @@ if [ -n "$cwd" ] && git -C "$cwd" --no-optional-locks rev-parse --is-inside-work
     fi
     segments+=("$(fg "$yellow")$(printf '\xee\x9c\xa5') ${branch}${reset}${dirty}")
   fi
-fi
-
-# 4. context window usage, gauge glyph, colour scales green -> yellow -> red
-pct=$(printf '%s' "$input" | jq -r '.context_window.used_percentage // empty')
-if [ -n "$pct" ]; then
-  pct_r=$(printf '%.0f' "$pct")
-  colour="$green"
-  [ "$pct_r" -ge 50 ] && colour="$yellow"
-  [ "$pct_r" -ge 80 ] && colour="$red"
-  segments+=("$(fg "$colour")$(printf '\xef\x83\xa4') ${pct_r}%${reset}")
 fi
 
 out=""
