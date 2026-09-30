@@ -40,12 +40,13 @@ SCRIPTS="home/.chezmoiscripts/after"
   assert_line_in_output 'sudo rpm-ostree install "${PACKAGES_TO_INSTALL[@]}"'
 }
 
-@test "040 rpm-ostree: a host with no rpmOstree packages exits early" {
+@test "040 rpm-ostree: a host with no rpmOstree block inherits the defaults" {
   chez_init grease-monkey
   run chez_template "${SCRIPTS}/run_onchange_after_040_rpm-ostree.sh.tmpl"
   [ "$status" -eq 0 ]
-  assert_line_in_output 'echo "📝 No rpmOstree packages for grease-monkey, skipping"'
-  refute_output_contains 'PACKAGES_TO_INSTALL+=('
+  assert_line_in_output '  PACKAGES_TO_INSTALL+=("zsh")'
+  refute_output_contains 'PACKAGES_TO_INSTALL+=("ghostty")'
+  refute_output_contains 'GHOSTTY_COPR'
 }
 
 @test "005 dnf: package list renders from chezmoi data" {

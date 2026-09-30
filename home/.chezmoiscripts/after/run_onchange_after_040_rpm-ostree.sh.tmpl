@@ -7,11 +7,16 @@ if ! command -v rpm-ostree >/dev/null 2>&1; then
   exit 0
 fi
 
+{{- $commonConfig := .hostData.default }}
 {{- $hostConfig := get .hostData .hostname }}
 {{- $rpmPackages := list }}
-{{- if and $hostConfig (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "rpmOstree") }}
-{{-   $rpmPackages = index $hostConfig.packages "rpmOstree" }}
+{{- if hasKey $commonConfig.packages "rpmOstree" }}
+{{-   $rpmPackages = concat $rpmPackages $commonConfig.packages.rpmOstree }}
 {{- end }}
+{{- if and $hostConfig (hasKey $hostConfig "packages") (hasKey $hostConfig.packages "rpmOstree") }}
+{{-   $rpmPackages = concat $rpmPackages $hostConfig.packages.rpmOstree }}
+{{- end }}
+{{- $rpmPackages = uniq $rpmPackages }}
 
 {{- if not $rpmPackages }}
 echo "📝 No rpmOstree packages for {{ .hostname }}, skipping"
