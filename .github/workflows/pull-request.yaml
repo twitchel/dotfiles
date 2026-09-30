@@ -10,10 +10,20 @@ jobs:
         os:
           - fedora:44
           - ubuntu:26.04
+          # Immutable/atomic Fedora — exercises the rpm-ostree code paths
+          - quay.io/fedora/fedora-coreos:stable
     container:
       image: ${{ matrix.os }}
       options: --ulimit nofile=1024:1024
     steps:
+      # Atomic/immutable images symlink /home, /root, /usr/local etc. into
+      # /var, whose targets are only created by systemd-tmpfiles at boot, so
+      # they dangle in a container. Do the boot's job before anything runs.
+      - name: Populate /var on atomic images
+        run: |
+          if [ -L /home ]; then
+            systemd-tmpfiles --create --prefix=/var >/dev/null
+          fi
       - uses: actions/checkout@v5
       - name: Install dependencies dnf
         run: dnf install -y git curl >/dev/null 2>&1 || echo "no dnf"

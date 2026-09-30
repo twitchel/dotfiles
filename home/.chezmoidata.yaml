@@ -78,6 +78,8 @@ hostData:
         - org.telegram.desktop
         - org.videolan.VLC
         - us.zoom.Zoom
+      rpmOstree:
+        - zsh
   ci:
     packages:
       brew:
@@ -99,7 +101,6 @@ hostData:
         - ublue-os/tap
       rpmOstree:
         - ghostty
-        - zsh
       flatpak: []
   grease-monkey:
     packages:
