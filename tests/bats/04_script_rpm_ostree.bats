@@ -11,7 +11,7 @@ setup() {
 
 # Helper: run the "skip if no rpm-ostree" guard logic
 _guard_no_rpm_ostree() {
-  bash <<'SCRIPT'
+  "$BASH" <<'SCRIPT'
 if ! command -v rpm-ostree >/dev/null 2>&1; then
   echo "No rpm-ostree on system, skipping"
   exit 0
@@ -21,8 +21,8 @@ SCRIPT
 }
 
 @test "skips when rpm-ostree is not installed" {
-  # No rpm-ostree mock in PATH
-  run _guard_no_rpm_ostree
+  # Mocks only: atomic CI images ship a real rpm-ostree on the system PATH
+  PATH="${BATS_TEST_TMPDIR}/bin" run _guard_no_rpm_ostree
   [ "$status" -eq 0 ]
   [[ "$output" == *"No rpm-ostree"* ]]
 }
