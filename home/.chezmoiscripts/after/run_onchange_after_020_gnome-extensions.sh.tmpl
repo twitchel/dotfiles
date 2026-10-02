@@ -24,7 +24,8 @@ if ! command -v gext > /dev/null 2>&1; then
   if command -v pipx > /dev/null 2>&1; then
     pipx install gnome-extensions-cli
   elif command -v pip3 > /dev/null 2>&1; then
-    pip3 install --user gnome-extensions-cli
+    # PEP 668 distros refuse --user installs without this; older pip ignores it
+    PIP_BREAK_SYSTEM_PACKAGES=1 pip3 install --user gnome-extensions-cli
   else
     echo "⚠️  Neither pipx nor pip3 found — cannot install gext. Skipping GNOME extensions."
     exit 0
