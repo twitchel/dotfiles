@@ -73,3 +73,32 @@ load '../helpers/common'
   [ "$status" -eq 0 ] || { echo "$output"; false; }
   [ -z "$output" ]
 }
+
+@test "functions.zshrc: take creates nested dirs and enters them despite the cd alias" {
+  command -v zsh > /dev/null || skip "zsh not installed"
+  chez_init ci
+  local zdotdir="${BATS_TEST_TMPDIR}/zdotdir"
+  mkdir -p "$zdotdir"
+  chez_cat .config/zsh/functions.zshrc > "$zdotdir/functions.zshrc"
+  chez_cat .config/zsh/worktrees.functions.zshrc > "$zdotdir/worktrees.functions.zshrc"
+
+  # aliases.zshrc maps cd to zoxide's z; take must not depend on it.
+  run env ZDOTDIR="$zdotdir" zsh -fc "alias cd='false'; source \"\$ZDOTDIR/functions.zshrc\" \
+    && builtin cd '${BATS_TEST_TMPDIR}' && take a/b && pwd" 2>&1
+  [ "$status" -eq 0 ] || { echo "$output"; false; }
+  [ "$output" = "${BATS_TEST_TMPDIR}/a/b" ] || [ "$output" = "$(cd "${BATS_TEST_TMPDIR}" && pwd -P)/a/b" ]
+  [ -d "${BATS_TEST_TMPDIR}/a/b" ]
+}
+
+@test "functions.zshrc: take without exactly one argument prints usage" {
+  command -v zsh > /dev/null || skip "zsh not installed"
+  chez_init ci
+  local zdotdir="${BATS_TEST_TMPDIR}/zdotdir"
+  mkdir -p "$zdotdir"
+  chez_cat .config/zsh/functions.zshrc > "$zdotdir/functions.zshrc"
+  chez_cat .config/zsh/worktrees.functions.zshrc > "$zdotdir/worktrees.functions.zshrc"
+
+  run env ZDOTDIR="$zdotdir" zsh -fc 'source "$ZDOTDIR/functions.zshrc" && take' 2>&1
+  [ "$status" -eq 2 ]
+  [ "$output" = "usage: take <dir>" ]
+}
