@@ -1,3 +1,6 @@
+## ---- worktrees: functions to make interacting with worktrees easier ---- ##
+source "$ZDOTDIR/worktrees.functions.zshrc"
+
 ## ---- serve: serve the current directory over HTTP ---- ##
 # serve [-d] [-a] <port> — mounts $PWD as the webroot of an nginx:alpine container.
 # -d detaches; the container is named serve-<port> so it can be stopped again.
