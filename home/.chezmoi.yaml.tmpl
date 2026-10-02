@@ -59,7 +59,6 @@ data:
 env:
     OS: "{{ .chezmoi.os }}"
     OS_DISTRO: "{{ $osid }}"
-    OS_VARIANT: "{{ $variantID }}"
     HOSTNAME: "{{ $hostname | lower }}"
     MACHINE_TYPE: "{{ $machineType }}"
     BREWPATH: "{{ $brewpath }}"
