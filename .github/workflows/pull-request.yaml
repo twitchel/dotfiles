@@ -1,6 +1,8 @@
 on:
   pull_request:
   workflow_dispatch:
+  # Reused by apply.yaml for pushes to main and the weekly scheduled run.
+  workflow_call:
 
 jobs:
   install-and-test-linux-server:

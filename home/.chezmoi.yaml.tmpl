@@ -41,7 +41,7 @@
 {{- if eq .chezmoi.os "linux" -}}
 {{-   if eq (env "CI") "true" -}}
 {{-     $machineType = "server" -}}
-{{-   else if or (eq $variantID "silverblue") (eq $variantID "workstation") (eq $variantID "kinoite") (eq $variantID "onyx") (eq $variantID "bazzite") -}}
+{{-   else if or (eq $variantID "silverblue") (eq $variantID "workstation") (eq $variantID "kinoite") (eq $variantID "sericea") (eq $variantID "onyx") (eq $variantID "cosmic-atomic") (eq $variantID "bazzite") -}}
 {{-     $machineType = "workstation" -}}
 {{-   else if eq $variantID "server" -}}
 {{-     $machineType = "server" -}}
@@ -59,7 +59,6 @@ data:
 env:
     OS: "{{ .chezmoi.os }}"
     OS_DISTRO: "{{ $osid }}"
-    OS_VARIANT: "{{ $variantID }}"
     HOSTNAME: "{{ $hostname | lower }}"
     MACHINE_TYPE: "{{ $machineType }}"
     BREWPATH: "{{ $brewpath }}"

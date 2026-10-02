@@ -1,6 +1,16 @@
 ## ---- worktrees: functions to make interacting with worktrees easier ---- ##
 source "$ZDOTDIR/worktrees.functions.zshrc"
 
+## ---- take: create a directory and cd into it ---- ##
+# builtin cd: `cd` is aliased to zoxide's `z` in aliases.zshrc.
+take() {
+  if [[ $# -ne 1 ]]; then
+    print -u2 "usage: take <dir>"
+    return 2
+  fi
+  mkdir -p -- "$1" && builtin cd -- "$1"
+}
+
 ## ---- serve: serve the current directory over HTTP ---- ##
 # serve [-d] [-a] <port> — mounts $PWD as the webroot of an nginx:alpine container.
 # -d detaches; the container is named serve-<port> so it can be stopped again.
