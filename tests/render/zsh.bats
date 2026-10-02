@@ -53,3 +53,22 @@ load '../helpers/common'
   assert_line_in_output '  local publish="127.0.0.1:$port:80"'
   assert_line_in_output '  (( all )) && publish="$port:80"'
 }
+
+@test "functions.zshrc: defines the worktree functions when sourced in zsh" {
+  chez_init ci
+  # Render both files into a scratch ZDOTDIR, then source from a different
+  # cwd so a $PWD-relative path to worktrees.functions.zshrc can't pass.
+  local zdotdir="${BATS_TEST_TMPDIR}/zdotdir"
+  mkdir -p "$zdotdir"
+  chez_cat .config/zsh/functions.zshrc > "$zdotdir/functions.zshrc"
+  chez_cat .config/zsh/worktrees.functions.zshrc > "$zdotdir/worktrees.functions.zshrc"
+
+  run env ZDOTDIR="$zdotdir" zsh -f -c '
+    cd /
+    source "$ZDOTDIR/functions.zshrc" || exit 1
+    for f in wtdir wt wtr wtrm wtl wtcd wtprune; do
+      [[ $(whence -w $f) == "$f: function" ]] || { echo "missing: $f"; exit 1; }
+    done' 2>&1
+  [ "$status" -eq 0 ] || { echo "$output"; false; }
+  [ -z "$output" ]
+}

@@ -12,10 +12,10 @@ FROM ${BASE_IMAGE}
 # Base tooling: git/curl for chezmoi + its externals, sudo for the apply tier,
 # coreutils for sha256sum, procps/which as common shell deps.
 RUN if command -v dnf >/dev/null 2>&1; then \
-        dnf install -y git curl bash sudo make ca-certificates coreutils which procps-ng >/dev/null && dnf clean all; \
+        dnf install -y git curl bash zsh sudo make ca-certificates coreutils which procps-ng >/dev/null && dnf clean all; \
     elif command -v apt-get >/dev/null 2>&1; then \
         apt-get update >/dev/null && \
-        DEBIAN_FRONTEND=noninteractive apt-get install -y git curl bash sudo make ca-certificates coreutils procps >/dev/null && \
+        DEBIAN_FRONTEND=noninteractive apt-get install -y git curl bash zsh sudo make ca-certificates coreutils procps >/dev/null && \
         rm -rf /var/lib/apt/lists/*; \
     else \
         echo "unsupported base image: no dnf or apt-get" && exit 1; \

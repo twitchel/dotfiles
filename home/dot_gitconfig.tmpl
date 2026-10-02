@@ -1,0 +1,64 @@
+[user]
+	email = {{ .email }}
+
+	name = Daniel Jones
+[alias]
+	a = add
+	ap = add -p
+
+	cm = commit
+
+	puf = !git push --force-with-lease -u origin HEAD
+	pup = !git push -u origin HEAD
+
+	co = checkout
+	cop = checkout -p
+
+	cl = clone
+
+	rd = rebase origin/main
+	rid = rebase -i origin/main
+
+	logadog = log --all --decorate --oneline --graph
+
+  staash = stash --all
+
+  bb = !$HOME/.scripts/git/better-branch.sh
+
+  # via http://philjackson.github.io/2013/04/07/handy-git-tips-to-stop-you-getting-fired.html
+  snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
+  snapshots = !git stash list --grep snapshot
+
+  #via http://stackoverflow.com/questions/5188320/how-can-i-get-a-list-of-git-branches-ordered-by-most-recent-commit
+  recent-branches = !git for-each-ref --count=15 --sort=-committerdate refs/heads/ --format='%(refname:short)'
+
+[core]
+  pager = delta
+
+[interactive]
+  diffFilter = delta --color-only
+
+[delta]
+  navigate = true    # use n and N to move between diff sections
+  side-by-side = false
+  line-numbers = true
+
+[merge]
+  conflictstyle = zdiff3
+
+#[diff]
+#  colorMoved = default
+
+[rerere]
+  enabled = true #REuse REcorded REsoltions (in merge conflicts)
+
+[includeIf "gitdir:~/dev/src/github.com/oohmedia/**"]
+  path = ~/dev/src/github.com/oohmedia/.gitconfig
+
+[includeIf "gitdir:~/dev/src/github.com/twitchel/**"]
+  path = ~/dev/src/github.com/twitchel/.gitconfig
+
+# Machine-local, unmanaged config (credentials such as url.insteadOf tokens).
+# Never commit secrets here; a missing file is silently ignored by git.
+[include]
+  path = ~/.gitconfig.local
