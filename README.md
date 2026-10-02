@@ -9,4 +9,6 @@ A running system with the following installed
 ## Supported Operating Systems
 - MacOS (Tahoe)
 - Fedora Workstation
-- Fedora Silverblue
+- Fedora Atomic desktops (Silverblue, Kinoite, Bazzite, ...)
+- Fedora Server
+- Ubuntu

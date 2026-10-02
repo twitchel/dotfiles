@@ -39,7 +39,7 @@ Machine-specific config comes from two sources:
 
 Templates reference this data as `.hostData.default`, `.hostData.<hostname>`, `.hostname`, `.email`, `.machineType`, etc.
 
-`machineType` is auto-detected from `variantID` in `/etc/os-release`: `silverblue`/`workstation`/`kinoite`/`onyx`/`bazzite` → `workstation`; `server` → `server`; CI → `server`; macOS → always `workstation`. Unknown Linux variants prompt the user.
+`machineType` is auto-detected from `variantID` in `/etc/os-release`: `silverblue`/`workstation`/`kinoite`/`sericea`/`onyx`/`cosmic-atomic`/`bazzite` → `workstation`; `server` → `server`; CI → `server`; macOS → always `workstation`. Unknown Linux variants prompt the user.
 
 ### Package management
 
@@ -52,14 +52,15 @@ To add a package: add it under the appropriate key in `home/.chezmoidata.yaml` (
 
 Other package-related keys under `packages`:
 - `brewTaps` / `brewCaskTaps` — tapped (and trusted, for cask taps) before `brew bundle` runs, both at the `default` level and per-host (e.g. `coffee-sponge` taps `ublue-os/tap` for its Linux casks)
-- `rpmOstree` — packages layered onto atomic/immutable Fedora hosts (Silverblue) via `rpm-ostree install`, for things Homebrew can't provide system-wide. `default` and host lists are merged (e.g. every atomic host layers `zsh` from `default`; `coffee-sponge` adds `ghostty`)
+- `rpmOstree` — packages layered onto atomic/immutable Fedora hosts (Silverblue, Kinoite, Bazzite, ...) via `rpm-ostree install`, for things Homebrew can't provide system-wide. `default` and host lists are merged (e.g. every atomic host layers `zsh` from `default`; `coffee-sponge` adds `ghostty`)
 - `dnf` / `apt` — system packages installed by the `before/` scripts ahead of Homebrew, currently `zsh` and `git`. Keyed per package manager because names diverge between Fedora and Debian. `default` level only for now — these scripts do not read host-specific blocks
+- `gnomeExtensions` — GNOME Shell extension UUIDs installed via `gext` by `after/020_gnome-extensions`; `default` and host lists are merged
 
 ### Script execution order
 
 chezmoi runs scripts in lexicographic order within each phase:
 - **before/**: `005_dnf-packages` (installs `packages.dnf` via `sudo dnf install`; skips when `dnf` is absent, and skips atomic hosts where `rpm-ostree` is present since `040_rpm-ostree` owns layering there) → `006_apt-packages` (installs `packages.apt`, running `apt-get update` only when something is actually missing) → `010_install-homebrew` — installs Homebrew if missing. Both package scripts filter to not-yet-installed packages first, so a no-op apply never prompts for sudo
-- **after/**: `010_silverblue-postinstall` (resets Flatpak remotes to full Flathub on Silverblue) → `040_rpm-ostree` (adds the Ghostty copr repo and layers the merged `default` + host `rpmOstree` packages) → `050_install-brew-packages` (taps/trusts `brewTaps`/`brewCaskTaps`, then `brew bundle`s the generated Brewfile — cachebusted via a sha256 hash of `.chezmoidata.yaml` in a comment so it reruns when packages change) → `900_set-default-shell` (picks the first executable shell outside any home directory — brew's prefix first, so macOS keeps `/opt/homebrew/bin/zsh`, then `/usr/bin`, `/bin`, `/usr/local/bin`; then `chsh`, falling back to `sudo usermod -s` on atomic distros. **Never selects a shell under `/home`, `/var/home`, `/Users` or `$HOME`**: sshd cannot exec a `user_home_t`-labelled binary on SELinux distros, so setting Linuxbrew's zsh as the login shell locks you out of SSH entirely) → `999_post-run`
+- **after/**: `010_flatpak-postinstall` (adds full Flathub on workstations; on ostree-booted hosts — detected via `/run/ostree-booted`, not a list of variant IDs — first removes the filtered `flathub` and `fedora` remotes) → `020_gnome-extensions` (installs merged `gnomeExtensions` via `gext`; needs a live GNOME session) → `040_rpm-ostree` (adds the Ghostty copr repo and layers the merged `default` + host `rpmOstree` packages) → `050_install-brew-packages` (installs `gcc` on Linux, taps/trusts `brewTaps`/`brewCaskTaps`, then `brew bundle`s the generated Brewfile — cachebusted via a sha256 hash of `.chezmoidata.yaml` in a comment so it reruns when packages change) → `900_set-default-shell` (picks the first executable shell outside any home directory — brew's prefix first, so macOS keeps `/opt/homebrew/bin/zsh`, then `/usr/bin`, `/bin`, `/usr/local/bin`; then `chsh`, falling back to `sudo usermod -s` on atomic distros. **Never selects a shell under `/home`, `/var/home`, `/Users` or `$HOME`**: sshd cannot exec a `user_home_t`-labelled binary on SELinux distros, so setting Linuxbrew's zsh as the login shell locks you out of SSH entirely) → `999_post-run`
 
 Scripts use the `onchange_` prefix to re-run only when their content changes (hashed by chezmoi).
 
@@ -74,15 +75,16 @@ Scripts use the `onchange_` prefix to re-run only when their content changes (ha
 The ZSH setup is split across files sourced in order:
 1. `home/dot_zshrc` — sets `ZDOTDIR` to `~/.config/zsh`
 2. `home/dot_config/zsh/dot_zshrc` — main entry, sources the files below
-3. `home/dot_config/zsh/bootstrap.zshrc.tmpl` — SSH agent eval, `~/.local/bin` PATH, Homebrew PATH, Antidote plugin manager, Starship, atuin, NVM, zoxide
-4. `home/dot_config/zsh/aliases.zshrc` — shell aliases
-5. `home/dot_config/zsh/dot_zsh_plugins.txt` — Antidote plugin list (zsh-autosuggestions, zsh-completions, zsh-syntax-highlighting, zpm-zsh/clipboard)
+3. `home/dot_config/zsh/bootstrap.zshrc.tmpl` — SSH agent (only when `$SSH_AUTH_SOCK` is unset), `~/.local/bin` PATH, Homebrew PATH, Antidote plugin manager, Starship, atuin, zoxide
+4. `home/dot_config/zsh/aliases.zshrc` — shell aliases (`cd` → zoxide's `z`, so functions use `builtin cd`)
+5. `home/dot_config/zsh/functions.zshrc` — shell functions (`take`, `serve`); sources `worktrees.functions.zshrc` for the `wt*` git worktree helpers
+6. `home/dot_config/zsh/dot_zsh_plugins.txt` — Antidote plugin list (zsh-autosuggestions, zsh-completions, zsh-syntax-highlighting, zpm-zsh/clipboard)
 
 The generated `.config/zsh/.zsh_plugins.zsh` is excluded via `.chezmoiignore`.
 
 ## CI
 
-GitHub Actions (`.github/workflows/pull-request.yaml`) runs `chezmoi init -S . && chezmoi apply -S . && bash tests/run.sh` in containers for `fedora:44`, `ubuntu:26.04`, and `macos-latest`. CI sets `CI=true` to bypass interactive prompts, using `ci` as the hostname and `ci@example.com` as the email. The `apply` step is what installs Homebrew and brew-bundles the Brewfile, which is where `bats` and `yq` come from — without it the test step fails with `Missing: bats`.
+GitHub Actions (`.github/workflows/pull-request.yaml`) runs `chezmoi init -S . && chezmoi apply -S . && bash tests/run.sh` in containers for `fedora:44`, `ubuntu:26.04`, `quay.io/fedora/fedora-coreos:stable` (exercises the rpm-ostree paths), and on `macos-latest`. `.github/workflows/apply.yaml` reuses it via `workflow_call` on pushes to `main` and a weekly schedule. CI sets `CI=true` to bypass interactive prompts, using `ci` as the hostname and `ci@example.com` as the email. The `apply` step is what installs Homebrew and brew-bundles the Brewfile, which is where `bats` and `yq` come from — without it the test step fails with `Missing: bats`.
 
 ## Tests
 
