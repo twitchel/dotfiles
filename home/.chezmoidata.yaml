@@ -43,7 +43,6 @@ hostData:
         - neovim
         - nmap
         - node
-        - nvim
         - rclone
         - ripgrep
         - screen
@@ -92,7 +91,6 @@ hostData:
         - logomenu@aryan_k
         - rectangle@acristoffers.me
         - Vitals@CoreCoding.com
-      brew:
       brewCask:
         - 1password-gui-linux
         - claude-code
