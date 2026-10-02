@@ -23,11 +23,12 @@ load '../helpers/common'
   assert_line_in_output 'export PATH="$HOME/.local/bin:$PATH"'
 }
 
-@test "bootstrap.zshrc: ssh-agent eval is silenced" {
+@test "bootstrap.zshrc: ssh-agent only starts without an existing agent, silenced" {
   chez_init ci
   run chez_cat .config/zsh/bootstrap.zshrc
   [ "$status" -eq 0 ]
-  assert_line_in_output 'command -v ssh-agent > /dev/null && eval "$(ssh-agent)" > /dev/null'
+  assert_line_in_output 'if [ -z "$SSH_AUTH_SOCK" ] && command -v ssh-agent > /dev/null; then'
+  assert_line_in_output '  eval "$(ssh-agent)" > /dev/null'
 }
 
 @test ".zshrc: sources functions.zshrc" {

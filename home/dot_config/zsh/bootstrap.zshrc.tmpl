@@ -5,7 +5,11 @@ source_file() {
 }
 
 ## ---- Boot SSH Agent ---- ##
-command -v ssh-agent > /dev/null && eval "$(ssh-agent)" > /dev/null
+# Only when no agent is already provided (launchd, GNOME Keyring, 1Password),
+# otherwise every new shell spawns another agent and shadows the system one.
+if [ -z "$SSH_AUTH_SOCK" ] && command -v ssh-agent > /dev/null; then
+  eval "$(ssh-agent)" > /dev/null
+fi
 
 ## ---- home bin path ---- ##
 export PATH="$HOME/.local/bin:$PATH"
