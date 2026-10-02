@@ -22,3 +22,6 @@ Desktop.ini
 
 # vendored BATS (recreated by `make vendor`)
 tests/vendor/
+
+# Backups
+*.bak
