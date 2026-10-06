@@ -98,6 +98,6 @@ Three tiers under `tests/` (see `tests/README.md`):
 
 `bash tests/run.sh` runs the unit and render tiers and is what CI invokes; it needs `bats`, `yq` and `chezmoi` on PATH. The repo-root `Makefile` reproduces all of it in containers (`make test`, `make ci`, `make test-apply`); `make vendor` fetches bats into the gitignored `tests/vendor/`.
 
-Suites assert in plain bash, not bats-assert, so the only test dependency is bats itself. Helpers live in `tests/helpers/common.bash`: `mock`/`assert_mock_*` for the unit tier, and `chez_init`/`chez_cat`/`chez_template` (which seed an isolated chezmoi config to bypass `promptStringOnce`) for the render tier.
+Suites assert in plain bash, not bats-assert, so the only test dependency is bats itself. Helpers live in `tests/helpers/common.bash`: `mock`/`assert_mock_*` for the unit tier, and `chez_init`/`chez_cat`/`chez_template` (which seed an isolated chezmoi config to bypass `promptStringOnce`) for the render tier. Host-specific package tests use the `ci` host via `chez_init_ci_fixture`, which merges `tests/fixtures/ci-packages.yaml` into `hostData.ci` — test-only, since CI really applies the `ci` block.
 
 When changing a script, prefer sourcing or rendering the real thing over re-implementing its logic inline in the test — an earlier inline-heredoc suite passed against the code that caused an SSH lockout.

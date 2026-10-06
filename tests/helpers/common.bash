@@ -77,6 +77,16 @@ EOF
   env -u CI HOME="${CHEZ_HOME}" chezmoi init -S "${REPO_ROOT}" --no-tty > /dev/null
 }
 
+# chez_init_ci_fixture — chez_init ci, then deep-merge tests/fixtures/ci-packages.yaml
+# into hostData.ci, so host-specific package tests run against the ci host
+# without CI's real apply installing those packages. Merged after init because
+# init regenerates the config from .chezmoi.yaml.tmpl, dropping extra data.
+chez_init_ci_fixture() {
+  chez_init ci
+  yq -i ".data.hostData.ci *= load(\"${REPO_ROOT}/tests/fixtures/ci-packages.yaml\")" \
+    "${CHEZ_HOME}/.config/chezmoi/chezmoi.yaml"
+}
+
 # chez <args...> — run a chezmoi subcommand against the isolated HOME.
 chez() {
   env -u CI HOME="${CHEZ_HOME}" chezmoi "$@" -S "${REPO_ROOT}" --no-tty

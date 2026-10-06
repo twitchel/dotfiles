@@ -14,20 +14,11 @@ load '../helpers/common'
   assert_line_in_output 'brew "act"'   # default/common
 }
 
-@test "coffee-sponge: casks render on Linux (cask-on-linux)" {
-  chez_init coffee-sponge
+@test "ci host: host casks render (cask-on-linux)" {
+  chez_init_ci_fixture
   run chez_cat .config/brew/Brewfile
   [ "$status" -eq 0 ]
-  assert_line_in_output 'cask "1password-gui-linux"'
-  assert_line_in_output 'cask "claude-code"'
-}
-
-@test "grease-monkey: host brew package merges with common packages" {
-  chez_init grease-monkey
-  run chez_cat .config/brew/Brewfile
-  [ "$status" -eq 0 ]
-  assert_line_in_output 'brew "tailscale"' # host-specific
-  assert_line_in_output 'brew "starship"'  # common
+  assert_line_in_output 'cask "fixture-cask"'
 }
 
 @test "hostname is normalised to lowercase" {
@@ -38,9 +29,9 @@ load '../helpers/common'
 }
 
 @test "a host with no extra packages still renders the common block" {
-  # grease-monkey has an empty flatpak list and only one extra brew; the
-  # template must not error and must still emit the common packages.
-  chez_init grease-monkey
+  # the ci fixture has an empty flatpak list; the template must not error and
+  # must still emit the common packages.
+  chez_init_ci_fixture
   run chez_cat .config/brew/Brewfile
   [ "$status" -eq 0 ]
   assert_line_in_output 'brew "neovim"'

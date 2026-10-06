@@ -1,0 +1,11 @@
+# Test-only package data merged into hostData.ci by chez_init_ci_fixture.
+# Kept out of .chezmoidata.yaml because CI runs a real `chezmoi apply` as the
+# ci host — anything there gets tapped, installed and layered on the runners.
+packages:
+  brewCask:
+    - fixture-cask
+  brewCaskTaps:
+    - fixture/tap
+  rpmOstree:
+    - ghostty # ghostty specifically: it gates the COPR repo branch
+  flatpak: []
