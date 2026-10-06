@@ -1,6 +1,8 @@
 #!/usr/bin/env bats
 # Tests for run_onchange_after_010_flatpak-postinstall.sh.tmpl
 # This script has no template variables — it can be run directly.
+# OSTREE_BOOTED points the atomic-host check at a fixture instead of
+# /run/ostree-booted.
 
 load '../helpers/common'
 
@@ -8,62 +10,46 @@ SCRIPT="${SCRIPTS_AFTER}/run_onchange_after_010_flatpak-postinstall.sh.tmpl"
 
 setup() {
   setup_mocks
+  ATOMIC_MARKER="${BATS_TEST_TMPDIR}/ostree-booted"
+  touch "$ATOMIC_MARKER"
+  NO_MARKER="${BATS_TEST_TMPDIR}/absent"
 }
 
 @test "skips when MACHINE_TYPE is server" {
-  run env MACHINE_TYPE="server" OS_VARIANT="" bash "$SCRIPT"
+  run env MACHINE_TYPE="server" OSTREE_BOOTED="$NO_MARKER" bash "$SCRIPT"
   [ "$status" -eq 0 ]
   [[ "$output" == *"Not a workstation"* ]]
 }
 
 @test "skips when flatpak is not installed" {
   # No flatpak mock in PATH → command -v flatpak fails
-  run env MACHINE_TYPE="workstation" OS_VARIANT="" bash "$SCRIPT"
+  run env MACHINE_TYPE="workstation" OSTREE_BOOTED="$NO_MARKER" bash "$SCRIPT"
   [ "$status" -eq 0 ]
   [[ "$output" == *"flatpak not found"* ]]
 }
 
-@test "removes filtered Flathub remotes on silverblue" {
+@test "removes filtered Flathub remotes on an ostree-booted host" {
   mock flatpak 0
 
-  run env MACHINE_TYPE="workstation" OS_VARIANT="silverblue" bash "$SCRIPT"
+  run env MACHINE_TYPE="workstation" OSTREE_BOOTED="$ATOMIC_MARKER" bash "$SCRIPT"
   [ "$status" -eq 0 ]
   assert_mock_called_with flatpak "remote-delete flathub"
   assert_mock_called_with flatpak "remote-delete fedora"
 }
 
-@test "removes filtered Flathub remotes on bazzite" {
+@test "does NOT remove remotes on a non-atomic host" {
   mock flatpak 0
 
-  run env MACHINE_TYPE="workstation" OS_VARIANT="bazzite" bash "$SCRIPT"
+  run env MACHINE_TYPE="workstation" OSTREE_BOOTED="$NO_MARKER" bash "$SCRIPT"
   [ "$status" -eq 0 ]
-  assert_mock_called_with flatpak "remote-delete flathub"
-}
-
-@test "removes filtered Flathub remotes on kinoite" {
-  mock flatpak 0
-
-  run env MACHINE_TYPE="workstation" OS_VARIANT="kinoite" bash "$SCRIPT"
-  [ "$status" -eq 0 ]
-  assert_mock_called_with flatpak "remote-delete flathub"
-}
-
-@test "does NOT remove remotes on standard Ubuntu (non-atomic)" {
-  mock flatpak 0
-
-  run env MACHINE_TYPE="workstation" OS_VARIANT="" bash "$SCRIPT"
-  [ "$status" -eq 0 ]
-  # remote-delete should not appear for non-atomic variants
-  if assert_mock_called flatpak; then
-    run grep "remote-delete" "${BATS_TEST_TMPDIR}/mock_flatpak.log"
-    [ "$status" -ne 0 ]
-  fi
+  run grep "remote-delete" "${BATS_TEST_TMPDIR}/mock_flatpak.log"
+  [ "$status" -ne 0 ]
 }
 
 @test "always calls remote-add --if-not-exists for full Flathub" {
   mock flatpak 0
 
-  run env MACHINE_TYPE="workstation" OS_VARIANT="silverblue" bash "$SCRIPT"
+  run env MACHINE_TYPE="workstation" OSTREE_BOOTED="$NO_MARKER" bash "$SCRIPT"
   [ "$status" -eq 0 ]
   assert_mock_called_with flatpak "remote-add --if-not-exists flathub"
 }
@@ -78,6 +64,7 @@ exit 0
 MOCK
   chmod +x "${BATS_TEST_TMPDIR}/bin/flatpak"
 
-  run env "PATH=${BATS_TEST_TMPDIR}/bin:${PATH}" MACHINE_TYPE="workstation" OS_VARIANT="silverblue" /bin/bash "$SCRIPT"
+  run env "PATH=${BATS_TEST_TMPDIR}/bin:${PATH}" MACHINE_TYPE="workstation" OSTREE_BOOTED="$ATOMIC_MARKER" /bin/bash "$SCRIPT"
   [ "$status" -eq 0 ]
+  assert_mock_called_with flatpak "remote-add --if-not-exists flathub"
 }

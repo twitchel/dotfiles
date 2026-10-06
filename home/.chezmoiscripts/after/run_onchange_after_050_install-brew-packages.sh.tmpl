@@ -4,7 +4,9 @@
 echo "⭐️ Running after 050 install-brew-packages"
 
 # Install GCC first (required build dependency on Linux)
-$BREWBIN install gcc --skip-post-install
+if [ "$OS" = "linux" ]; then
+  $BREWBIN install gcc --skip-post-install
+fi
 
 # Tap and trust default formula taps
 {{- $commonConfig := .hostData.default }}
