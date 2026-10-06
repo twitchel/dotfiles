@@ -70,7 +70,8 @@ the Linux test containers. macOS behaviour stays validated by the
 ```
 test/
   Dockerfile          # ARG BASE_IMAGE; chezmoi + tooling + non-root `tester`
-  helpers/common.bash # chez_init / chez_cat / chez_template helpers
+  helpers/common.bash # chez_init / chez_init_ci_fixture / chez_cat / chez_template helpers
+  fixtures/ci-packages.yaml # test-only hostData.ci packages (casks, taps, rpmOstree)
   render.bats         # Brewfile / package-merge content
   scripts.bats        # generated .chezmoiscripts content
   zsh.bats            # bootstrap.zshrc content

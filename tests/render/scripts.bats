@@ -16,11 +16,11 @@ SCRIPTS="home/.chezmoiscripts/after"
 }
 
 @test "050 install-brew: host cask taps are tapped and trusted" {
-  chez_init coffee-sponge
+  chez_init_ci_fixture
   run chez_template "${SCRIPTS}/run_onchange_after_050_install-brew-packages.sh.tmpl"
   [ "$status" -eq 0 ]
-  assert_line_in_output '$BREWBIN tap "ublue-os/tap"'
-  assert_line_in_output '$BREWBIN trust "ublue-os/tap"'
+  assert_line_in_output '$BREWBIN tap "fixture/tap"'
+  assert_line_in_output '$BREWBIN trust "fixture/tap"'
 }
 
 @test "050 install-brew: cachebust hash line is present and non-empty" {
@@ -30,8 +30,8 @@ SCRIPTS="home/.chezmoiscripts/after"
   assert_line_matches '^# \.chezmoidata\.yaml hash: [0-9a-f]{64}'
 }
 
-@test "040 rpm-ostree: coffee-sponge queues ghostty and zsh for layering" {
-  chez_init coffee-sponge
+@test "040 rpm-ostree: ci host queues ghostty and zsh for layering" {
+  chez_init_ci_fixture
   run chez_template "${SCRIPTS}/run_onchange_after_040_rpm-ostree.sh.tmpl"
   [ "$status" -eq 0 ]
   assert_line_in_output '  PACKAGES_TO_INSTALL+=("ghostty")'
@@ -41,7 +41,7 @@ SCRIPTS="home/.chezmoiscripts/after"
 }
 
 @test "040 rpm-ostree: a host with no rpmOstree block inherits the defaults" {
-  chez_init grease-monkey
+  chez_init not-a-real-host
   run chez_template "${SCRIPTS}/run_onchange_after_040_rpm-ostree.sh.tmpl"
   [ "$status" -eq 0 ]
   assert_line_in_output '  PACKAGES_TO_INSTALL+=("zsh")'
