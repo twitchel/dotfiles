@@ -104,9 +104,20 @@ hostData:
       flatpak: []
   grease-monkey:
     packages:
-      gnomeExtensions: []
+      gnomeExtensions:
+        - dash-to-dock@micxgx.gmail.com
+        - logomenu@aryan_k
+        - rectangle@acristoffers.me
+        - Vitals@CoreCoding.com
       brew:
-        - tailscale
+      brewCask:
+        - 1password-gui-linux
+        - claude-code
+        - jetbrains-toolbox-linux
+      brewCaskTaps:
+        - ublue-os/tap
+      rpmOstree:
+        - ghostty
       flatpak: []
   mac-4981:
     packages:
