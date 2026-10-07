@@ -25,3 +25,7 @@ tests/vendor/
 
 # Backups
 *.bak
+
+# Claude Code / superpowers scratch
+.claude/worktrees/
+.superpowers/
