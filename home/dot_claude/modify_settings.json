@@ -1,0 +1,8 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- /* Managed keys win over the live file; everything else Claude Code wrote survives. */ -}}
+{{- $live := dict -}}
+{{- if .chezmoi.stdin | trim -}}
+{{-   $live = .chezmoi.stdin | fromJson -}}
+{{- end -}}
+{{- $managed := includeTemplate "claude/settings.managed.json.tmpl" . | fromJson -}}
+{{- mergeOverwrite $live $managed | toPrettyJson -}}
