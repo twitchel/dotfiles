@@ -74,7 +74,9 @@ Scripts use the `onchange_` prefix to re-run only when their content changes (ha
 
 `home/dot_claude/` manages these `~/.claude` paths: `CLAUDE.md`, `hooks/`, `statusline-command.sh` and `settings.json`.
 
-`settings.json` comes from `modify_settings.json`, a chezmoi modify-template. It deep-merges `home/.chezmoitemplates/claude/settings.managed.json.tmpl` over the live file with sprig `mergeOverwrite`, so keys Claude Code writes itself (`autoMode`, theme, etc.) survive. **Managed keys win on every apply.** To change a managed setting, edit the template, not `~/.claude/settings.json`.
+`settings.json` comes from `modify_settings.json`, a chezmoi modify-template. It deep-merges `home/.chezmoitemplates/claude/settings.managed.json.tmpl` over the live file with sprig `mergeOverwrite` (objects merge, arrays such as `hooks.SessionStart` are replaced), so keys Claude Code writes itself (`autoMode`, theme, etc.) survive. **Managed keys win on every apply.** To change a managed setting, edit the template, not `~/.claude/settings.json`.
+
+`hooks/herdr-agent-state.sh` is seeded once (`create_`); herdr owns later updates to it.
 
 Runtime paths (`projects/`, `sessions/`, `skills/synced/`, credentials) are never managed. Render tests are in `tests/render/claude.bats`.
 

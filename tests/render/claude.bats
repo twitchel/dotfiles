@@ -1,5 +1,5 @@
 #!/usr/bin/env bats
-# Render tier: the managed ~/.claude files (global CLAUDE.md, hooks, statusline)
+# Render tier: the managed ~/.claude files (global CLAUDE.md, hooks, statusline, settings.json)
 # and the boundary of what chezmoi owns under ~/.claude.
 
 load '../helpers/common'
@@ -87,5 +87,5 @@ seed_settings() {
 @test ".claude/settings.json: output ends in exactly one newline" {
   chez_init ci
   chez_cat .claude/settings.json > "${BATS_TEST_TMPDIR}/out"
-  [ "$(tail -c 2 "${BATS_TEST_TMPDIR}/out" | xxd -p)" = "7d0a" ]
+  [ "$(tail -c 2 "${BATS_TEST_TMPDIR}/out" | od -An -tx1 | tr -d ' \n')" = "7d0a" ]
 }
