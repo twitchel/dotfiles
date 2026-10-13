@@ -72,13 +72,22 @@ Scripts use the `onchange_` prefix to re-run only when their content changes (ha
 
 ### Claude Code config
 
-`home/dot_claude/` manages these `~/.claude` paths: `CLAUDE.md`, `hooks/`, `statusline-command.sh` and `settings.json`.
+`home/dot_claude/` manages these `~/.claude` paths: `CLAUDE.md`, `agents/`, `hooks/`, the four skill dirs under `skills/`, `statusline-command.sh` and `settings.json`.
+
+- `agents/` — six user-level subagents: `reader-quick`/`reader`/`reader-deep` (read-only) and `writer-quick`/`writer`/`writer-deep`, tiered haiku/low, sonnet/medium, opus/high via `model` and `effort` frontmatter. The global `CLAUDE.md` tells Claude which tier to pick.
+- `skills/` — a vendored subset of `obra/superpowers` v7.0.0 (`verification-before-completion`, `subagent-driven-development`, `using-git-worktrees`, `finishing-a-development-branch`), with `superpowers:` cross-refs rewritten to bare names, `requesting-code-review`'s reviewer prompt copied in as `final-reviewer-prompt.md`, and agent/`aicli` hooks added. The superpowers plugin itself is disabled; Matt Pocock's skills (`mattpocock-skills@mattpocock`, tracking `mattpocock/skills` main with `autoUpdate`) are the primary methodology.
 
 `settings.json` comes from `modify_settings.json`, a chezmoi modify-template. It deep-merges `home/.chezmoitemplates/claude/settings.managed.json.tmpl` over the live file with sprig `mergeOverwrite` (objects merge, arrays such as `hooks.SessionStart` are replaced), so keys Claude Code writes itself (`autoMode`, theme, etc.) survive. **Managed keys win on every apply.** To change a managed setting, edit the template, not `~/.claude/settings.json`.
+
+`permissions.allow` in the managed template is an array, so it **replaces** the live list on every apply: add allow rules to the template, not via Claude's permission prompts. It only allows read-only `aicli` subcommands.
 
 `hooks/herdr-agent-state.sh` is seeded once (`create_`); herdr owns later updates to it.
 
 Runtime paths (`projects/`, `sessions/`, `skills/synced/`, credentials) are never managed. Render tests are in `tests/render/claude.bats`.
+
+### aicli
+
+`aicli` (`home/dot_local/bin/executable_aicli`) is a bash dispatcher for deterministic agent chores; each subcommand is `home/dot_local/lib/aicli/cmd/<name>.sh` (installed to `~/.local/lib/aicli`, overridable with `AICLI_LIB`), sourced after `lib.sh`, and defines `main`. Its `# summary:` line feeds `aicli help` and its `# usage:` comment block feeds `-h`. Subcommands: `ctx`, `ship`, `pr`, `doctor`, `plugins`. Keep it bash 3.2 compatible (macOS `/bin/bash`) and dependent only on git, gh, jq, curl, claude. Unit tests: `tests/bats/10_aicli.bats`.
 
 ### ZSH configuration
 

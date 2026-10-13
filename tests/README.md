@@ -10,7 +10,7 @@ Three tiers, in increasing cost:
 
 | Tier | Path | What it checks | Runs by default |
 |---|---|---|---|
-| unit | `tests/bats/` | script bash logic, against mocked binaries | yes |
+| unit | `tests/bats/` | script bash logic and `aicli`, against mocked binaries and throwaway git repos | yes |
 | render | `tests/render/` | what chezmoi actually renders (Brewfile, scripts, zshrc) | yes |
 | apply | `tests/apply/` | a real `chezmoi apply` into an isolated HOME | no — `make test-apply` |
 

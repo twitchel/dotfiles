@@ -25,7 +25,8 @@ load '../helpers/common'
   assert_line_in_output '.claude/CLAUDE.md'
   assert_line_in_output '.claude/hooks/herdr-agent-state.sh'
   assert_line_in_output '.claude/statusline-command.sh'
-  if assert_line_matches '^\.claude/(skills|projects|sessions)(/|$)'; then false; fi
+  assert_line_in_output '.claude/skills/verification-before-completion/SKILL.md'
+  if assert_line_matches '^\.claude/(skills/(synced|presenterm)|projects|sessions)(/|$)'; then false; fi
 }
 
 # Seed the isolated destination's settings.json with the given JSON.
@@ -44,8 +45,68 @@ seed_settings() {
     and .statusLine.refreshInterval == 2
     and .hooks.SessionStart[0].hooks[0].command == "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" session"
     and .hooks.SessionStart[0].hooks[0].timeout == 10
-    and .enabledPlugins["superpowers@claude-plugins-official"] == true
-    and (has("permissions") | not)' > /dev/null
+    and .enabledPlugins["superpowers@claude-plugins-official"] == false
+    and .enabledPlugins["mattpocock-skills@claude-plugins-official"] == false
+    and .enabledPlugins["mattpocock-skills@mattpocock"] == true
+    and .extraKnownMarketplaces.mattpocock.source.repo == "mattpocock/skills"
+    and .extraKnownMarketplaces.mattpocock.autoUpdate == true
+    and (.permissions.allow | index("Bash(aicli ctx:*)") != null)' > /dev/null
+}
+
+@test ".claude/settings.json: live marketplaces survive alongside the managed one" {
+  chez_init ci
+  seed_settings '{"extraKnownMarketplaces":{"caveman":{"source":{"source":"github","repo":"JuliusBrussee/caveman"}}}}'
+  run chez_cat .claude/settings.json
+  [ "$status" -eq 0 ]
+  printf '%s' "$output" | jq -e '
+    .extraKnownMarketplaces.caveman.source.repo == "JuliusBrussee/caveman"
+    and .extraKnownMarketplaces.mattpocock.source.repo == "mattpocock/skills"' > /dev/null
+}
+
+@test ".claude/agents: six reader/writer agents with model and effort tiers" {
+  chez_init ci
+  local spec name model effort
+  for spec in reader-quick:haiku:low reader:sonnet:medium reader-deep:opus:high \
+    writer-quick:haiku:low writer:sonnet:medium writer-deep:opus:high; do
+    IFS=: read -r name model effort <<< "$spec"
+    run chez_cat ".claude/agents/${name}.md"
+    [ "$status" -eq 0 ]
+    [ "$(printf '%s\n' "$output" | yq --front-matter=extract '.name + " " + .model + " " + .effort')" = "$name $model $effort" ]
+  done
+}
+
+@test ".claude/agents: readers have no edit tools; writer-quick has no shell" {
+  chez_init ci
+  local name
+  for name in reader-quick reader reader-deep; do
+    run chez_cat ".claude/agents/${name}.md"
+    refute_output_contains 'Edit'
+    refute_output_contains 'Write,'
+  done
+  run chez_cat .claude/agents/writer-quick.md
+  [ "$(printf '%s\n' "$output" | yq --front-matter=extract '.tools')" = "Read, Edit, Write, Grep, Glob" ]
+}
+
+@test ".claude/skills: vendored skills carry no superpowers: plugin references" {
+  run grep -rn 'superpowers:' "${REPO_ROOT}/home/dot_claude/skills"
+  [ "$status" -eq 1 ]
+}
+
+@test ".claude/skills: subagent-driven-development scripts install executable" {
+  chez_init ci
+  run chez managed --include files
+  assert_line_in_output '.claude/skills/subagent-driven-development/scripts/sdd-workspace'
+  assert_line_in_output '.claude/skills/subagent-driven-development/final-reviewer-prompt.md'
+}
+
+@test "aicli: dispatcher and every subcommand are managed" {
+  chez_init ci
+  run chez managed --include files
+  assert_line_in_output '.local/bin/aicli'
+  local cmd
+  for cmd in ctx ship pr doctor plugins; do
+    assert_line_in_output ".local/lib/aicli/cmd/${cmd}.sh"
+  done
 }
 
 @test ".claude/settings.json: managed keys win and unmanaged live keys survive" {
@@ -59,7 +120,7 @@ seed_settings() {
     and .tui == "fullscreen"
     and .autoMode.soft_deny == ["x"]
     and .enabledPlugins["foo@bar"] == false
-    and .enabledPlugins["superpowers@claude-plugins-official"] == true' > /dev/null
+    and .enabledPlugins["superpowers@claude-plugins-official"] == false' > /dev/null
 }
 
 @test ".claude/settings.json: extra hook events survive and SessionStart is managed" {

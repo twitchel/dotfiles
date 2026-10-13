@@ -39,3 +39,29 @@ pairs = [(k, v) for k, v in items]
 The test: if a sentence only makes sense to someone who watched the change happen, cut it.
 
 This applies to comments in every language, and to config and infrastructure files.
+
+# Deterministic tools
+
+`aicli` (in `~/.local/bin`) does fixed git/GitHub/Claude chores in one call. Prefer it to running the steps by hand:
+
+- `aicli ctx` — repo snapshot (branch, upstream, status, diffstat, recent commits, PR, stack). Run it first instead of separate `git status`/`git log`/`git diff --stat` calls.
+- `aicli ship -m "<msg>" [-a] [-b <branch>] [--pr]` — commit, push, optionally open the PR. Write the message yourself; the script does the rest. It refuses the default branch without `-b`.
+- `aicli pr create|status` — open or inspect the branch's PR.
+- `aicli doctor`, `aicli plugins list|update|sync` — setup health.
+
+`aicli <cmd> -h` shows options.
+
+# Delegation
+
+User-level agents pair a model with an effort level. Pick the cheapest that fits:
+
+| Need | Agent |
+|---|---|
+| single-fact lookup: where is X, what calls Y | `reader-quick` |
+| trace a flow, explain a feature, review a diff | `reader` |
+| architecture audit, subtle bug, whole-branch review | `reader-deep` |
+| mechanical 1–2 file edit with a full spec | `writer-quick` |
+| scoped feature or fix with tests | `writer` |
+| cross-file refactor, design judgment, a stuck writer | `writer-deep` |
+
+Brief writers with the exact files, the change, and the checks to run. Commit their work yourself, with `aicli ship`.

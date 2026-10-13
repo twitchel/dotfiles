@@ -35,7 +35,25 @@
     "pr-review-toolkit@claude-plugins-official": true,
     "security-guidance@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true,
-    "mattpocock-skills@claude-plugins-official": true
+    "superpowers@claude-plugins-official": false,
+    "mattpocock-skills@claude-plugins-official": false,
+    "mattpocock-skills@mattpocock": true
+  },
+  "permissions": {
+    "allow": [
+      "Bash(aicli ctx:*)",
+      "Bash(aicli doctor:*)",
+      "Bash(aicli plugins list:*)",
+      "Bash(aicli pr status:*)"
+    ]
+  },
+  "extraKnownMarketplaces": {
+    "mattpocock": {
+      "source": {
+        "source": "github",
+        "repo": "mattpocock/skills"
+      },
+      "autoUpdate": true
+    }
   }
 }
