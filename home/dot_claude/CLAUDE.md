@@ -45,7 +45,7 @@ This applies to comments in every language, and to config and infrastructure fil
 `aicli` (in `~/.local/bin`) does fixed git/GitHub/Claude chores in one call. Prefer it to running the steps by hand:
 
 - `aicli ctx` — repo snapshot (branch, upstream, status, diffstat, recent commits, PR, stack). Run it first instead of separate `git status`/`git log`/`git diff --stat` calls.
-- `aicli ship -m "<msg>" [-a] [-b <branch>] [--pr]` — commit, push, optionally open the PR. Write the message yourself; the script does the rest. It refuses the default branch without `-b`.
+- `aicli ship -m "<msg>" [-a [<path>[:<start>-<end>]...]] [-b <branch>] [--pr]` — commit, push, optionally open the PR. `-a` alone stages everything; `-a <paths>` stages only those; `<path>:<start>-<end>` stages only the changed hunks touching those working-copy lines. Write the message yourself; the script does the rest. It refuses the default branch without `-b`.
 - `aicli pr create|status` — open or inspect the branch's PR.
 - `aicli doctor`, `aicli plugins list|update|sync` — setup health.
 

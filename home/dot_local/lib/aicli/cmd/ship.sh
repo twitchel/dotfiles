@@ -1,9 +1,12 @@
 # shellcheck shell=bash
 # summary: commit (optional), push the branch, optionally open a PR
-# usage: aicli ship [-m <msg>|-m -] [-a] [-b <branch>] [--pr] [--draft]
+# usage: aicli ship [-m <msg>|-m -] [-a [<path>[:<start>[-<end>]]...]] [-b <branch>] [--pr] [--draft]
 #
 #   -m MSG      commit message; "-" reads it from stdin. Required when there is anything to commit
-#   -a          stage everything first (tracked and untracked)
+#   -a [PATH..] stage first: everything (tracked and untracked), or only the given paths.
+#               Paths run until the next option, so put -a last or follow its paths with an option.
+#               PATH:START-END (or PATH:LINE) stages only the changes in a tracked file that touch
+#               those lines of the working copy, at the granularity of `git diff -U0` hunks
 #   -b BRANCH   create and switch to BRANCH before committing
 #   --pr        then run `aicli pr create`
 #   --draft     with --pr, open as draft
@@ -11,12 +14,90 @@
 #   Refuses to commit or push on the default branch unless -b is given.
 #   With nothing staged and no -m, only pushes.
 
+# Keeps the `git diff -U0` hunks whose new-side lines overlap one of the
+# space-separated START-END ranges; exits 1 if none do.
+# shellcheck disable=SC2016
+HUNK_FILTER='
+BEGIN {
+  n = split(ranges, r, " ")
+  for (i = 1; i <= n; i++) { split(r[i], p, "-"); lo[i] = p[1] + 0; hi[i] = p[2] + 0 }
+}
+/^@@ / {
+  in_hunk = 1
+  match($0, /\+[0-9]+(,[0-9]+)?/)
+  k = split(substr($0, RSTART + 1, RLENGTH - 1), q, ",")
+  c = q[1] + 0; d = (k > 1) ? q[2] + 0 : 1
+  # A pure deletion sits between new lines c and c+1.
+  a = c; b = (d == 0) ? c + 1 : c + d - 1
+  keep = 0
+  for (i = 1; i <= n; i++) if (lo[i] <= b && hi[i] >= a) keep = 1
+  if (keep) kept++
+}
+!in_hunk { print; next }
+keep { print }
+END { exit kept ? 0 : 1 }
+'
+
+stage_ranges() {
+  local file="$1" ranges="$2" patch
+  git ls-files --error-unmatch -- "$file" > /dev/null 2>&1 ||
+    die "ship: line ranges need a tracked file: $file"
+  patch=$(git diff -U0 --no-color --no-ext-diff -- "$file" | awk -v ranges="$ranges" "$HUNK_FILTER") ||
+    die "ship: no unstaged changes in $file touch lines $ranges"
+  printf '%s\n' "$patch" | git apply --cached --unidiff-zero - ||
+    die "ship: could not stage lines $ranges of $file"
+}
+
+# Stages whole paths with `git add -A`, and PATH:START[-END] specs hunk by hunk.
+stage_paths() {
+  local whole=() rfile=() rrange=() arg i j f ranges seen
+  local re='^(.+):([0-9]+)(-([0-9]+))?$'
+  for arg in "$@"; do
+    if [ ! -e "$arg" ] && [[ $arg =~ $re ]]; then
+      rfile+=("${BASH_REMATCH[1]}")
+      rrange+=("${BASH_REMATCH[2]}-${BASH_REMATCH[4]:-${BASH_REMATCH[2]}}")
+    else
+      whole+=("$arg")
+    fi
+  done
+  if [ ${#whole[@]} -gt 0 ]; then
+    git add -A -- "${whole[@]}" || die "ship: could not stage the given paths"
+  fi
+  i=0
+  while [ "$i" -lt ${#rfile[@]} ]; do
+    f="${rfile[$i]}"
+    seen=false
+    j=0
+    while [ "$j" -lt "$i" ]; do
+      [ "${rfile[$j]}" = "$f" ] && seen=true
+      j=$((j + 1))
+    done
+    if ! $seen; then
+      ranges=""
+      j=$i
+      while [ "$j" -lt ${#rfile[@]} ]; do
+        [ "${rfile[$j]}" = "$f" ] && ranges="${ranges:+$ranges }${rrange[$j]}"
+        j=$((j + 1))
+      done
+      stage_ranges "$f" "$ranges"
+    fi
+    i=$((i + 1))
+  done
+}
+
 main() {
   local msg="" have_msg=false all=false new_branch="" pr=false draft=false
+  local paths=()
   while [ $# -gt 0 ]; do
     case "$1" in
       -m) msg="${2-}"; have_msg=true; shift ;;
-      -a) all=true ;;
+      -a)
+        all=true
+        while [ $# -gt 1 ] && [ "${2#-}" = "$2" ]; do
+          paths+=("$2")
+          shift
+        done
+        ;;
       -b) new_branch="${2:?-b needs a branch name}"; shift ;;
       --pr) pr=true ;;
       --draft) draft=true ;;
@@ -42,7 +123,13 @@ main() {
     die "ship: on default branch '$def'; pass -b <branch>"
   fi
 
-  $all && git add -A
+  if $all; then
+    if [ ${#paths[@]} -gt 0 ]; then
+      stage_paths "${paths[@]}"
+    else
+      git add -A
+    fi
+  fi
 
   if ! git diff --cached --quiet 2> /dev/null || ! has_commits; then
     $have_msg && [ -n "$msg" ] || die "ship: staged changes need a message (-m)"

@@ -107,6 +107,81 @@ SCRIPT
   [ -z "$(git status --porcelain)" ]
 }
 
+@test "aicli ship: -a with paths stages only those paths" {
+  make_repo
+  git switch -q -c feat
+  echo two >> a.txt
+  touch b.txt c.txt
+  run aicli ship -a b.txt a.txt -m "add b"
+  [ "$status" -eq 0 ]
+  [ "$(git show --name-only --format= HEAD | sort | tr '\n' ' ')" = "a.txt b.txt " ]
+  [ "$(git status --porcelain)" = "?? c.txt" ]
+}
+
+@test "aicli ship: -a with an unknown path fails before committing" {
+  make_repo
+  git switch -q -c feat
+  echo two >> a.txt
+  run aicli ship -m change -a nope.txt
+  [ "$status" -eq 1 ]
+  assert_line_matches 'could not stage'
+  [ "$(git rev-list --count HEAD)" -eq 1 ]
+}
+
+# ten-line l.txt committed on branch feat
+make_lines_repo() {
+  make_repo
+  git switch -q -c feat
+  seq 1 10 > l.txt
+  git add l.txt
+  git commit -q -m "lines"
+}
+
+@test "aicli ship: -a PATH:START-END stages only the hunks in that range" {
+  make_lines_repo
+  sed -i.bak -e 's/^2$/two/' -e 's/^8$/eight/' l.txt && rm l.txt.bak
+  echo two >> a.txt
+  run aicli ship -a l.txt:7-9 a.txt -m "eight"
+  [ "$status" -eq 0 ]
+  [ "$(git show HEAD:l.txt | sed -n 2p)" = "2" ]
+  [ "$(git show HEAD:l.txt | sed -n 8p)" = "eight" ]
+  [ "$(git show HEAD:a.txt | tail -n 1)" = "two" ]
+  [ "$(git diff --numstat -- l.txt | cut -f1-2)" = "$(printf '1\t1')" ]
+}
+
+@test "aicli ship: -a takes several ranges and single lines for one file" {
+  make_lines_repo
+  sed -i.bak -e 's/^2$/two/' -e 's/^5$/five/' -e 's/^8$/eight/' l.txt && rm l.txt.bak
+  run aicli ship -a l.txt:2 l.txt:8-8 -m "two and eight"
+  [ "$status" -eq 0 ]
+  [ "$(git show HEAD:l.txt | sed -n '2p;5p;8p' | tr '\n' ' ')" = "two 5 eight " ]
+}
+
+@test "aicli ship: -a range matches a pure deletion at its position" {
+  make_lines_repo
+  sed -i.bak -e '/^5$/d' -e 's/^9$/nine/' l.txt && rm l.txt.bak
+  run aicli ship -a l.txt:4-5 -m "drop five"
+  [ "$status" -eq 0 ]
+  [ "$(git show HEAD:l.txt | tr '\n' ' ')" = "1 2 3 4 6 7 8 9 10 " ]
+}
+
+@test "aicli ship: -a range touching no change fails before committing" {
+  make_lines_repo
+  sed -i.bak 's/^8$/eight/' l.txt && rm l.txt.bak
+  run aicli ship -m change -a l.txt:1-3
+  [ "$status" -eq 1 ]
+  assert_line_matches 'no unstaged changes in l.txt touch lines 1-3'
+  [ "$(git log -1 --format=%s)" = "lines" ]
+}
+
+@test "aicli ship: -a range on an untracked file fails" {
+  make_lines_repo
+  seq 1 3 > new.txt
+  run aicli ship -m change -a new.txt:1-2
+  [ "$status" -eq 1 ]
+  assert_line_matches 'line ranges need a tracked file: new.txt'
+}
+
 @test "aicli ship: staged changes without -m fail" {
   make_repo
   git switch -q -c feat
