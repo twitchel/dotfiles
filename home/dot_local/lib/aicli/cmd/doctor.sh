@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # summary: health check: deps, gh auth, Claude gateway, settings drift, plugins
 # usage: aicli doctor
 #

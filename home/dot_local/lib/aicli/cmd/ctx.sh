@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # summary: repo snapshot: branch, upstream, status, diffstat, recent commits, PR, stack
 # usage: aicli ctx [--json] [--no-pr] [-n <commits>]
 #

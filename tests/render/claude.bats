@@ -26,6 +26,7 @@ load '../helpers/common'
   assert_line_in_output '.claude/hooks/herdr-agent-state.sh'
   assert_line_in_output '.claude/statusline-command.sh'
   assert_line_in_output '.claude/skills/verification-before-completion/SKILL.md'
+  if assert_line_in_output '.claude/skills/SOURCES.md'; then false; fi
   if assert_line_matches '^\.claude/(skills/(synced|presenterm)|projects|sessions)(/|$)'; then false; fi
 }
 

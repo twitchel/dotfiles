@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Shared helpers, sourced by the aicli dispatcher. Bash 3.2 compatible: macOS runs /bin/bash.
 
 CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"

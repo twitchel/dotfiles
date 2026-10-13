@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # summary: commit (optional), push the branch, optionally open a PR
 # usage: aicli ship [-m <msg>|-m -] [-a] [-b <branch>] [--pr] [--draft]
 #

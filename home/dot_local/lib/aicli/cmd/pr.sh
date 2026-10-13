@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # summary: create or inspect the current branch's GitHub PR
 # usage: aicli pr create [--title <t>] [--body-file <f>|-] [--draft]
 #        aicli pr status

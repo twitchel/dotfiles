@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # summary: list, update or install the Claude Code plugins enabled in settings.json
 # usage: aicli plugins [list|update|sync]
 #
