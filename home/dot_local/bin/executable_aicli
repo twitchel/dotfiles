@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# aicli: deterministic helpers for coding agents. Each subcommand is $AICLI_LIB/cmd/<name>.sh.
+set -euo pipefail
+
+AICLI_LIB="${AICLI_LIB:-$HOME/.local/lib/aicli}"
+AICLI_BIN="${AICLI_BIN:-$0}"
+export AICLI_LIB AICLI_BIN
+
+# shellcheck source=/dev/null
+. "$AICLI_LIB/lib.sh"
+
+usage() {
+  echo "usage: aicli <command> [args]   (aicli <command> -h for details)"
+  echo
+  echo "commands:"
+  local f name summary
+  for f in "$AICLI_LIB"/cmd/*.sh; do
+    name=$(basename "$f" .sh)
+    summary=$(sed -n 's/^# summary: //p' "$f")
+    printf '  %-9s %s\n' "$name" "$summary"
+  done
+}
+
+cmd="${1:-}"
+case "$cmd" in
+  "" | -h | --help | help)
+    usage
+    exit 0
+    ;;
+esac
+shift
+
+file="$AICLI_LIB/cmd/$cmd.sh"
+if [ ! -f "$file" ]; then
+  echo "aicli: unknown command: $cmd" >&2
+  usage >&2
+  exit 2
+fi
+
+# shellcheck source=/dev/null
+. "$file"
+main "$@"
