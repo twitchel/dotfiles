@@ -18,6 +18,16 @@ load '../helpers/common'
   [[ "${lines[0]}" == '#!'* ]]
 }
 
+@test ".claude/hooks/delegate-guard.sh: managed (executable_ source), renders a script with a shebang" {
+  chez_init ci
+  run chez managed --include files
+  assert_line_in_output '.claude/hooks/delegate-guard.sh'
+  run chez_cat .claude/hooks/delegate-guard.sh
+  [ "$status" -eq 0 ]
+  [[ "${lines[0]}" == '#!'* ]]
+  [ -f "${REPO_ROOT}/home/dot_claude/hooks/executable_delegate-guard.sh" ]
+}
+
 @test "chezmoi managed: owns the claude files and no runtime paths" {
   chez_init ci
   run chez managed
@@ -46,6 +56,12 @@ seed_settings() {
     and .statusLine.refreshInterval == 2
     and .hooks.SessionStart[0].hooks[0].command == "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" session"
     and .hooks.SessionStart[0].hooks[0].timeout == 10
+    and .hooks.PreToolUse[0].matcher == "^(Edit|Write|MultiEdit|NotebookEdit)$"
+    and .hooks.PreToolUse[0].hooks[0].command == "bash \"$HOME/.claude/hooks/delegate-guard.sh\" pre-tool"
+    and .hooks.PreToolUse[1].matcher == "^(Agent|Task)$"
+    and .hooks.PreToolUse[1].hooks[0].command == "bash \"$HOME/.claude/hooks/delegate-guard.sh\" agent"
+    and .hooks.PreToolUse[1].hooks[0].timeout == 5
+    and .hooks.UserPromptSubmit[0].hooks[0].command == "bash \"$HOME/.claude/hooks/delegate-guard.sh\" prompt"
     and .enabledPlugins["superpowers@claude-plugins-official"] == false
     and .enabledPlugins["mattpocock-skills@claude-plugins-official"] == false
     and .enabledPlugins["mattpocock-skills@mattpocock"] == true

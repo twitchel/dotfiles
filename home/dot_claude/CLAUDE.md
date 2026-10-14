@@ -53,6 +53,12 @@ This applies to comments in every language, and to config and infrastructure fil
 
 # Delegation
 
+The main session plans, briefs, verifies and commits. It does not do the legwork itself:
+
+- **Edits go to a writer.** A hook blocks main-session Edit/Write on project files. Do not route edits through Bash (`sed`, heredocs, scripts) to get around it.
+- **Investigation goes to a reader** when it spans more than one file or needs more than a couple of searches: tracing a flow, reviewing a diff, auditing a design.
+- **Stay inline** only for single-fact lookups in a file you already know, running tests, and `aicli`/git chores.
+
 User-level agents pair a model with an effort level. Pick the cheapest that fits:
 
 | Need | Agent |
@@ -65,3 +71,5 @@ User-level agents pair a model with an effort level. Pick the cheapest that fits
 | cross-file refactor, design judgment, a stuck writer | `writer-deep` |
 
 Brief writers with the exact files, the change, and the checks to run. Commit their work yourself, with `aicli ship`.
+
+One agent per task, not per item: give a reader the whole file list rather than one reader per file. A hook caps spawns at 8 per prompt, 2 of them `reader-deep`/`writer-deep`. Run independent agents in parallel. Verify a writer's report (re-run its checks, read the diff) before claiming the work is done.
