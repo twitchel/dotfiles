@@ -46,6 +46,7 @@ hostData:
         - rclone
         - ripgrep
         - screen
+        - shellcheck
         - starship
         - tig
         - tmux
