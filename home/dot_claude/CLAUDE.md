@@ -1,3 +1,16 @@
+# Writing style: ASD-STE100
+
+Write all prose in ASD-STE100 Simplified Technical English. This includes replies, code comments, commit messages, PR bodies, docs and briefs to subagents. It does not apply to code, identifiers, commands, file paths, quoted output, or text the user gives you to keep as is.
+
+- Use one word for one meaning. Use the simple, common sense of a word. Use technical names and technical verbs as necessary.
+- Keep procedural sentences to 20 words or fewer, and descriptive sentences to 25 words or fewer.
+- Write one instruction in each sentence. Put steps in a numbered list.
+- Use the active voice. Use the imperative for instructions.
+- Use only the simple present, simple past and simple future tenses. Do not use "-ing" forms as verbs.
+- Do not make noun clusters of more than three words. Use articles ("the", "a") where possible.
+- Keep a paragraph to six sentences or fewer, about one topic.
+- Put a warning or a caution before the step it applies to.
+
 # Code comments
 
 Keep them concise: **what**, and a short optional **why**. Usually one line, rarely more than two.

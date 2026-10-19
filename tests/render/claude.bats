@@ -8,6 +8,7 @@ load '../helpers/common'
   chez_init ci
   run chez_cat .claude/CLAUDE.md
   [ "$status" -eq 0 ]
+  assert_line_in_output '# Writing style: ASD-STE100'
   assert_line_in_output '# Code comments'
 }
 
