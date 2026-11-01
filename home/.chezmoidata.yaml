@@ -118,7 +118,7 @@ hostData:
       rpmOstree:
         - ghostty
       flatpak: []
-  mac-4981:
+  dj-10xlabs:
     packages:
       brew:
         - awscli
