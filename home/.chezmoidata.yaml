@@ -127,13 +127,16 @@ hostData:
         - trivy
       brewCask:
         - caffeine
+        - claude-code
         - firefox
         - ghostty
         - gimp
+        - google-chrome
         - microsoft-edge
         - obsidian
         - raycast
         - rectangle
+        - slack
         - spotify
         - stats
         - visual-studio-code
