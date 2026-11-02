@@ -26,7 +26,7 @@ load '../helpers/common'
 }
 
 @test "known hosts exist in hostData" {
-  for host in coffee-sponge grease-monkey mac-4981 ci; do
+  for host in coffee-sponge grease-monkey dj-10xlabs ci; do
     run yq eval ".hostData.\"${host}\" | has(\"packages\")" "${CHEZMOIDATA}"
     [ "$output" = "true" ]
   done
@@ -48,6 +48,14 @@ load '../helpers/common'
   run yq eval '.hostData.grease-monkey.packages.flatpak' "${CHEZMOIDATA}"
   [ "$status" -eq 0 ]
   [ "$output" = "[]" ]
+}
+
+@test "dj-10xlabs has its extra brewCask apps" {
+  for app in claude-code google-chrome slack; do
+    run yq eval ".hostData.dj-10xlabs.packages.brewCask[] | select(. == \"${app}\")" "${CHEZMOIDATA}"
+    [ "$status" -eq 0 ]
+    [ "$output" = "$app" ]
+  done
 }
 
 @test "unknown hostname returns empty host-specific package lists (nil guard)" {
