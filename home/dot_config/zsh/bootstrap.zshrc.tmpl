@@ -16,7 +16,9 @@ export PATH="$HOME/.local/bin:$PATH"
 
 ## ---- Bun PATH ---- ##
 export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+if [ -d "$BUN_INSTALL/bin" ]; then
+  export PATH="$BUN_INSTALL/bin:$PATH"
+fi
 
 ## ---- Homebrew PATH ---- ##
 eval "$({{.chezmoi.config.env.BREWBIN}} shellenv)"

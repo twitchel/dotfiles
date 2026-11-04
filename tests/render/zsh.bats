@@ -23,12 +23,13 @@ load '../helpers/common'
   assert_line_in_output 'export PATH="$HOME/.local/bin:$PATH"'
 }
 
-@test "bootstrap.zshrc: sets BUN_INSTALL and prepends its bin to PATH" {
+@test "bootstrap.zshrc: sets BUN_INSTALL and prepends its bin to PATH only when it exists" {
   chez_init ci
   run chez_cat .config/zsh/bootstrap.zshrc
   [ "$status" -eq 0 ]
   assert_line_in_output 'export BUN_INSTALL="$HOME/.bun"'
-  assert_line_in_output 'export PATH="$BUN_INSTALL/bin:$PATH"'
+  assert_line_in_output 'if [ -d "$BUN_INSTALL/bin" ]; then'
+  assert_line_in_output '  export PATH="$BUN_INSTALL/bin:$PATH"'
 }
 
 @test "bootstrap.zshrc: ssh-agent only starts without an existing agent, silenced" {
